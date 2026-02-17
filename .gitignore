@@ -1,0 +1,19 @@
+# IntelliJ IDEA
+.idea/
+out/
+*.iml
+
+# Gradle.
+/.gradle
+/build
+/cache
+/target
+
+# Allure reports.
+/.allure/
+
+# Log file.
+/logs/
+
+# Compiled class file.
+/classes/
