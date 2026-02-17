@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'org.example'
+group = 'com.ovidiomiranda'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -12,7 +12,7 @@ repositories {
 dependencies {
 
     // Selenium
-    testImplementation 'org.seleniumhq.selenium:selenium-java:4.21.0'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.21.0'
 
     // Cucumber
     testImplementation 'io.cucumber:cucumber-java:7.17.0'
@@ -22,7 +22,7 @@ dependencies {
     testImplementation 'org.testng:testng:7.9.0'
 
     // WebDriverManager
-    testImplementation 'io.github.bonigarcia:webdrivermanager:5.8.0'
+    implementation 'io.github.bonigarcia:webdrivermanager:5.8.0'
 }
 
 test {
