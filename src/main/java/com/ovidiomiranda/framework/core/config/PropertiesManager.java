@@ -29,9 +29,9 @@ public final class PropertiesManager {
    */
   private Properties loadProperties() {
     Properties props = new Properties();
-    try (InputStream input = getClass().getClassLoader().getResourceAsStream("gradle.properties")) {
+    try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
       if (input == null) {
-        throw new RuntimeException("gradle.properties not found");
+        throw new RuntimeException("config.properties not found");
       }
       props.load(input);
     } catch (IOException e) {
