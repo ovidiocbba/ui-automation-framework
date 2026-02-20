@@ -41,4 +41,13 @@ public class SearchResultsSteps {
     Assert.assertFalse(searchResultsPage.isResultsListEmpty(),
         "Expected results list not to be empty");
   }
+
+  /**
+   * Verifies that the browser page title contains the expected product name.
+   */
+  @Then("the page title should contain {string}")
+  public void pageTitleShouldContain(String product) {
+    Assert.assertTrue(searchResultsPage.isTitleRelatedTo(product),
+        "Expected page title to contain: " + product);
+  }
 }
