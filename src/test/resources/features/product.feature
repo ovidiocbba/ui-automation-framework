@@ -6,7 +6,7 @@ Feature: Product Search
   Background:
     Given I navigate to 'Home' page
 
-  @regression
+  @TC-00001 @regression
   Scenario Outline: Search for a valid product
     When I enter "<product>" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
