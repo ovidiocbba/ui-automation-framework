@@ -79,4 +79,13 @@ public class SearchResultsSteps {
     Assert.assertEquals(searchResultsPage.getCurrentActivePageNumber(), expectedPage,
         "Expected current page number to be: " + expectedPage);
   }
+
+  /**
+   * Verifies that the 'Previous' pagination button is visible.
+   */
+  @Then("the Previous pagination button should be visible")
+  public void previousPaginationButtonShouldBeVisible() {
+    Assert.assertTrue(searchResultsPage.isPreviousPaginationButtonVisible(),
+        "Expected Previous pagination button to be visible");
+  }
 }
