@@ -13,6 +13,8 @@ public class SearchResultsPage extends BasePage {
 
   private final By header = By.cssSelector("span.a-color-state");
   private final By resultsList = By.cssSelector("div[data-component-type='s-search-result']");
+  private final By activePageNumber = By.cssSelector(
+      "span.s-pagination-item.s-pagination-selected");
 
   /**
    * Initializes a new instance of the 'SearchResultsPage' class.
@@ -28,6 +30,36 @@ public class SearchResultsPage extends BasePage {
   @Override
   public void waitUntilPageIsLoaded() {
     ExplicitWait.waitUntilVisible(header);
+  }
+
+  /**
+   * Builds the locator for a specific pagination page number.
+   *
+   * @param pageNumber page number in pagination
+   * @return By locator for the page number link
+   */
+  private By pageNumberButton(int pageNumber) {
+    return By.xpath("//a[text()='" + pageNumber + "']");
+  }
+
+  /**
+   * Clicks on the given page number in pagination.
+   *
+   * @param pageNumber page number to click
+   */
+  public void clickOnPageNumber(int pageNumber) {
+    WebElementActions.click(pageNumberButton(pageNumber));
+  }
+
+  /**
+   * Gets the currently active page number.
+   *
+   * @return active page number as integer
+   */
+  public int getCurrentActivePageNumber() {
+    ExplicitWait.waitUntilVisible(activePageNumber);
+    String activeText = driver.findElement(activePageNumber).getText();
+    return Integer.parseInt(activeText);
   }
 
   /**
