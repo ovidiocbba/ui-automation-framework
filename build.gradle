@@ -1,6 +1,10 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.11.2'
 }
+
+// Loads custom test tasks (Cucumber execution + Allure)
+apply from: 'test-tasks.gradle'
 
 group = 'com.ovidiomiranda'
 version = '1.0-SNAPSHOT'
@@ -24,8 +28,12 @@ dependencies {
 
     // WebDriverManager
     implementation 'io.github.bonigarcia:webdrivermanager:5.8.0'
+
+    // Allure
+    testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.25.0'
+    testImplementation 'io.qameta.allure:allure-testng:2.25.0'
 }
 
-test {
-    useTestNG()
+allure {
+    version = '2.25.0'
 }
