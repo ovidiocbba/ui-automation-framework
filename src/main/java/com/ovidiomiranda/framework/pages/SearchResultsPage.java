@@ -15,6 +15,7 @@ public class SearchResultsPage extends BasePage {
   private final By resultsList = By.cssSelector("div[data-component-type='s-search-result']");
   private final By activePageNumber = By.cssSelector(
       "span.s-pagination-item.s-pagination-selected");
+  private final By previousPaginationButton = By.cssSelector("a.s-pagination-previous");
   private final By nextPaginationButton = By.cssSelector("a.s-pagination-next");
 
   /**
@@ -99,5 +100,14 @@ public class SearchResultsPage extends BasePage {
    */
   public boolean isTitleRelatedTo(String product) {
     return driver.getTitle().toLowerCase().contains(product.toLowerCase());
+  }
+
+  /**
+   * Determines whether the 'Previous' pagination button is visible.
+   *
+   * @return true if the Previous button is visible; false otherwise
+   */
+  public boolean isPreviousPaginationButtonVisible() {
+    return WebElementActions.isElementDisplayed(previousPaginationButton);
   }
 }
