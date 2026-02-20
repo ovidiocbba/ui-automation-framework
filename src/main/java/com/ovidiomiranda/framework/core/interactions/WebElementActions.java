@@ -77,4 +77,19 @@ public final class WebElementActions {
   public static int getElementsCount(By locator) {
     return getDriver().findElements(locator).size();
   }
+
+  /**
+   * Determines whether the element located by the given locator is displayed.
+   *
+   * @param locator the {@link By} locator of the element
+   * @return true if the element is displayed; false otherwise
+   */
+  public static boolean isElementDisplayed(final By locator) {
+    try {
+      ExplicitWait.waitUntilVisible(locator);
+      return getDriver().findElement(locator).isDisplayed();
+    } catch (Exception e) {
+      return false;
+    }
+  }
 }
