@@ -49,4 +49,14 @@ public class SearchResultsPage extends BasePage {
     String headerText = WebElementActions.getText(header).toLowerCase();
     return headerText.contains(product.toLowerCase());
   }
+
+  /**
+   * Validates whether the browser page title contains the expected product name.
+   *
+   * @param product expected product name
+   * @return true if page title contains product
+   */
+  public boolean isTitleRelatedTo(String product) {
+    return driver.getTitle().toLowerCase().contains(product.toLowerCase());
+  }
 }
