@@ -24,6 +24,16 @@ public class SearchResultsSteps {
   }
 
   /**
+   * Clicks on the given pagination page number.
+   *
+   * @param pageNumber page number to navigate to
+   */
+  @And("I click on page number {int}")
+  public void clickOnPageNumber(int pageNumber) {
+    searchResultsPage.clickOnPageNumber(pageNumber);
+  }
+
+  /**
    * Verifies that the search results header is related to the expected product.
    *
    * @param product the expected product name
@@ -49,5 +59,16 @@ public class SearchResultsSteps {
   public void pageTitleShouldContain(String product) {
     Assert.assertTrue(searchResultsPage.isTitleRelatedTo(product),
         "Expected page title to contain: " + product);
+  }
+
+  /**
+   * Verifies that the current active pagination page matches the expected value.
+   *
+   * @param expectedPage expected active page number
+   */
+  @Then("the current page number should be {int}")
+  public void currentPageNumberShouldBe(int expectedPage) {
+    Assert.assertEquals(searchResultsPage.getCurrentActivePageNumber(), expectedPage,
+        "Expected current page number to be: " + expectedPage);
   }
 }
