@@ -15,6 +15,7 @@ public class SearchResultsPage extends BasePage {
   private final By resultsList = By.cssSelector("div[data-component-type='s-search-result']");
   private final By activePageNumber = By.cssSelector(
       "span.s-pagination-item.s-pagination-selected");
+  private final By nextPaginationButton = By.cssSelector("a.s-pagination-next");
 
   /**
    * Initializes a new instance of the 'SearchResultsPage' class.
@@ -49,6 +50,14 @@ public class SearchResultsPage extends BasePage {
    */
   public void clickOnPageNumber(int pageNumber) {
     WebElementActions.click(pageNumberButton(pageNumber));
+  }
+
+  /**
+   * Clicks on the 'Next' pagination button.
+   */
+  public void clickOnNextPaginationButton() {
+    ExplicitWait.waitUntilVisible(nextPaginationButton);
+    WebElementActions.click(nextPaginationButton);
   }
 
   /**
