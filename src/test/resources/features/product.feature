@@ -37,3 +37,10 @@ Feature: Product Search
     And I click 'Search' button on 'Home' page
     And I click on the Next pagination button
     Then the current page number should be 2
+
+  @TC-00005 @regression
+  Scenario: Previous button should appear on second page
+    When I enter "laptop" in the Search Field on 'Home' page
+    And I click 'Search' button on 'Home' page
+    And I click on page number 2
+    Then the Previous pagination button should be visible
