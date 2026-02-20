@@ -23,3 +23,10 @@ Feature: Product Search
     When I enter "laptop" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
     Then the page title should contain "laptop"
+
+  @TC-00003 @regression
+  Scenario: User can navigate to second page of search results
+    When I enter "laptop" in the Search Field on 'Home' page
+    And I click 'Search' button on 'Home' page
+    And I click on page number 2
+    Then the current page number should be 2
