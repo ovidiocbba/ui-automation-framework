@@ -18,3 +18,8 @@ Feature: Product Search
       | laptop   |
       | keyboard |
 
+  @TC-00002 @regression
+  Scenario: Page title should contain searched product
+    When I enter "laptop" in the Search Field on 'Home' page
+    And I click 'Search' button on 'Home' page
+    Then the page title should contain "laptop"
