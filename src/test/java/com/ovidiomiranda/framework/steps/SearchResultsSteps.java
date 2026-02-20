@@ -34,6 +34,14 @@ public class SearchResultsSteps {
   }
 
   /**
+   * Clicks on the 'Next' pagination button in search results.
+   */
+  @And("I click on the Next pagination button")
+  public void clickOnTheNextPaginationButton() {
+    searchResultsPage.clickOnNextPaginationButton();
+  }
+
+  /**
    * Verifies that the search results header is related to the expected product.
    *
    * @param product the expected product name
