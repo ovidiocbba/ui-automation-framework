@@ -30,3 +30,10 @@ Feature: Product Search
     And I click 'Search' button on 'Home' page
     And I click on page number 2
     Then the current page number should be 2
+
+  @TC-00004 @regression
+  Scenario: User can navigate using Next button
+    When I enter "laptop" in the Search Field on 'Home' page
+    And I click 'Search' button on 'Home' page
+    And I click on the Next pagination button
+    Then the current page number should be 2
