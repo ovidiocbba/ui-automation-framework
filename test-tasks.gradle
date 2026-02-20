@@ -1,0 +1,118 @@
+import java.util.Properties
+
+/*
+=====================================================
+ EXECUTION GUIDE
+=====================================================
+
+Run all tests:
+    gradle clean executeFeatures
+
+Run by tag:
+    gradle clean executeFeatures -Dcucumber.filter.tags='@regression'
+    gradle clean executeFeatures -Dcucumber.filter.tags='@TC-00001'
+
+Override default configuration (from config.properties):
+    gradle clean executeFeatures -Dbrowser=EDGE
+    gradle clean executeFeatures -DbaseUrl=https://example.com
+
+Re-run only failed scenarios:
+    gradle reExecuteFeatures
+
+-----------------------------------------------------
+ ALLURE REPORT
+-----------------------------------------------------
+Generate and open report automatically in browser:
+    gradle allureServe
+
+=====================================================
+*/
+
+// ========================================
+// Load config.properties (Test configuration)
+// ========================================
+def configFile = file("$rootDir/src/test/resources/config.properties")
+def configProps = new Properties()
+
+if (!configFile.exists()) {
+    throw new GradleException("config.properties not found at: $configFile")
+}
+
+// Load properties into memory
+configFile.withInputStream { stream -> configProps.load(stream)
+}
+
+// ========================================
+// Base configuration applied to ALL Test tasks
+// ========================================
+tasks.withType(Test).configureEach {
+
+    useTestNG()
+    // Required for Cucumber + TestNG integration
+    scanForTestClasses = false
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "short"
+        showStandardStreams = false
+    }
+
+    // List of supported system properties
+    def supportedProperties = ["cucumber.filter.tags",
+                               "browser",
+                               "baseUrl",
+                               "explicitWait"]
+
+    supportedProperties.each { key ->
+        // First priority: Command line
+        def value = System.getProperty(key)
+        // Second priority: config.properties
+        if (value == null) {
+            value = configProps.getProperty(key)
+        }
+        // If value exists, pass it to test runtime
+        if (value != null) {
+            systemProperty key, value
+        }
+    }
+}
+
+// ========================================
+// Main execution task
+// ========================================
+tasks.register('executeFeatures', Test) {
+
+    group = "Execution"
+    description = "Runs all Cucumber feature files"
+
+    doFirst {
+        // Clean previous rerun file
+        file("build/rerun.txt").delete()
+    }
+
+    // After tests finish, generate Allure report
+    finalizedBy "allureReport"
+}
+
+// ========================================
+// Re-run failed scenarios
+// ========================================
+tasks.register('reExecuteFeatures', Test) {
+
+    group = "Execution"
+    description = "Re-runs failed scenarios from rerun.txt"
+
+    doFirst {
+        def rerunFile = file("build/rerun.txt")
+
+        if (!rerunFile.exists()) {
+            throw new GradleException("rerun.txt not found. Execute 'executeFeatures' first.")
+        }
+    }
+
+    // Tell Cucumber to execute only failed scenarios
+    systemProperty "cucumber.features", "@build/rerun.txt"
+
+    // Generate Allure report after execution
+    finalizedBy "allureReport"
+}
