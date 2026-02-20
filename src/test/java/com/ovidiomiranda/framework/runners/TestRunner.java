@@ -11,8 +11,9 @@ import io.cucumber.testng.CucumberOptions;
     glue = "com.ovidiomiranda.framework",
     plugin = {
         "pretty",
-        "html:target/cucumber-reports.html",
-        "json:target/cucumber.json"
+        "json:build/cucumber.json",
+        "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm",
+        "rerun:build/rerun.txt"
     }
 )
 public class TestRunner extends AbstractTestNGCucumberTests {
