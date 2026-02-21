@@ -44,3 +44,9 @@ Feature: Product Search
     And I click 'Search' button on 'Home' page
     And I click on page number 2
     Then the Previous pagination button should be visible
+
+  @TC-00006 @regression
+  Scenario: Search results should include the searched keyword in their titles
+    When I enter "laptop" in the Search Field on 'Home' page
+    And I click 'Search' button on 'Home' page
+    Then at least one result title should contain "laptop"
