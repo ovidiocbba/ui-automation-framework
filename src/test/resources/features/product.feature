@@ -68,3 +68,10 @@ Feature: Product Search
     When I enter "laptop" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
     Then the current page number should be 1
+
+  @TC-00010 @regression
+  Scenario: Next pagination button should be visible on first page
+    Given I navigate to 'Home' page
+    When I enter "laptop" in the Search Field on 'Home' page
+    And I click 'Search' button on 'Home' page
+    Then the Next pagination button should be visible
