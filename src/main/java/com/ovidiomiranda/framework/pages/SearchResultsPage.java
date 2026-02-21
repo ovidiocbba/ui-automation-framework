@@ -17,7 +17,7 @@ public class SearchResultsPage extends BasePage {
   private final By resultTitles = By.cssSelector("h2.a-size-medium");
   private final By activePageNumber = By.cssSelector(
       "span.s-pagination-item.s-pagination-selected");
-  private final By previousPaginationButton = By.cssSelector("a.s-pagination-previous");
+  private final By previousPaginationButton = By.cssSelector(".s-pagination-previous");
   private final By nextPaginationButton = By.cssSelector("a.s-pagination-next");
 
   /**
@@ -130,11 +130,24 @@ public class SearchResultsPage extends BasePage {
    */
   public boolean doesAnyResultTitleContain(final String keyword) {
 
-    return getAllResultTitles()
-        .stream()
-        .map(title -> title == null ? "" : title.trim())
+    return getAllResultTitles().stream().map(title -> title == null ? "" : title.trim())
         .filter(title -> !title.isEmpty())
-        .anyMatch(title ->
-            title.toLowerCase().contains(keyword.toLowerCase().trim()));
+        .anyMatch(title -> title.toLowerCase().contains(keyword.toLowerCase().trim()));
+  }
+
+  /**
+   * Determines whether the 'Previous' pagination button is disabled.
+   *
+   * <p>This method does NOT use explicit waits because the element
+   * is already present in the DOM after page load.
+   *
+   * @return true if the button is disabled; false otherwise
+   */
+  public boolean isPreviousPaginationButtonDisabled() {
+    if (driver.findElements(previousPaginationButton).isEmpty()) {
+      return false;
+    }
+    String classes = driver.findElement(previousPaginationButton).getAttribute("class");
+    return classes != null && classes.contains("s-pagination-disabled");
   }
 }
