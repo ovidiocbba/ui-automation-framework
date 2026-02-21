@@ -61,3 +61,10 @@ Feature: Product Search
   Scenario: The search field should have the correct placeholder text
     Given I navigate to 'Home' page
     Then the search field should display the placeholder text "Search Amazon"
+
+  @TC-00009 @regression
+  Scenario: Active page number should be 1 after performing a new search
+    Given I navigate to 'Home' page
+    When I enter "laptop" in the Search Field on 'Home' page
+    And I click 'Search' button on 'Home' page
+    Then the current page number should be 1
