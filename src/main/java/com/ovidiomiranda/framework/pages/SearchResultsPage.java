@@ -1,5 +1,7 @@
 package com.ovidiomiranda.framework.pages;
 
+import static com.ovidiomiranda.framework.core.interactions.WebElementActions.isElementDisplayed;
+
 import com.ovidiomiranda.framework.core.interactions.WebElementActions;
 import com.ovidiomiranda.framework.core.waits.ExplicitWait;
 import java.util.List;
@@ -119,7 +121,7 @@ public class SearchResultsPage extends BasePage {
    * @return true if the Previous button is visible; false otherwise
    */
   public boolean isPreviousPaginationButtonVisible() {
-    return WebElementActions.isElementDisplayed(previousPaginationButton);
+    return isElementDisplayed(previousPaginationButton);
   }
 
   /**
@@ -149,5 +151,14 @@ public class SearchResultsPage extends BasePage {
     }
     String classes = driver.findElement(previousPaginationButton).getAttribute("class");
     return classes != null && classes.contains("s-pagination-disabled");
+  }
+
+  /**
+   * Checks whether the 'Next' pagination button is visible.
+   *
+   * @return true if the Next pagination button is displayed, false otherwise.
+   */
+  public boolean isNextPaginationButtonVisible() {
+    return isElementDisplayed(nextPaginationButton);
   }
 }
