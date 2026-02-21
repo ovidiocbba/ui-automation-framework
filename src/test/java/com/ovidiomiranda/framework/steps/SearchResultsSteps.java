@@ -99,4 +99,13 @@ public class SearchResultsSteps {
     Assert.assertTrue(searchResultsPage.doesAnyResultTitleContain(keyword),
         "No result titles contain keyword: " + keyword);
   }
+
+  /**
+   * Verifies that the 'Previous' pagination button is disabled.
+   */
+  @Then("the Previous pagination button should be disabled")
+  public void previousPaginationButtonShouldBeDisabled() {
+    Assert.assertTrue(searchResultsPage.isPreviousPaginationButtonDisabled(),
+        "Expected Previous pagination button to be disabled");
+  }
 }
