@@ -50,3 +50,9 @@ Feature: Product Search
     When I enter "laptop" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
     Then at least one result title should contain "laptop"
+
+  @TC-00007 @regression
+  Scenario: Previous button should be disabled on first page
+    When I enter "laptop" in the Search Field on 'Home' page
+    And I click 'Search' button on 'Home' page
+    Then the Previous pagination button should be disabled
