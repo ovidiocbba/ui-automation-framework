@@ -2,6 +2,7 @@ package com.ovidiomiranda.framework.pages;
 
 import com.ovidiomiranda.framework.core.interactions.WebElementActions;
 import com.ovidiomiranda.framework.core.waits.ExplicitWait;
+import java.util.List;
 import org.openqa.selenium.By;
 
 /**
@@ -13,6 +14,7 @@ public class SearchResultsPage extends BasePage {
 
   private final By header = By.cssSelector("span.a-color-state");
   private final By resultsList = By.cssSelector("div[data-component-type='s-search-result']");
+  private final By resultTitles = By.cssSelector("h2.a-size-medium");
   private final By activePageNumber = By.cssSelector(
       "span.s-pagination-item.s-pagination-selected");
   private final By previousPaginationButton = By.cssSelector("a.s-pagination-previous");
@@ -32,6 +34,15 @@ public class SearchResultsPage extends BasePage {
   @Override
   public void waitUntilPageIsLoaded() {
     ExplicitWait.waitUntilVisible(header);
+  }
+
+  /**
+   * Retrieves all result title texts displayed on the search results page.
+   *
+   * @return list of result title strings
+   */
+  public List<String> getAllResultTitles() {
+    return WebElementActions.getElementsText(resultTitles);
   }
 
   /**
@@ -109,5 +120,21 @@ public class SearchResultsPage extends BasePage {
    */
   public boolean isPreviousPaginationButtonVisible() {
     return WebElementActions.isElementDisplayed(previousPaginationButton);
+  }
+
+  /**
+   * Validates that at least one result title contains the specified keyword.
+   *
+   * @param keyword searched keyword
+   * @return true if at least one title contains the keyword; false otherwise
+   */
+  public boolean doesAnyResultTitleContain(final String keyword) {
+
+    return getAllResultTitles()
+        .stream()
+        .map(title -> title == null ? "" : title.trim())
+        .filter(title -> !title.isEmpty())
+        .anyMatch(title ->
+            title.toLowerCase().contains(keyword.toLowerCase().trim()));
   }
 }
