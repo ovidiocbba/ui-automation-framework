@@ -108,4 +108,13 @@ public class SearchResultsSteps {
     Assert.assertTrue(searchResultsPage.isPreviousPaginationButtonDisabled(),
         "Expected Previous pagination button to be disabled");
   }
+
+  /**
+   * Verifies that the 'Next' pagination button is visible.
+   */
+  @Then("the Next pagination button should be visible")
+  public void nextPaginationButtonShouldBeVisible() {
+    Assert.assertTrue(searchResultsPage.isNextPaginationButtonVisible(),
+        "Expected Next pagination button to be visible");
+  }
 }
