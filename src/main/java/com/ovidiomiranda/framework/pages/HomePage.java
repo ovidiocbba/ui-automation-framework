@@ -1,9 +1,9 @@
 package com.ovidiomiranda.framework.pages;
 
-import com.ovidiomiranda.framework.core.waits.ExplicitWait;
-import com.ovidiomiranda.framework.core.interactions.WebElementActions;
 import com.ovidiomiranda.framework.core.config.PropertiesInput;
 import com.ovidiomiranda.framework.core.config.PropertiesManager;
+import com.ovidiomiranda.framework.core.interactions.WebElementActions;
+import com.ovidiomiranda.framework.core.waits.ExplicitWait;
 import org.openqa.selenium.By;
 
 /**
@@ -38,6 +38,14 @@ public class HomePage extends BasePage {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void waitUntilPageIsLoaded() {
+    ExplicitWait.waitUntilVisible(searchTextField);
+  }
+
+  /**
    * Enters a product name into the search field.
    *
    * @param product product name to search
@@ -57,10 +65,14 @@ public class HomePage extends BasePage {
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the placeholder text from the search input field.
+   *
+   * <p>This method retrieves the value of the "placeholder"
+   * attribute from the search text field element.
+   *
+   * @return placeholder text of the search field
    */
-  @Override
-  public void waitUntilPageIsLoaded() {
-    ExplicitWait.waitUntilVisible(searchTextField);
+  public String getSearchFieldPlaceholder() {
+    return driver.findElement(searchTextField).getAttribute("placeholder");
   }
 }
