@@ -2,6 +2,8 @@ package com.ovidiomiranda.framework.core.interactions;
 
 import com.ovidiomiranda.framework.core.driver.DriverManager;
 import com.ovidiomiranda.framework.core.waits.ExplicitWait;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -91,5 +93,19 @@ public final class WebElementActions {
     } catch (Exception e) {
       return false;
     }
+  }
+
+  /**
+   * Retrieves the visible text from all elements matching the given locator.
+   *
+   * <p>Waits until at least one element is visible before collecting texts.
+   *
+   * @param locator the {@link By} locator of the elements
+   * @return list of visible text values
+   */
+  public static List<String> getElementsText(final By locator) {
+    ExplicitWait.waitUntilVisible(locator);
+    return getDriver().findElements(locator).stream().map(WebElement::getText)
+        .filter(text -> !text.isBlank()).collect(Collectors.toList());
   }
 }
