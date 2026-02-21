@@ -56,3 +56,8 @@ Feature: Product Search
     When I enter "laptop" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
     Then the Previous pagination button should be disabled
+
+  @TC-00008 @regression
+  Scenario: The search field should have the correct placeholder text
+    Given I navigate to 'Home' page
+    Then the search field should display the placeholder text "Search Amazon"
