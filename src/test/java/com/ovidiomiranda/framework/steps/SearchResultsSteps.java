@@ -88,4 +88,15 @@ public class SearchResultsSteps {
     Assert.assertTrue(searchResultsPage.isPreviousPaginationButtonVisible(),
         "Expected Previous pagination button to be visible");
   }
+
+  /**
+   * Verifies that at least one result title contains the searched keyword.
+   *
+   * @param keyword searched keyword
+   */
+  @Then("at least one result title should contain {string}")
+  public void atLeastOneResultTitleShouldContain(String keyword) {
+    Assert.assertTrue(searchResultsPage.doesAnyResultTitleContain(keyword),
+        "No result titles contain keyword: " + keyword);
+  }
 }
