@@ -33,6 +33,6 @@ runs:
       shell: bash
 
     - name: Set up Gradle
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: ${{ inputs.gradle-ver }}
