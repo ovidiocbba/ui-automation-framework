@@ -1,0 +1,59 @@
+name: Scheduled Execution
+
+env:
+  JAVA_VERSION: 17.0.12
+  GRADLE_VERSION: 8.6
+
+# Controls when the workflow will run.
+on:
+  # Allows you to run this workflow manually from the Actions tab.
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      scenarioTag:
+        description: 'Scenario Tag to execute(e.g. "@TC-00001")'
+        type: string
+        required: false
+        default: '@regression'
+
+  schedule:
+    # Scheduled the execution.
+    # Every friday at 21:00 PM (Bolivia).
+    # All the cron job in GitHub Actions is in UTC.
+    - cron: '0 1 * * 6'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel.
+jobs:
+  execution:
+    # The type of runner that the job will run on.
+    runs-on: ubuntu-latest
+    # These permissions are required to generate reports.
+    permissions:
+      contents: write # To push a branch (gh_pages).
+
+    steps:
+      # Cloning you repository to the runner.
+      - name: Checkout code
+        uses: actions/checkout@v4 # Necessary to access local action.
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment
+        with:
+          java-ver: ${{ env.JAVA_VERSION }}
+          java-distribution: 'temurin'
+          gradle-ver: ${{ env.GRADLE_VERSION }}
+
+      - name: Execute Features
+        uses: ./.github/actions/execute-features
+        with:
+          scenarioTag: ${{ inputs.scenarioTag || '@regression' }}
+          baseUrl: ${{ vars.BASE_URL }}
+          explicitWait: ${{ vars.EXPLICIT_WAIT }}
+
+      - name: Deploy allure report
+        if: always()
+        uses: ./.github/actions/deploy-allure-report
+        with:
+          allure_results_path: ./build/allure-results
+          publish_name_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
