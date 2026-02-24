@@ -3,6 +3,7 @@ package com.ovidiomiranda.framework.core.driver;
 import com.ovidiomiranda.framework.core.config.PropertiesInput;
 import com.ovidiomiranda.framework.core.config.PropertiesManager;
 import java.time.Duration;
+import java.util.Locale;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -12,11 +13,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * @author Ovidio Miranda
  */
 public final class DriverManager {
-
-  private static DriverManager driverManager;
-
-  private WebDriver driver;
-  private WebDriverWait wait;
+  private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
+  private static final ThreadLocal<WebDriverWait> WAIT = new ThreadLocal<>();
 
   /**
    * Private constructor to avoid direct instantiation.
@@ -25,31 +23,21 @@ public final class DriverManager {
   }
 
   /**
-   * Gets singleton instance.
-   *
-   * @return DriverManager instance
-   */
-  public static DriverManager getInstance() {
-    if (driverManager == null) {
-      driverManager = new DriverManager();
-    }
-    return driverManager;
-  }
-
-  /**
    * Initializes WebDriver using configuration values.
    */
-  private void initDriver() {
+  private static void initDriver() {
     DriverType driverType = DriverType.valueOf(
-        PropertiesManager.getInstance().getProperty(PropertiesInput.BROWSER).toUpperCase());
+        PropertiesManager.getInstance().getProperty(PropertiesInput.BROWSER)
+            .toUpperCase(Locale.ENGLISH));
 
-    driver = DriverFactory.getDriverManager(driverType);
-    // Maximize browser window
+    WebDriver driver = DriverFactory.getDriverManager(driverType);
     driver.manage().window().maximize();
-    // Explicit wait configuration
+
     long timeout = Long.parseLong(
         PropertiesManager.getInstance().getProperty(PropertiesInput.EXPLICIT_WAIT));
-    wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+
+    DRIVER.set(driver);
+    WAIT.set(new WebDriverWait(driver, Duration.ofSeconds(timeout)));
   }
 
   /**
@@ -57,11 +45,11 @@ public final class DriverManager {
    *
    * @return WebDriver instance
    */
-  public WebDriver getDriver() {
-    if (driver == null) {
+  public static WebDriver getDriver() {
+    if (DRIVER.get() == null) {
       initDriver();
     }
-    return driver;
+    return DRIVER.get();
   }
 
   /**
@@ -69,21 +57,21 @@ public final class DriverManager {
    *
    * @return WebDriverWait instance
    */
-  public WebDriverWait getWebDriverWait() {
-    return wait;
+  public static WebDriverWait getWebDriverWait() {
+    return WAIT.get();
   }
 
   /**
    * Quit driver and clean resources.
    */
-  public void quitDriver() {
+  public static void quitDriver() {
     try {
-      if (driver != null) {
-        driver.quit();
+      if (DRIVER.get() != null) {
+        DRIVER.get().quit();
       }
     } finally {
-      driver = null;
-      wait = null;
+      DRIVER.remove();
+      WAIT.remove();
     }
   }
 }
