@@ -1,0 +1,85 @@
+/*
+=====================================================
+ CODE QUALITY GUIDE
+=====================================================
+
+Run full static analysis (Checkstyle + PMD):
+    gradle staticAnalysis
+
+Run Checkstyle only:
+    gradle checkstyleMain
+    gradle checkstyleTest
+
+Run PMD only:
+    gradle pmdMain
+    gradle pmdTest
+
+Run full verification (tests + static analysis):
+    gradle clean check
+
+Reports location:
+    build/reports/checkstyle/
+    build/reports/pmd/
+
+=====================================================
+*/
+
+// [OM] Checkstyle configuration.
+checkstyle {
+    // [OM] Set version to use.
+    toolVersion = '10.12.4'
+    // [OM] Ignore warning and let the build continue.
+    ignoreFailures = false
+    // [OM] Whether rule violations are to be displayed on the console.
+    showViolations = true
+    // [OM] The path to the configuration file.
+    configFile = rootProject.file("config/checkstyle/google_checks.xml")
+}
+tasks.withType(Checkstyle).configureEach {
+
+    exclude '**/generated/**'
+    exclude '**/build/**'
+
+    reports {
+        xml.required = false
+        html.required = true
+        // [OM] The custom HTML report using an XSLT stylesheet.
+        html.stylesheet = resources.text.fromFile(
+                rootProject.file("config/checkstyle/xsl/checkstyle-noframes-severity-sorted.xsl")
+        )
+    }
+}
+
+// [OM] PMD configuration.
+pmd {
+    // [OM] Set version to use.
+    toolVersion = '6.55.0'
+    // [OM] Ignore warning and let the build continue.
+    ignoreFailures = false
+    consoleOutput = true
+    // [OM] Set rules to use.
+    ruleSets = ["rulesets/java/quickstart.xml"]
+}
+
+tasks.withType(Pmd).configureEach {
+
+    exclude '**/generated/**'
+    exclude '**/build/**'
+
+    reports {
+        xml.required = false
+        html.required = true
+    }
+}
+
+tasks.register('staticAnalysis') {
+    group = "verification"
+    description = "Runs Checkstyle and PMD analysis"
+
+    dependsOn(
+            'checkstyleMain',
+            'checkstyleTest',
+            'pmdMain',
+            'pmdTest'
+    )
+}
