@@ -1,7 +1,12 @@
 package com.ovidiomiranda.framework.pages;
 
 import com.ovidiomiranda.framework.core.driver.DriverManager;
+import com.ovidiomiranda.framework.core.waits.ExplicitWait;
+import java.util.Locale;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract base class implementing the Page Object pattern.
@@ -13,10 +18,14 @@ import org.openqa.selenium.WebDriver;
  */
 public abstract class BasePage {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(BasePage.class);
   /**
    * WebDriver instance used to interact with the browser.
    */
   protected WebDriver driver;
+  // Validation page locator
+  private final By continueShoppingButton = By.xpath(
+      "//button[contains(text(),'Continue shopping')]");
 
   /**
    * Initializes the WebDriver from DriverManager.
@@ -32,5 +41,35 @@ public abstract class BasePage {
    * <p>This method must be implemented by each concrete page.
    */
   public abstract void waitUntilPageIsLoaded();
+
+  /**
+   * Checks if the current page is a validation or captcha page.
+   *
+   * @return true if validation page is detected
+   */
+  protected boolean isValidationPage() {
+    return driver.getCurrentUrl().toLowerCase(Locale.ENGLISH).contains("validatecaptcha")
+        || !driver.findElements(continueShoppingButton).isEmpty();
+  }
+
+  /**
+   * Attempts to bypass validation page automatically.
+   *
+   * <p>Only works if "Continue shopping" button exists.
+   * Will fail if a full captcha challenge is displayed.
+   */
+  protected void bypassValidationIfPresent() {
+    if (isValidationPage()) {
+      LOGGER.warn("Validation page detected. Trying to continue...");
+      try {
+        ExplicitWait.waitUntilClickable(continueShoppingButton);
+        driver.findElement(continueShoppingButton).click();
+        LOGGER.info("Validation page bypass successful.");
+      } catch (Exception e) {
+        LOGGER.error("Could not bypass validation page.", e);
+        throw new RuntimeException("Could not bypass validation page.", e);
+      }
+    }
+  }
 }
 

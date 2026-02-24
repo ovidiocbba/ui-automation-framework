@@ -26,6 +26,7 @@ public class HomePage extends BasePage {
    */
   public HomePage open() {
     driver.get(baseUrl);
+    bypassValidationIfPresent();
     waitUntilPageIsLoaded();
     return this;
   }
