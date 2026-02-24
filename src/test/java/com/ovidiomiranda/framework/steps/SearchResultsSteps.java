@@ -62,6 +62,8 @@ public class SearchResultsSteps {
 
   /**
    * Verifies that the browser page title contains the expected product name.
+   *
+   * @param product expected product name
    */
   @Then("the page title should contain {string}")
   public void pageTitleShouldContain(String product) {
