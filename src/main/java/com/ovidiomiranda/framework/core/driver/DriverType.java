@@ -11,6 +11,10 @@ public enum DriverType {
    */
   CHROME,
   /**
+   * Google Chrome Headless browser driver.
+   */
+  CHROME_HEADLESS,
+  /**
    * Microsoft Edge browser driver.
    */
   EDGE,
