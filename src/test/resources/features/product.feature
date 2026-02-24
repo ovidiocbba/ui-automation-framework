@@ -6,7 +6,7 @@ Feature: Product Search
   Background:
     Given I navigate to 'Home' page
 
-  @TC-00001 @regression
+  @TC-00001 @regression @smoke @functional
   Scenario Outline: Search for a valid product
     When I enter "<product>" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
@@ -18,58 +18,58 @@ Feature: Product Search
       | laptop   |
       | keyboard |
 
-  @TC-00002 @regression
+  @TC-00002 @regression @functional
   Scenario: Page title should contain searched product
     When I enter "laptop" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
     Then the page title should contain "laptop"
 
-  @TC-00003 @regression
+  @TC-00003 @regression @functional
   Scenario: User can navigate to second page of search results
     When I enter "laptop" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
     And I click on page number 2
     Then the current page number should be 2
 
-  @TC-00004 @regression
+  @TC-00004 @regression @functional
   Scenario: User can navigate using Next button
     When I enter "laptop" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
     And I click on the Next pagination button
     Then the current page number should be 2
 
-  @TC-00005 @regression
+  @TC-00005 @regression @functional
   Scenario: Previous button should appear on second page
     When I enter "laptop" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
     And I click on page number 2
     Then the Previous pagination button should be visible
 
-  @TC-00006 @regression
+  @TC-00006 @regression @smoke
   Scenario: Search results should include the searched keyword in their titles
     When I enter "laptop" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
     Then at least one result title should contain "laptop"
 
-  @TC-00007 @regression
+  @TC-00007 @regression @functional
   Scenario: Previous button should be disabled on first page
     When I enter "laptop" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
     Then the Previous pagination button should be disabled
 
-  @TC-00008 @regression
+  @TC-00008 @regression @functional
   Scenario: The search field should have the correct placeholder text
     Given I navigate to 'Home' page
     Then the search field should display the placeholder text "Search Amazon"
 
-  @TC-00009 @regression
+  @TC-00009 @regression @functional
   Scenario: Active page number should be 1 after performing a new search
     Given I navigate to 'Home' page
     When I enter "laptop" in the Search Field on 'Home' page
     And I click 'Search' button on 'Home' page
     Then the current page number should be 1
 
-  @TC-00010 @regression
+  @TC-00010 @regression @functional
   Scenario: Next pagination button should be visible on first page
     Given I navigate to 'Home' page
     When I enter "laptop" in the Search Field on 'Home' page
