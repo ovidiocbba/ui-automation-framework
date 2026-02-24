@@ -36,9 +36,8 @@ public class CommonHooks {
     startTime = System.currentTimeMillis();
     if (LOGGER.isInfoEnabled()) {
       LOGGER.info(SEPARATOR);
-      LOGGER.info("▶ SCENARIO STARTED | {}", getTestCaseTitle(scenario));
+      LOGGER.info("▶ STARTING SCENARIO | {}", getTestCaseTitle(scenario));
       LOGGER.info(SEPARATOR);
-      LOGGER.info("");
     }
   }
 
@@ -57,11 +56,13 @@ public class CommonHooks {
     String formattedDuration = String.format("%.2f", durationSec);
 
     if (scenario.isFailed()) {
-      LOGGER.error("✖ SCENARIO FAILED | {} | {} s", testCaseId, formattedDuration);
+      LOGGER.error("RESULT: FAILED | Duration: {} s", formattedDuration);
       attachScreenshot(testCaseId);
     } else {
-      LOGGER.info("✔ SCENARIO PASSED | {} | {} s", testCaseId, formattedDuration);
+      LOGGER.info("RESULT: PASSED | Duration: {} s", formattedDuration);
     }
+    LOGGER.info(SEPARATOR);
+
     DriverManager.quitDriver();
   }
 
