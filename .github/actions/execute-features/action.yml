@@ -52,5 +52,6 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: logs${{ github.run_id }}
-        path: ./logs
+        path: build/logs
         retention-days: 5
+        if-no-files-found: warn
