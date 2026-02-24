@@ -20,13 +20,6 @@ public class HomePage extends BasePage {
   private final By searchButton = By.id("nav-search-submit-button");
 
   /**
-   * Initializes a new instance of the HomePage class.
-   */
-  public HomePage() {
-    super();
-  }
-
-  /**
    * Opens the base URL and waits for the page to load.
    *
    * @return current HomePage instance
