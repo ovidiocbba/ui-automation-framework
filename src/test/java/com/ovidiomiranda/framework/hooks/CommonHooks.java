@@ -23,10 +23,10 @@ public class CommonHooks {
   @After
   public void tearDown(Scenario scenario) {
     if (scenario.isFailed()) {
-      byte[] screenshot = ((TakesScreenshot) DriverManager.getInstance()
-          .getDriver()).getScreenshotAs(OutputType.BYTES);
+      byte[] screenshot = ((TakesScreenshot) DriverManager.getDriver()).getScreenshotAs(
+          OutputType.BYTES);
       Allure.addAttachment(scenario.getName(), new ByteArrayInputStream(screenshot));
     }
-    DriverManager.getInstance().quitDriver();
+    DriverManager.quitDriver();
   }
 }

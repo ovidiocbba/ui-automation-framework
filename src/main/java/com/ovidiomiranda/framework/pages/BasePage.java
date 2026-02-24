@@ -13,13 +13,16 @@ import org.openqa.selenium.WebDriver;
  */
 public abstract class BasePage {
 
+  /**
+   * WebDriver instance used to interact with the browser.
+   */
   protected WebDriver driver;
 
   /**
    * Initializes the WebDriver from DriverManager.
    */
   protected BasePage() {
-    driver = DriverManager.getInstance().getDriver();
+    driver = DriverManager.getDriver();
   }
 
   /**

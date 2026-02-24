@@ -27,7 +27,7 @@ public final class WebElementActions {
    * @return active WebDriver instance
    */
   private static WebDriver getDriver() {
-    return DriverManager.getInstance().getDriver();
+    return DriverManager.getDriver();
   }
 
   /**

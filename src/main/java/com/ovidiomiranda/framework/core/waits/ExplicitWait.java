@@ -44,6 +44,6 @@ public final class ExplicitWait {
    * @return WebDriverWait instance
    */
   private static WebDriverWait getWait() {
-    return DriverManager.getInstance().getWebDriverWait();
+    return DriverManager.getWebDriverWait();
   }
 }
