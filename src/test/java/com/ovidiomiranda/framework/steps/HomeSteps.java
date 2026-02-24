@@ -1,7 +1,6 @@
 package com.ovidiomiranda.framework.steps;
 
 import com.ovidiomiranda.framework.pages.HomePage;
-import com.ovidiomiranda.framework.pages.SearchResultsPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -14,8 +13,7 @@ import org.testng.Assert;
  */
 public class HomeSteps {
 
-  private HomePage homePage;
-  private SearchResultsPage searchResultsPage;
+  private final HomePage homePage;
 
   /**
    * Initializes a new instance of 'HomeSteps' class.
@@ -49,7 +47,7 @@ public class HomeSteps {
    */
   @And("I click 'Search' button on 'Home' page")
   public void clickSearchButton() {
-    searchResultsPage = homePage.clickSearchButton();
+    homePage.clickSearchButton();
   }
 
   /**
