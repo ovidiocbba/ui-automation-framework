@@ -1,0 +1,38 @@
+name: install_environment
+description: 'Installing the environment'
+
+# Inputs the action accepts.
+inputs:
+  java-ver:
+    description: 'Java Version'
+    required: true
+  java-distribution:
+    description: 'Java Distribution'
+    required: true
+  gradle-ver:
+    description: 'Gradle Version'
+    required: true
+
+runs:
+  using: 'composite'
+
+  steps:
+    - name: Set up JDK for x64
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ inputs.java-ver }}
+        distribution: ${{ inputs.java-distribution }}
+        architecture: x64
+
+    # Using shell script to install Google Chrome.
+    - name: Install Google Chrome
+    # Install if the user email value is different from the default value.
+      run: |
+           chmod +x ./scripts/InstallChrome.sh
+            ./scripts/InstallChrome.sh
+      shell: bash
+
+    - name: Set up Gradle
+      uses: gradle/gradle-build-action@v3
+      with:
+        gradle-version: ${{ inputs.gradle-ver }}
