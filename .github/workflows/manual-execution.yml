@@ -30,7 +30,83 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
+  build:
+    # The type of runner that the job will run on.
+    runs-on: ubuntu-latest
+
+    steps:
+      # Cloning you repository to the runner.
+      - name: Checkout code
+        uses: actions/checkout@v4 # Necessary to access local action.
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment
+        with:
+          java-ver:  ${{ env.JAVA_VERSION }}
+          java-distribution: 'temurin'
+          gradle-ver: ${{ env.GRADLE_VERSION }}
+      - run: |
+          gradle assemble
+          gradle assemble testClasses
+
+  # Checkstyle and PMD.
+  static-analysis:
+    needs: build
+    # The type of runner that the job will run on.
+    runs-on: ubuntu-latest
+
+    steps:
+      # Cloning you repository to the runner.
+      - name: Checkout code
+        uses: actions/checkout@v4 # Necessary to access local action.
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment
+        with:
+          java-ver:  ${{ env.JAVA_VERSION }}
+          java-distribution: 'temurin'
+          gradle-ver: ${{ env.GRADLE_VERSION }}
+
+      - name: Run Static Analysis
+        run: gradle staticAnalysis
+
+      - name: Upload Static Analysis Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: staticAnalysisReports${{ github.run_id }}
+          path: ./build/reports
+          retention-days: 5
+
+  # Documentation generation.
+  javadoc:
+    needs: build
+    # The type of runner that the job will run on.
+    runs-on: ubuntu-latest
+
+    steps:
+      # Cloning you repository to the runner.
+      - name: Checkout code
+        uses: actions/checkout@v4 # Necessary to access local action.
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment
+        with:
+          java-ver:  ${{ env.JAVA_VERSION }}
+          java-distribution: 'temurin'
+          gradle-ver: ${{ env.GRADLE_VERSION }}
+
+      - name: Generate Javadoc
+        run: gradle javadoc
+
+      - name: Upload Javadoc
+        uses: actions/upload-artifact@v4
+        with:
+          name: javadoc${{ github.run_id }}
+          path: ./build/docs/javadoc
+          retention-days: 5
+
   execution:
+    needs: [static-analysis, javadoc]
     # The type of runner that the job will run on.
     runs-on: ubuntu-latest
     # These permissions are required to generate reports.
