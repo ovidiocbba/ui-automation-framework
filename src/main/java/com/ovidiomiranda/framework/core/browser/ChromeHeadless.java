@@ -30,7 +30,7 @@ public class ChromeHeadless implements Browser {
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--no-sandbox");
     options.addArguments("--disable-dev-shm-usage");
-    options.addArguments("--headless");
+    options.addArguments("--headless=new");
     return options;
   }
 }

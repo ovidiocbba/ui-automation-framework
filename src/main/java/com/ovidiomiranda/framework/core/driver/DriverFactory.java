@@ -2,6 +2,7 @@ package com.ovidiomiranda.framework.core.driver;
 
 import com.ovidiomiranda.framework.core.browser.Browser;
 import com.ovidiomiranda.framework.core.browser.Chrome;
+import com.ovidiomiranda.framework.core.browser.ChromeHeadless;
 import com.ovidiomiranda.framework.core.browser.Edge;
 import com.ovidiomiranda.framework.core.browser.Firefox;
 import java.util.EnumMap;
@@ -25,6 +26,7 @@ public final class DriverFactory {
 
   static {
     BROWSERS.put(DriverType.CHROME, new Chrome());
+    BROWSERS.put(DriverType.CHROME_HEADLESS, new ChromeHeadless());
     BROWSERS.put(DriverType.FIREFOX, new Firefox());
     BROWSERS.put(DriverType.EDGE, new Edge());
   }
