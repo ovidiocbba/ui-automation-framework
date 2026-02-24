@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility class that provides common web interaction methods.
@@ -14,6 +16,8 @@ import org.openqa.selenium.WebElement;
  * @author Ovidio Miranda
  */
 public final class WebElementActions {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebElementActions.class);
 
   /**
    * Private constructor to prevent instantiation.
@@ -43,6 +47,7 @@ public final class WebElementActions {
     WebElement element = getDriver().findElement(locator);
     element.clear();
     element.sendKeys(text);
+    LOGGER.info("Entered text '{}' into element ({})", text, locator);
   }
 
   /**
@@ -55,6 +60,7 @@ public final class WebElementActions {
   public static void click(final By locator) {
     ExplicitWait.waitUntilClickable(locator);
     getDriver().findElement(locator).click();
+    LOGGER.info("Clicked on element ({})", locator);
   }
 
   /**
@@ -67,7 +73,9 @@ public final class WebElementActions {
    */
   public static String getText(By locator) {
     ExplicitWait.waitUntilVisible(locator);
-    return getDriver().findElement(locator).getText();
+    String text = getDriver().findElement(locator).getText();
+    LOGGER.debug("Retrieved text '{}' from element located: {}", text, locator);
+    return text;
   }
 
   /**
@@ -77,7 +85,9 @@ public final class WebElementActions {
    * @return number of matching elements
    */
   public static int getElementsCount(By locator) {
-    return getDriver().findElements(locator).size();
+    int count = getDriver().findElements(locator).size();
+    LOGGER.debug("Found {} elements for locator: {}", count, locator);
+    return count;
   }
 
   /**
