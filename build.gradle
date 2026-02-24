@@ -1,10 +1,16 @@
 plugins {
     id 'java'
     id 'io.qameta.allure' version '2.11.2'
+    id 'checkstyle'
+    id 'pmd'
 }
 
 // Loads custom test tasks (Cucumber execution + Allure)
 apply from: 'test-tasks.gradle'
+// Loads static code analysis configuration (Checkstyle + PMD)
+apply from: 'code-quality-plugins.gradle'
+// Loads Javadoc configuration
+apply from: 'javadoc.gradle'
 
 group = 'com.ovidiomiranda'
 version = '1.0-SNAPSHOT'
