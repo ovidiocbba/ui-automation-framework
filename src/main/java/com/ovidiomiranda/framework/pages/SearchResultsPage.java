@@ -5,6 +5,7 @@ import static com.ovidiomiranda.framework.core.interactions.WebElementActions.is
 import com.ovidiomiranda.framework.core.interactions.WebElementActions;
 import com.ovidiomiranda.framework.core.waits.ExplicitWait;
 import java.util.List;
+import java.util.Locale;
 import org.openqa.selenium.By;
 
 /**
@@ -101,8 +102,10 @@ public class SearchResultsPage extends BasePage {
    * @return true if header contains the product name
    */
   public boolean isHeaderRelatedTo(String product) {
-    String headerText = WebElementActions.getText(header).toLowerCase();
-    return headerText.contains(product.toLowerCase());
+    String headerText = WebElementActions.getText(header)
+        .toLowerCase(Locale.ENGLISH);
+
+    return headerText.contains(product.toLowerCase(Locale.ENGLISH));
   }
 
   /**
@@ -112,7 +115,9 @@ public class SearchResultsPage extends BasePage {
    * @return true if page title contains product
    */
   public boolean isTitleRelatedTo(String product) {
-    return driver.getTitle().toLowerCase().contains(product.toLowerCase());
+    return driver.getTitle()
+        .toLowerCase(Locale.ENGLISH)
+        .contains(product.toLowerCase(Locale.ENGLISH));
   }
 
   /**
@@ -132,9 +137,13 @@ public class SearchResultsPage extends BasePage {
    */
   public boolean doesAnyResultTitleContain(final String keyword) {
 
-    return getAllResultTitles().stream().map(title -> title == null ? "" : title.trim())
-        .filter(title -> !title.isEmpty())
-        .anyMatch(title -> title.toLowerCase().contains(keyword.toLowerCase().trim()));
+    String normalizedKeyword = keyword.trim().toLowerCase(Locale.ENGLISH);
+
+    return getAllResultTitles().stream()
+        .filter(title -> title != null && !title.isBlank())
+        .anyMatch(title ->
+            title.toLowerCase(Locale.ENGLISH)
+                .contains(normalizedKeyword));
   }
 
   /**
