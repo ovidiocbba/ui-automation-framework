@@ -13,7 +13,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Ovidio Miranda
  */
-public class DriverFactory {
+public final class DriverFactory {
 
   private static final Map<DriverType, Browser> BROWSERS = new EnumMap<>(DriverType.class);
 
