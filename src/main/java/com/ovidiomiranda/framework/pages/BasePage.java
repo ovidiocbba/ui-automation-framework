@@ -1,7 +1,7 @@
 package com.ovidiomiranda.framework.pages;
 
 import com.ovidiomiranda.framework.core.driver.DriverManager;
-import com.ovidiomiranda.framework.core.waits.ExplicitWait;
+import com.ovidiomiranda.framework.core.interactions.WebElementActions;
 import java.util.Locale;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -60,14 +60,13 @@ public abstract class BasePage {
    */
   protected void bypassValidationIfPresent() {
     if (isValidationPage()) {
-      LOGGER.warn("Validation page detected. Trying to continue...");
+      LOGGER.info("Validation page detected. Attempting to continue.");
       try {
-        ExplicitWait.waitUntilClickable(continueShoppingButton);
-        driver.findElement(continueShoppingButton).click();
-        LOGGER.info("Validation page bypass successful.");
+        WebElementActions.click(continueShoppingButton);
+        LOGGER.info("Validation page handled successfully.");
       } catch (Exception e) {
         LOGGER.error("Could not bypass validation page.", e);
-        throw new RuntimeException("Could not bypass validation page.", e);
+        throw new RuntimeException("Unable to automatically handle validation page.", e);
       }
     }
   }
