@@ -1,7 +1,10 @@
 <configuration>
 
   <property name="LOG_PATTERN"
-    value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
+    value="%d{HH:mm:ss} | %-5level | %-20logger{0} | %msg%n"/>
+
+  <!-- Silence WebDriverManager INFO logs -->
+  <logger name="io.github.bonigarcia.wdm" level="WARN"/>
 
   <!-- Console -->
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
