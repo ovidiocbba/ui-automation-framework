@@ -4,12 +4,9 @@ import org.openqa.selenium.WebDriver;
 
 /**
  * Interface that defines how a browser WebDriver should be created.
- * <p>
- * Each browser must implement this interface.
- * <p>
- * Helps separate browser creation logic from the rest of the framework.
- * <p>
- * Part of the Strategy Pattern.
+ *
+ * <p>Each browser must implement this interface. It helps separate browser
+ * creation logic from the rest of the framework and is part of the Strategy Pattern.
  *
  * @author Ovidio Miranda
  */
