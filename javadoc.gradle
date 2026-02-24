@@ -1,0 +1,35 @@
+/*
+=====================================================
+ JAVADOC GUIDE
+=====================================================
+
+Generate Javadoc:
+    gradle clean javadoc
+
+Documentation location:
+    build/docs/javadoc/
+
+=====================================================
+*/
+
+tasks.withType(Javadoc).configureEach {
+
+    classpath += sourceSets.test.compileClasspath
+    source += sourceSets.test.allJava
+
+    title = "UI Automation Framework"
+    setDestinationDir(layout.buildDirectory.dir("docs/javadoc").get().asFile)
+
+    options.encoding = "UTF-8"
+    options.charSet = "UTF-8"
+    options.author = true
+    options.version = true
+
+    options.header = "UI Automation Framework - v${project.version}"
+
+    // Fail build if Javadoc has warnings (professional mode)
+    options.addStringOption('Xwerror', '-quiet')
+
+    // Hide timestamps for reproducible builds
+    options.addBooleanOption('noTimestamp', true)
+}
