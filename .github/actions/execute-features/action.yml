@@ -1,0 +1,56 @@
+name: 'Execute features'
+description: 'Execute Cucumber features with optional re-run of failed scenarios'
+
+# Inputs the action accepts.
+inputs:
+  scenarioTag:
+    description: 'Scenario Tag to execute(e.g. "@TC-00001")'
+    required: true
+    default: '@regression'
+
+  baseUrl:
+    description: 'Base Url(e.g. "https://www.amazon.com")'
+    required: true
+    default: 'https://www.amazon.com'
+
+  explicitWait:
+    description: 'Explicit wait timeout in seconds (e.g. "30")'
+    required: true
+    default: '30'
+
+runs:
+  using: 'composite'
+
+  steps:
+    - name: Execute Features
+      id: execute-features
+      # Configuration variables in your repository.
+      # Settings -> Secrets and variables -> Actions -> Secrets(secrets) or Variables(vars).
+      run: |
+        gradle executeFeatures \
+            -Dcucumber.filter.tags="${{ inputs.scenarioTag }}" \
+            -Dbrowser="CHROME_HEADLESS" \
+            -DbaseUrl="${{ inputs.baseUrl }}" \
+            -DexplicitWait="${{ inputs.explicitWait }}"
+      shell: bash
+
+    # Re-execute if there are failed scenarios using the 'rerun.txt' file.
+    - name: Re-Execute Failed Features
+      # Composite actions, now support if conditionals.
+      # https://github.blog/changelog/2021-11-09-github-actions-conditional-execution-of-steps-in-actions/
+      if: ${{ failure() && steps.execute-features.conclusion == 'failure' }}
+      run: |
+        gradle reExecuteFeatures \
+            -Dbrowser="CHROME_HEADLESS" \
+            -DbaseUrl="${{ inputs.baseUrl }}" \
+            -DexplicitWait="${{ inputs.explicitWait }}"
+      shell: bash
+
+    # Upload log file.
+    - name: Upload log file
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: logs${{ github.run_id }}
+        path: ./logs
+        retention-days: 5
