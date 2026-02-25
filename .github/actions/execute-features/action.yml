@@ -27,7 +27,7 @@ runs:
       # Configuration variables in your repository.
       # Settings -> Secrets and variables -> Actions -> Secrets(secrets) or Variables(vars).
       run: |
-        gradle executeFeatures \
+        ./gradlew executeFeatures \
             -Dcucumber.filter.tags="${{ inputs.scenarioTag }}" \
             -Dbrowser="CHROME_HEADLESS" \
             -DbaseUrl="${{ inputs.baseUrl }}" \
@@ -40,7 +40,7 @@ runs:
       # https://github.blog/changelog/2021-11-09-github-actions-conditional-execution-of-steps-in-actions/
       if: ${{ failure() && steps.execute-features.conclusion == 'failure' }}
       run: |
-        gradle reExecuteFeatures \
+        ./gradlew reExecuteFeatures \
             -Dbrowser="CHROME_HEADLESS" \
             -DbaseUrl="${{ inputs.baseUrl }}" \
             -DexplicitWait="${{ inputs.explicitWait }}"
