@@ -2,7 +2,6 @@ name: CI
 
 env:
   JAVA_VERSION: 17.0.12
-  GRADLE_VERSION: 8.6
 
 # Controls when the workflow will run.
 on:
@@ -40,10 +39,9 @@ jobs:
         with:
           java-ver:  ${{ env.JAVA_VERSION }}
           java-distribution: 'temurin'
-          gradle-ver: ${{ env.GRADLE_VERSION }}
-      - run: | 
-              gradle assemble
-              gradle assemble testClasses
+      # Compiles main and test code but does not run tests.
+      - run: |
+          ./gradlew build -x test
 
   # Checkstyle and PMD.
   static-analysis:
@@ -61,10 +59,9 @@ jobs:
         with:
           java-ver:  ${{ env.JAVA_VERSION }}
           java-distribution: 'temurin'
-          gradle-ver: ${{ env.GRADLE_VERSION }}
 
       - name: Run Static Analysis
-        run: gradle staticAnalysis
+        run: ./gradlew staticAnalysis
 
       - name: Upload Static Analysis Reports
         uses: actions/upload-artifact@v4
@@ -89,10 +86,9 @@ jobs:
         with:
           java-ver:  ${{ env.JAVA_VERSION }}
           java-distribution: 'temurin'
-          gradle-ver: ${{ env.GRADLE_VERSION }}
 
       - name: Generate Javadoc
-        run: gradle javadoc
+        run: ./gradlew javadoc
 
       - name: Upload Javadoc
         uses: actions/upload-artifact@v4
@@ -129,7 +125,6 @@ jobs:
         with:
           java-ver:  ${{ env.JAVA_VERSION }}
           java-distribution: 'temurin'
-          gradle-ver: ${{ env.GRADLE_VERSION }}
 
       # Get the test case tag from the branch name.
       # Eg.
