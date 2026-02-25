@@ -26,7 +26,18 @@ runs:
       # git commit --allow-empty -m "Initial commit on gh_pages branch"
       # git push origin gh-pages
 
+    - name: Check if Allure results exist
+      id: check_results
+      shell: bash
+      run: |
+        if [ -n "${{ hashFiles(format('{0}/**', inputs.allure_results_path)) }}" ]; then
+          echo "has_results=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_results=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Get Allure history
+      if: steps.check_results.outputs.has_results == 'true'
       uses: actions/checkout@v4
       continue-on-error: true
       with:
@@ -34,6 +45,7 @@ runs:
         path: ${{ inputs.publish_name_branch }}
 
     - name: Allure Report action from marketplace
+      if: steps.check_results.outputs.has_results == 'true'
       uses: simple-elf/allure-report-action@master
       id: allure-report
       with:
@@ -43,6 +55,7 @@ runs:
         allure_history: allure-history
 
     - name: Deploy report to Github Pages
+      if: steps.check_results.outputs.has_results == 'true'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ inputs.github_token }}
