@@ -24,8 +24,15 @@ runs:
 
     # Using shell script to install Google Chrome.
     - name: Install Google Chrome
-    # Install if the user email value is different from the default value.
-      run: |
-           chmod +x ./scripts/InstallChrome.sh
-            ./scripts/InstallChrome.sh
       shell: bash
+      run: |
+        if command -v google-chrome >/dev/null 2>&1; then
+          echo "Google Chrome already installed:"
+          google-chrome --version
+        else
+          echo "Google Chrome not found. Installing..."
+          chmod +x ./scripts/InstallChrome.sh
+          ./scripts/InstallChrome.sh
+          echo "Installed Chrome version:"
+          google-chrome --version
+        fi
