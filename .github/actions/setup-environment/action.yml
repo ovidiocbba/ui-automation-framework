@@ -1,5 +1,5 @@
-name: install_environment
-description: 'Installing the environment'
+name: Setup Environment
+description: 'Install Java, Chrome and configure Gradle cache'
 
 # Inputs the action accepts.
 inputs:
@@ -20,6 +20,7 @@ runs:
         java-version: ${{ inputs.java-ver }}
         distribution: ${{ inputs.java-distribution }}
         architecture: x64
+        cache: gradle # enable built-in Gradle caching to speed up CI executions
 
     # Using shell script to install Google Chrome.
     - name: Install Google Chrome
