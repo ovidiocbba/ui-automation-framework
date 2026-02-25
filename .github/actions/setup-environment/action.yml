@@ -9,9 +9,6 @@ inputs:
   java-distribution:
     description: 'Java Distribution'
     required: true
-  gradle-ver:
-    description: 'Gradle Version'
-    required: true
 
 runs:
   using: 'composite'
@@ -31,8 +28,3 @@ runs:
            chmod +x ./scripts/InstallChrome.sh
             ./scripts/InstallChrome.sh
       shell: bash
-
-    - name: Set up Gradle
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        gradle-version: ${{ inputs.gradle-ver }}
