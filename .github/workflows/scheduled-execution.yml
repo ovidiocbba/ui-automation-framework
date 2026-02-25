@@ -2,7 +2,6 @@ name: Scheduled Execution
 
 env:
   JAVA_VERSION: 17.0.12
-  GRADLE_VERSION: 8.6
 
 # Controls when the workflow will run.
 on:
@@ -49,7 +48,6 @@ jobs:
         with:
           java-ver: ${{ env.JAVA_VERSION }}
           java-distribution: 'temurin'
-          gradle-ver: ${{ env.GRADLE_VERSION }}
 
       - name: Execute Features
         uses: ./.github/actions/execute-features
