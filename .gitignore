@@ -1,5 +1,7 @@
 # IntelliJ IDEA
 .idea/
+!.idea/codeStyles/
+!.idea/codeStyles/*
 out/
 *.iml
 
