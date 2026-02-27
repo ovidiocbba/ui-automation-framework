@@ -18,6 +18,11 @@ inputs:
     required: true
     default: '30'
 
+  threads:
+    description: 'Number of parallel threads (e.g. "4")'
+    required: false
+    default: '4'
+
 runs:
   using: 'composite'
 
@@ -32,6 +37,7 @@ runs:
             -Dbrowser="CHROME_HEADLESS" \
             -DbaseUrl="${{ inputs.baseUrl }}" \
             -DexplicitWait="${{ inputs.explicitWait }}"
+            -Dthreads="${{ inputs.threads }}"
       shell: bash
 
     # Re-execute if there are failed scenarios using the 'rerun.txt' file.
@@ -44,6 +50,7 @@ runs:
             -Dbrowser="CHROME_HEADLESS" \
             -DbaseUrl="${{ inputs.baseUrl }}" \
             -DexplicitWait="${{ inputs.explicitWait }}"
+            -Dthreads="${{ inputs.threads }}"
       shell: bash
 
     # Upload log file.
