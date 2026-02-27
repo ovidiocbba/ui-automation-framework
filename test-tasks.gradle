@@ -5,25 +5,28 @@ import java.util.Properties
  EXECUTION GUIDE
 =====================================================
 
-Run all tests:
-    gradle clean executeFeatures
+Run all tests (default: 1 thread):
+    ./gradlew clean executeFeatures
+
+Run with parallel threads:
+    ./gradlew clean executeFeatures -Dthreads=4
 
 Run by tag:
-    gradle clean executeFeatures -Dcucumber.filter.tags='@regression'
-    gradle clean executeFeatures -Dcucumber.filter.tags='@TC-00001'
+    ./gradlew clean executeFeatures -Dcucumber.filter.tags='@regression'
+    ./gradlew clean executeFeatures -Dcucumber.filter.tags='@TC-00001'
 
 Override default configuration (from config.properties):
-    gradle clean executeFeatures -Dbrowser=EDGE
-    gradle clean executeFeatures -DbaseUrl=https://example.com
+    ./gradlew clean executeFeatures -Dbrowser=EDGE
+    ./gradlew clean executeFeatures -DbaseUrl=https://example.com
 
 Re-run only failed scenarios:
-    gradle reExecuteFeatures
+    ./gradlew reExecuteFeatures
 
 -----------------------------------------------------
  ALLURE REPORT
 -----------------------------------------------------
 Generate and open report automatically in browser:
-    gradle allureServe
+    ./gradlew allureServe
 
 =====================================================
 */
@@ -61,7 +64,8 @@ tasks.withType(Test).configureEach {
     def supportedProperties = ["cucumber.filter.tags",
                                "browser",
                                "baseUrl",
-                               "explicitWait"]
+                               "explicitWait",
+                               "threads"]
 
     supportedProperties.each { key ->
         // First priority: Command line
@@ -75,6 +79,11 @@ tasks.withType(Test).configureEach {
             systemProperty key, value
         }
     }
+
+    def threadCount = System.getProperty("threads") ?:
+            configProps.getProperty("threads") ?: "1"
+    // Required by TestNG to control parallel DataProvider threads
+    systemProperty "dataproviderthreadcount", threadCount
 }
 
 // ========================================
