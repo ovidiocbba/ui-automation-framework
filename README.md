@@ -436,7 +436,7 @@ Re-run failed scenarios:
 
 ## :bar_chart: 7. Reporting (Allure)
 
-Generate report:
+After executing the tests, generate and open the Allure report with:
 
 ``` bash
 ./gradlew allureServe
