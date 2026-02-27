@@ -27,6 +27,12 @@ on:
         required: true
         default: '30'
 
+      threads:
+        description: 'Number of parallel threads (e.g. "2")'
+        type: string
+        required: false
+        default: '2'
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
   build:
@@ -134,6 +140,7 @@ jobs:
           scenarioTag: ${{ inputs.scenarioTag || '@regression' }}
           baseUrl: ${{ inputs.baseUrl }}
           explicitWait: ${{ inputs.explicitWait }}
+          threads: ${{ inputs.threads }}
 
       - name: Deploy allure report
         if: always()
