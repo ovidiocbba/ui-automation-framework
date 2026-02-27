@@ -17,7 +17,12 @@ public enum PropertiesInput {
   /**
    * Explicit wait timeout value in seconds.
    */
-  EXPLICIT_WAIT("explicitWait");
+  EXPLICIT_WAIT("explicitWait"),
+
+  /**
+   * Number of threads used for parallel test execution.
+   */
+  THREAD_COUNT("threads");
 
   private final String propertiesName;
 
