@@ -98,9 +98,6 @@ tasks.register('executeFeatures', Test) {
         // Clean previous rerun file
         file("build/rerun.txt").delete()
     }
-
-    // After tests finish, generate Allure report
-    finalizedBy "allureReport"
 }
 
 // ========================================
@@ -121,7 +118,4 @@ tasks.register('reExecuteFeatures', Test) {
 
     // Tell Cucumber to execute only failed scenarios
     systemProperty "cucumber.features", "@build/rerun.txt"
-
-    // Generate Allure report after execution
-    finalizedBy "allureReport"
 }
