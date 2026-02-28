@@ -16,7 +16,7 @@ public class HomePage extends BasePage {
   private final String baseUrl = PropertiesManager.getInstance()
       .getProperty(PropertiesInput.BASE_URL);
 
-  private final By searchTextField = By.id("twotabsearchtextbox");
+  private final By searchTextField = By.cssSelector("input#twotabsearchtextbox");
   private final By searchButton = By.id("nav-search-submit-button");
 
   /**
