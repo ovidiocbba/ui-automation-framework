@@ -5,6 +5,7 @@ import com.ovidiomiranda.framework.core.browser.Chrome;
 import com.ovidiomiranda.framework.core.browser.ChromeHeadless;
 import com.ovidiomiranda.framework.core.browser.Edge;
 import com.ovidiomiranda.framework.core.browser.Firefox;
+import com.ovidiomiranda.framework.core.browser.FirefoxHeadless;
 import java.util.EnumMap;
 import java.util.Map;
 import org.openqa.selenium.WebDriver;
@@ -28,6 +29,7 @@ public final class DriverFactory {
     BROWSERS.put(DriverType.CHROME, new Chrome());
     BROWSERS.put(DriverType.CHROME_HEADLESS, new ChromeHeadless());
     BROWSERS.put(DriverType.FIREFOX, new Firefox());
+    BROWSERS.put(DriverType.FIREFOX_HEADLESS, new FirefoxHeadless());
     BROWSERS.put(DriverType.EDGE, new Edge());
   }
 
