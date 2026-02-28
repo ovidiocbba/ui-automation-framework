@@ -2,7 +2,6 @@ package com.ovidiomiranda.framework.pages;
 
 import com.ovidiomiranda.framework.core.driver.DriverManager;
 import com.ovidiomiranda.framework.core.interactions.WebElementActions;
-import java.util.Locale;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -24,8 +23,7 @@ public abstract class BasePage {
    */
   protected WebDriver driver;
   // Validation page locator
-  private final By continueShoppingButton = By.xpath(
-      "//button[contains(text(),'Continue shopping')]");
+  private final By continueShoppingButton = By.xpath("//button[text()='Continue shopping']");
 
   /**
    * Initializes the WebDriver from DriverManager.
@@ -43,13 +41,12 @@ public abstract class BasePage {
   public abstract void waitUntilPageIsLoaded();
 
   /**
-   * Checks if the current page is a validation or captcha page.
+   * Checks if the current page is a validation page.
    *
    * @return true if validation page is detected
    */
   protected boolean isValidationPage() {
-    return driver.getCurrentUrl().toLowerCase(Locale.ENGLISH).contains("validatecaptcha")
-        || !driver.findElements(continueShoppingButton).isEmpty();
+    return WebElementActions.isElementDisplayed(continueShoppingButton);
   }
 
   /**
@@ -71,4 +68,3 @@ public abstract class BasePage {
     }
   }
 }
-
