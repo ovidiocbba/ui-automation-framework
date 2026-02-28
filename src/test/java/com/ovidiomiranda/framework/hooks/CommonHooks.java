@@ -3,6 +3,8 @@ package com.ovidiomiranda.framework.hooks;
 import static com.ovidiomiranda.framework.utils.ScenarioUtils.getTestCaseId;
 import static com.ovidiomiranda.framework.utils.ScenarioUtils.getTestCaseTitle;
 
+import com.ovidiomiranda.framework.core.config.PropertiesInput;
+import com.ovidiomiranda.framework.core.config.PropertiesManager;
 import com.ovidiomiranda.framework.core.driver.DriverManager;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -34,6 +36,18 @@ public class CommonHooks {
   @Before(order = -1)
   public void beforeScenario(final Scenario scenario) {
     startTime = System.currentTimeMillis();
+
+    // Get configuration values
+    String browser = PropertiesManager.getInstance()
+        .getProperty(PropertiesInput.BROWSER);
+
+    String baseUrl = PropertiesManager.getInstance()
+        .getProperty(PropertiesInput.BASE_URL);
+
+    // Add labels to Allure
+    Allure.label("browser", browser);
+    Allure.label("baseUrl", baseUrl);
+
     if (LOGGER.isInfoEnabled()) {
       LOGGER.info(SEPARATOR);
       LOGGER.info("▶ STARTING SCENARIO | {}", getTestCaseTitle(scenario));
