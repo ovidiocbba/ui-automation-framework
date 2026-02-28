@@ -3,13 +3,18 @@ description: 'Execute Cucumber features with optional re-run of failed scenarios
 
 # Inputs the action accepts.
 inputs:
+  browser:
+    description: 'Browser to execute tests (CHROME_HEADLESS | FIREFOX_HEADLESS)'
+    required: false
+    default: 'CHROME_HEADLESS'
+
   scenarioTag:
-    description: 'Scenario Tag to execute(e.g. "@TC-00001")'
+    description: 'Scenario tag to execute (e.g. "@TC-00001")'
     required: true
     default: '@regression'
 
   baseUrl:
-    description: 'Base Url(e.g. "https://www.amazon.com")'
+    description: 'Base URL (e.g. "https://www.amazon.com")'
     required: true
     default: 'https://www.amazon.com'
 
@@ -34,7 +39,7 @@ runs:
       run: |
         ./gradlew executeFeatures \
             -Dcucumber.filter.tags="${{ inputs.scenarioTag }}" \
-            -Dbrowser="CHROME_HEADLESS" \
+            -Dbrowser="${{ inputs.browser }}" \
             -DbaseUrl="${{ inputs.baseUrl }}" \
             -DexplicitWait="${{ inputs.explicitWait }}" \
             -Dthreads="${{ inputs.threads }}"
@@ -47,7 +52,7 @@ runs:
       if: ${{ failure() && steps.execute-features.conclusion == 'failure' }}
       run: |
         ./gradlew reExecuteFeatures \
-            -Dbrowser="CHROME_HEADLESS" \
+            -Dbrowser="${{ inputs.browser }}" \
             -DbaseUrl="${{ inputs.baseUrl }}" \
             -DexplicitWait="${{ inputs.explicitWait }}" \
             -Dthreads="${{ inputs.threads }}"
@@ -58,7 +63,17 @@ runs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: logs${{ github.run_id }}
+        name: logs-${{ inputs.browser }}-${{ github.run_id }}
         path: build/logs
+        retention-days: 5
+        if-no-files-found: warn
+
+    # Upload Allure results
+    - name: Upload Allure Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-results-${{ inputs.browser }}-${{ github.run_id }}
+        path: build/allure-results
         retention-days: 5
         if-no-files-found: warn
