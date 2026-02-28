@@ -21,5 +21,9 @@ public enum DriverType {
   /**
    * Mozilla Firefox browser driver.
    */
-  FIREFOX
+  FIREFOX,
+  /**
+   * FIREFOX Headless browser driver.
+   */
+  FIREFOX_HEADLESS
 }
