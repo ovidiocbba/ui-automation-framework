@@ -1,5 +1,5 @@
 name: Setup Environment
-description: 'Install Java, Chrome and configure Gradle cache'
+description: 'Install Java, Chrome, Firefox and configure Gradle cache'
 
 # Inputs the action accepts.
 inputs:
@@ -35,4 +35,19 @@ runs:
           ./scripts/InstallChrome.sh
           echo "Installed Chrome version:"
           google-chrome --version
+        fi
+
+    # Install Firefox if not present
+    - name: Install Firefox
+      shell: bash
+      run: |
+        if command -v firefox >/dev/null 2>&1; then
+          echo "Firefox already installed:"
+          firefox --version
+        else
+          echo "Firefox not found. Installing..."
+          sudo apt-get update
+          sudo apt-get install -y firefox-esr || sudo apt-get install -y firefox
+          echo "Installed Firefox version:"
+          firefox --version
         fi
