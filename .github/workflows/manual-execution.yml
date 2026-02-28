@@ -181,7 +181,9 @@ jobs:
       - name: Merge Allure Results
         run: |
           mkdir -p merged-allure-results
-          find downloaded-results -type d -name "allure-results-*" -exec cp -r {}/* merged-allure-results/ \;
+          for dir in downloaded-results/allure-results-*; do
+            rsync -av "$dir/" merged-allure-results/
+          done
 
       # Generate and deploy a single consolidated Allure report
       - name: Deploy allure report
