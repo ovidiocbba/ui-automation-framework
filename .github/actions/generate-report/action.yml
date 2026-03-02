@@ -1,0 +1,124 @@
+name: "Generate and Deploy Allure Reports"
+description: "Generate Allure reports per browser and deploy to GitHub Pages"
+
+inputs:
+  github_token:
+    description: "GitHub token for deployment"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install Allure CLI
+      shell: bash
+      run: npm install -g allure-commandline
+
+    - name: Download Allure Results
+      uses: actions/download-artifact@v4
+      with:
+        path: downloaded-results
+
+    - name: Checkout gh-pages
+      uses: actions/checkout@v4
+      with:
+        ref: gh-pages
+        path: gh-pages
+      continue-on-error: true
+
+    - name: Generate reports dynamically (auto-detect browsers)
+      shell: bash
+      run: |
+        set -e
+        shopt -s nullglob
+
+        echo "========================================="
+        echo "Starting dynamic Allure report generation"
+        echo "========================================="
+
+        mkdir -p public
+
+        if [ ! -d "downloaded-results" ]; then
+          echo "No downloaded-results directory found."
+          echo "Skipping report generation."
+          exit 0
+        fi
+
+        echo "Scanning downloaded Allure artifacts..."
+
+        for path in downloaded-results/allure-results-*; do
+
+          [ -e "$path" ] || continue
+
+          if [ -d "$path" ]; then
+
+            BROWSER=$(basename "$path" | sed 's/allure-results-//' | sed 's/-.*//')
+
+            LOWER=$(echo "$BROWSER" | tr '[:upper:]' '[:lower:]' | sed 's/_headless//')
+
+            echo ""
+            echo "-----------------------------------------"
+            echo "Processing browser: $BROWSER"
+            echo "Target folder: public/allure-$LOWER"
+            echo "-----------------------------------------"
+
+            mkdir -p "${LOWER}-results"
+
+            rsync -av "$path/" "${LOWER}-results/"
+
+            if [ -d "gh-pages/allure-${LOWER}/history" ]; then
+              echo "Restoring history for $LOWER"
+              mkdir -p "${LOWER}-results/history"
+              cp -r gh-pages/allure-${LOWER}/history/* "${LOWER}-results/history/" || true
+            else
+              echo "No previous history found for $LOWER"
+            fi
+
+            echo "Generating Allure report for $LOWER..."
+            allure generate "${LOWER}-results" -o "${LOWER}-report" --clean
+
+            rm -rf "public/allure-${LOWER}"
+            mv "${LOWER}-report" "public/allure-${LOWER}"
+
+            # Clean temporary folders
+            rm -rf "${LOWER}-results"
+
+            echo "Report successfully generated for $LOWER"
+          fi
+        done
+
+        echo ""
+        echo "Checking for reports to preserve..."
+
+        if [ -d "gh-pages" ]; then
+          for existing in gh-pages/allure-*; do
+            [ -e "$existing" ] || continue
+
+            if [ -d "$existing" ]; then
+              name=$(basename "$existing")
+
+              if [ ! -d "public/$name" ]; then
+                echo "Preserving existing report: $name"
+                cp -r "$existing" public/
+              fi
+            fi
+          done
+        fi
+
+        echo ""
+        echo "========================================="
+        echo "All reports processed successfully."
+        echo "========================================="
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ inputs.github_token }}
+        publish_branch: gh-pages
+        publish_dir: public
+        keep_files: true
