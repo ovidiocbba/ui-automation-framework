@@ -132,7 +132,7 @@ jobs:
           fromJson('["CHROME_HEADLESS","FIREFOX_HEADLESS","EDGE_HEADLESS"]')
           ||
           fromJson(format('["{0}"]', inputs.browser))
-      }}
+        }}
 
     steps:
       # Cloning you repository to the runner.
