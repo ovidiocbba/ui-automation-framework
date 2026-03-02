@@ -126,6 +126,8 @@ jobs:
     timeout-minutes: 30
 
     strategy:
+      # Allow all matrix jobs to finish even if one fails
+      fail-fast: false
       matrix:
         browser: ${{ inputs.browser == 'ALL' && fromJson('["CHROME_HEADLESS","FIREFOX_HEADLESS","EDGE_HEADLESS"]') || fromJson(format('["{0}"]', inputs.browser)) }}
 
@@ -151,6 +153,8 @@ jobs:
 
   generate-and-deploy-report:
     needs: execution
+    # Run report even if execution job fails
+    if: always()
     runs-on: ubuntu-latest
 
     # Prevents two workflows from deploying to 'gh-pages' at the same time.
