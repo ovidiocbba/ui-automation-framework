@@ -31,8 +31,7 @@ runs:
           google-chrome --version
         else
           echo "Google Chrome not found. Installing..."
-          chmod +x ./scripts/InstallChrome.sh
-          ./scripts/InstallChrome.sh
+          bash .github/scripts/install-chrome-linux.sh
           echo "Installed Chrome version:"
           google-chrome --version
         fi
