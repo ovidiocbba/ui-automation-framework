@@ -127,12 +127,7 @@ jobs:
 
     strategy:
       matrix:
-        browser: ${{
-          inputs.browser == 'ALL' &&
-          fromJson('["CHROME_HEADLESS","FIREFOX_HEADLESS","EDGE_HEADLESS"]')
-          ||
-          fromJson(format('["{0}"]', inputs.browser))
-        }}
+        browser: ${{ inputs.browser == 'ALL' && fromJson('["CHROME_HEADLESS","FIREFOX_HEADLESS","EDGE_HEADLESS"]') || fromJson(format('["{0}"]', inputs.browser)) }}
 
     steps:
       # Cloning you repository to the runner.
