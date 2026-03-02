@@ -19,6 +19,10 @@ public enum DriverType {
    */
   EDGE,
   /**
+   * Microsoft Edge Headless browser driver.
+   */
+  EDGE_HEADLESS,
+  /**
    * Mozilla Firefox browser driver.
    */
   FIREFOX,
