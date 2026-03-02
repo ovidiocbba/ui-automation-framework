@@ -46,7 +46,7 @@ enterprise-ready automation framework  including:
 -   Thread-safe driver management
 -   Headless execution support
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -86,7 +86,7 @@ subgraph Core
 end
 ```
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -126,7 +126,7 @@ Benefits:
 -   Open/Closed Principle applied
 -   Decoupled browser logic
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -151,7 +151,7 @@ Benefits:
 - Reduced coupling
 - Easier maintenance
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -188,7 +188,7 @@ Benefits:
 -   Proper memory cleanup with remove()
 -   Scalable and enterprise-ready execution model
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -211,7 +211,7 @@ public abstract class BasePage {
 
 Encapsulates UI logic and improves maintainability.
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -238,7 +238,7 @@ Benefits:
 -   Reduced test duplication
 -   Cleaner step definitions
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -256,7 +256,7 @@ Each class has one responsibility:
 -   PropertiesManager → Configuration
 -   WebElementActions → UI interactions
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -274,7 +274,7 @@ BROWSERS.put(DriverType.SAFARI, new Safari());
 
 No modification required in existing logic.
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -292,7 +292,7 @@ private final Browser browser;
 
 Instead of concrete implementations.
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -308,13 +308,7 @@ Instead of concrete implementations.
 -   Config → Properties layer
 -   CI → Pipeline layer
 
-<div style="text-align: right;">
-  <strong>
-    <a href="#table-of-contents" style="text-decoration: none;">↥ Back to top</a>
-  </strong>
-</div>
-
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -334,7 +328,7 @@ Layered approach:
 
 Dependencies flow inward only.
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -348,13 +342,7 @@ Parallel-safe execution using ThreadLocal.
 
 Prevents cross-thread contamination and flaky tests.
 
-<div style="text-align: right;">
-  <strong>
-    <a href="#table-of-contents" style="text-decoration: none;">↥ Back to top</a>
-  </strong>
-</div>
-
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -398,7 +386,7 @@ Run tests with a specific browser:
 
 If no parameter is provided, the value defined in `config.properties` will be used.
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -426,7 +414,7 @@ Re-run failed scenarios:
 ./gradlew reExecuteFeatures
 ```
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -449,7 +437,7 @@ Features:
 -   History tracking
 -   CI artifact publishing
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -487,7 +475,7 @@ Build fails if:
 
 Ensures consistent documentation, improved readability, and long-term maintainability across the framework.
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -517,7 +505,7 @@ CI Highlights:
 -   Fully automated deployment
 -   Parallel-ready pipeline
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -541,7 +529,7 @@ This document explains:
 - Good and bad examples
 - Why these conventions are used
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -560,13 +548,7 @@ This document explains:
 - When to use `{@inheritDoc}`
 - Naming rules and documentation best practices
 
-<div style="text-align: right;">
-  <strong>
-    <a href="#table-of-contents" style="text-decoration: none;">↥ Back to top</a>
-  </strong>
-</div>
-
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
@@ -588,7 +570,7 @@ This document explains:
 -   Allure reporting with history
 -   Automated CI/CD with deployment
 
-<div style="text-align: right;">
+<div align="right">
   <strong>
     <a href="#table-of-contents">↥ Back to top</a>
   </strong>
