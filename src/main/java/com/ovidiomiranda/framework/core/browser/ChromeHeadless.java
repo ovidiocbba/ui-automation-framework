@@ -1,6 +1,6 @@
 package com.ovidiomiranda.framework.core.browser;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+
 import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.WebDriver;
@@ -22,7 +22,6 @@ public class ChromeHeadless implements Browser {
    */
   @Override
   public WebDriver getBrowser() {
-    WebDriverManager.chromedriver().setup();
     ChromeOptions options = getChromeOptions();
     ChromeDriver driver = new ChromeDriver(options);
     // Overrides navigator.webdriver to prevent basic bot detection
