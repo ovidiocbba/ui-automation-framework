@@ -2,6 +2,7 @@ package com.ovidiomiranda.framework.pages;
 
 import com.ovidiomiranda.framework.core.driver.DriverManager;
 import com.ovidiomiranda.framework.core.interactions.WebElementActions;
+import com.ovidiomiranda.framework.core.waits.ExplicitWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public abstract class BasePage {
    * @return true if validation page is detected
    */
   protected boolean isValidationPage() {
-    return WebElementActions.isElementDisplayed(continueShoppingButton);
+    return ExplicitWait.waitUntilVisibleShort(continueShoppingButton, 4);
   }
 
   /**
