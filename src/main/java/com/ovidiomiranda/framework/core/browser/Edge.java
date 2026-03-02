@@ -1,6 +1,5 @@
 package com.ovidiomiranda.framework.core.browser;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 
@@ -16,7 +15,6 @@ public class Edge implements Browser {
    */
   @Override
   public WebDriver getBrowser() {
-    WebDriverManager.edgedriver().setup();
     return new EdgeDriver();
   }
 }
