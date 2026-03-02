@@ -1,6 +1,5 @@
 package com.ovidiomiranda.framework.core.browser;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.WebDriver;
@@ -22,7 +21,6 @@ public class EdgeHeadless implements Browser {
    */
   @Override
   public WebDriver getBrowser() {
-    WebDriverManager.edgedriver().setup();
     EdgeOptions options = getEdgeOptions();
     EdgeDriver driver = new EdgeDriver(options);
     // Overrides navigator.webdriver to prevent basic bot detection
