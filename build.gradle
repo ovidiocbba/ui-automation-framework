@@ -32,9 +32,6 @@ dependencies {
     // TestNG
     testImplementation 'org.testng:testng:7.9.0'
 
-    // WebDriverManager
-    implementation 'io.github.bonigarcia:webdrivermanager:5.8.0'
-
     // Allure
     testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.25.0'
     testImplementation 'io.qameta.allure:allure-testng:2.25.0'
