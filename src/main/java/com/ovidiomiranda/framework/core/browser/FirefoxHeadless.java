@@ -1,6 +1,5 @@
 package com.ovidiomiranda.framework.core.browser;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -21,7 +20,6 @@ public class FirefoxHeadless implements Browser {
    */
   @Override
   public WebDriver getBrowser() {
-    WebDriverManager.firefoxdriver().setup();
     FirefoxOptions options = getFirefoxOptions();
     return new FirefoxDriver(options);
   }
