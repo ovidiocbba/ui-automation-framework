@@ -10,14 +10,15 @@ on:
     # Inputs the workflow accepts.
     inputs:
       browser:
-        description: 'Browser to execute (CHROME_HEADLESS | FIREFOX_HEADLESS | BOTH)'
+        description: 'Browser to execute (CHROME_HEADLESS | FIREFOX_HEADLESS | EDGE_HEADLESS | ALL)'
         type: choice
         required: true
         default: CHROME_HEADLESS
         options:
           - CHROME_HEADLESS
           - FIREFOX_HEADLESS
-          - BOTH
+          - EDGE_HEADLESS
+          - ALL
 
       scenarioTag:
         description: 'Scenario tag to execute (e.g. "@TC-00001")'
@@ -126,7 +127,12 @@ jobs:
 
     strategy:
       matrix:
-        browser: ${{ inputs.browser == 'BOTH' && fromJson('["CHROME_HEADLESS","FIREFOX_HEADLESS"]') || fromJson(format('["{0}"]', inputs.browser)) }}
+        browser: ${{
+          inputs.browser == 'ALL' &&
+          fromJson('["CHROME_HEADLESS","FIREFOX_HEADLESS","EDGE_HEADLESS"]')
+          ||
+          fromJson(format('["{0}"]', inputs.browser))
+      }}
 
     steps:
       # Cloning you repository to the runner.
