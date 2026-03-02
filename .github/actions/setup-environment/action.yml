@@ -1,5 +1,5 @@
 name: Setup Environment
-description: 'Install Java, Chrome, Firefox and configure Gradle cache'
+description: 'Install Java, Chrome, Firefox, Edge and configure Gradle cache'
 
 # Inputs the action accepts.
 inputs:
@@ -50,4 +50,20 @@ runs:
           sudo apt-get install -y firefox-esr || sudo apt-get install -y firefox
           echo "Installed Firefox version:"
           firefox --version
+        fi
+
+    - name: Install Microsoft Edge
+      shell: bash
+      run: |
+        if command -v microsoft-edge >/dev/null 2>&1; then
+          echo "Edge already installed:"
+          microsoft-edge --version
+        else
+          echo "Installing Edge..."
+          curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+          sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/
+          sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge-dev.list'
+          sudo apt-get update
+          sudo apt-get install -y microsoft-edge-stable
+          microsoft-edge --version
         fi
