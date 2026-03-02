@@ -115,6 +115,10 @@ runs:
         echo "All reports processed successfully."
         echo "========================================="
 
+    - name: Generate index
+      shell: bash
+      run: bash .github/scripts/generate-index.sh
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
