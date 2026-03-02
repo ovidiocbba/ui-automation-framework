@@ -4,6 +4,7 @@ import com.ovidiomiranda.framework.core.browser.Browser;
 import com.ovidiomiranda.framework.core.browser.Chrome;
 import com.ovidiomiranda.framework.core.browser.ChromeHeadless;
 import com.ovidiomiranda.framework.core.browser.Edge;
+import com.ovidiomiranda.framework.core.browser.EdgeHeadless;
 import com.ovidiomiranda.framework.core.browser.Firefox;
 import com.ovidiomiranda.framework.core.browser.FirefoxHeadless;
 import java.util.EnumMap;
@@ -31,6 +32,7 @@ public final class DriverFactory {
     BROWSERS.put(DriverType.FIREFOX, new Firefox());
     BROWSERS.put(DriverType.FIREFOX_HEADLESS, new FirefoxHeadless());
     BROWSERS.put(DriverType.EDGE, new Edge());
+    BROWSERS.put(DriverType.EDGE_HEADLESS, new EdgeHeadless());
   }
 
   /**
