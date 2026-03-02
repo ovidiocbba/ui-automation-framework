@@ -1,7 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","17561","Search for a valid product","","Wed Feb 25 20:18:28 UTC 2026","passed","Wed Feb 25 20:18:45 UTC 2026","","Product Search","Search for a valid product",""
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","5025","Search for a valid product","","Wed Feb 25 20:18:45 UTC 2026","passed","Wed Feb 25 20:18:50 UTC 2026","","Product Search","Search for a valid product",""
