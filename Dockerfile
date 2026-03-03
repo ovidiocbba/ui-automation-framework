@@ -66,14 +66,28 @@ RUN wget https://github.com/allure-framework/allure2/releases/download/${ALLURE_
 # - git → Allows Jenkins to clone repositories
 # - credentials-binding → Secure usage of secrets in pipelines
 # - allure-jenkins-plugin → Integrates Allure test reports
-
+# - configuration-as-code → Allows Jenkins to be configured via YAML files (JCasC),
+#   enabling Infrastructure as Code and eliminating manual UI configuration
 # Install Jenkins Plugins
 RUN jenkins-plugin-cli --plugins \
     workflow-aggregator \
     pipeline-stage-view \
     git \
     credentials-binding \
-    allure-jenkins-plugin
+    allure-jenkins-plugin \
+    configuration-as-code
+
+# Enable Jenkins Configuration as Code
+ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs
+
+# Create configuration folder
+RUN mkdir -p /var/jenkins_home/casc_configs
+
+# Copy JCasC configuration file
+COPY jenkins.yaml /var/jenkins_home/casc_configs/jenkins.yaml
+
+# Fix permissions
+RUN chown -R jenkins:jenkins /var/jenkins_home/casc_configs
 
 # Switch back to default secure user
 USER jenkins
