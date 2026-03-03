@@ -1,0 +1,13 @@
+jenkins:
+  systemMessage: "Jenkins configured automatically via JCasC"
+
+tool:
+  jdk:
+    installations:
+      - name: "jdk17"
+        home: "/opt/java/openjdk"
+
+  allure:
+    installations:
+      - name: "allure"
+        home: "/usr/bin/allure"
