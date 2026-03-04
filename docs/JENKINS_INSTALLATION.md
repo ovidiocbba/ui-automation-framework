@@ -17,7 +17,7 @@ This guide explains how to build and run a fully configured **Jenkins UI Automat
 
 ---
 
-## 🐳 1. Build Docker Image
+## :whale: 1. Build Docker Image
 
 The `Dockerfile` is located at:
 
@@ -51,7 +51,7 @@ Builds a custom Jenkins image with the required plugins.
 
 ---
 
-## 💾 2. Create Persistent Volume
+## :floppy_disk: 2. Create Persistent Volume
 
 ```bash
 docker volume create jenkins_automation_ci
@@ -75,7 +75,7 @@ This volume stores:
 
 ---
 
-## 🚀 3. Run Jenkins Container
+## :rocket: 3. Run Jenkins Container
 
 ```bash
 docker run -d \
@@ -106,7 +106,7 @@ docker run -d \
 
 ---
 
-## 🌍 4. Access Jenkins
+## :globe_with_meridians: 4. Access Jenkins
 
 Open your browser:
 
@@ -122,7 +122,7 @@ http://localhost:8080/
 
 ---
 
-## 🔑 5. Get Initial Admin Password
+## :key: 5. Get Initial Admin Password
 
 ### PowerShell
 
@@ -150,7 +150,7 @@ Copy the generated password and paste it into the Jenkins unlock screen.
 
 ---
 
-## ⚙ 6. Initial Jenkins Setup
+## :gear: 6. Initial Jenkins Setup
 
 ### 6.1 Plugin Installation
 
@@ -234,7 +234,7 @@ Start using Jenkins
 
 ---
 
-## 🗑 7. Clean Setup (Optional)
+## :wastebasket: 7. Clean Setup (Optional)
 
 Remove container:
 
@@ -258,7 +258,7 @@ docker volume rm jenkins_automation_ci
 
 ---
 
-## 📝 8. Notes
+## :memo: 8. Notes
 
 * The Docker volume ensures Jenkins data persists.
 * Use `--shm-size=2g` to prevent browser crashes.
