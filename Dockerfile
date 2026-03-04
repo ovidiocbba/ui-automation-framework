@@ -68,6 +68,8 @@ RUN wget https://github.com/allure-framework/allure2/releases/download/${ALLURE_
 # - allure-jenkins-plugin → Integrates Allure test reports
 # - configuration-as-code → Allows Jenkins to be configured via YAML files (JCasC),
 #   enabling Infrastructure as Code and eliminating manual UI configuration
+# - job-dsl → Enables creation of Jenkins jobs via code (Job DSL),
+#   allowing automatic pipeline creation without manual UI configuration
 # Install Jenkins Plugins
 RUN jenkins-plugin-cli --plugins \
     workflow-aggregator \
@@ -75,7 +77,8 @@ RUN jenkins-plugin-cli --plugins \
     git \
     credentials-binding \
     allure-jenkins-plugin \
-    configuration-as-code
+    configuration-as-code \
+    job-dsl
 
 # Enable Jenkins Configuration as Code
 ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs
