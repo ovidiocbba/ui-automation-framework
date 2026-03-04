@@ -90,42 +90,47 @@ pipeline {
                     for (browser in browsers) {
                         def selectedBrowser = browser
                         // Create a parallel stage per browser
-                        parallelStages[browser] = {
+                        parallelStages[selectedBrowser] = {
                             stage("Run ${selectedBrowser}") {
                                 try {
                                     // Execute main test task
                                     sh """
+                                        mkdir -p build/logs
                                         ./gradlew clean executeFeatures \
                                           -Dcucumber.filter.tags="${params.SCENARIO_TAG}" \
                                           -Dbrowser="${selectedBrowser}" \
                                           -DbaseUrl="${params.BASE_URL}" \
                                           -DexplicitWait="${params.EXPLICIT_WAIT}" \
                                           -Dthreads="${params.THREADS}" \
-                                          -Dallure.results.directory=build/allure-results/${selectedBrowser}
+                                          -Dallure.results.directory=build/allure-results/${selectedBrowser} \
+                                          | tee build/logs/${selectedBrowser}.log
                                     """
                                 } catch (err) {
                                     // If execution fails, re-run failed scenarios only
-                                    echo "Re-running failed scenarios for ${browser}"
+                                    echo "Re-running failed scenarios for ${selectedBrowser}"
+
                                     sh """
                                         ./gradlew reExecuteFeatures \
                                           -Dbrowser="${selectedBrowser}" \
                                           -DbaseUrl="${params.BASE_URL}" \
                                           -DexplicitWait="${params.EXPLICIT_WAIT}" \
                                           -Dthreads="${params.THREADS}" \
-                                          -Dallure.results.directory=build/allure-results/${selectedBrowser}
+                                          -Dallure.results.directory=build/allure-results/${selectedBrowser} \
+                                          | tee build/logs/${selectedBrowser}-rerun.log
                                     """
                                     // Mark stage as failed after re-run
                                     throw err
                                 }
-                                    // Save logs for this specific browser
-                                    archiveArtifacts artifacts: "build/logs/${selectedBrowser}.log", allowEmptyArchive: true
+                                // Save logs for this specific browser
+                                archiveArtifacts artifacts: "build/logs/${selectedBrowser}*.log",
+                                                  allowEmptyArchive: true
                             }
                         }
                     }
                     // Run all browser stages in parallel
+                    parallel parallelStages
                     // failFast: false ensures one browser failure does NOT stop the others
                     parallelStages.failFast = false
-                    parallel parallelStages
                 }
             }
         }
