@@ -121,7 +121,8 @@ pipeline {
                         }
                     }
                     // Run all browser stages in parallel
-                    parallel parallelStages
+                    // failFast: false ensures one browser failure does NOT stop the others
+                    parallel parallelStages, failFast: false
                 }
             }
         }
