@@ -73,7 +73,6 @@ pipeline {
 
         stage('Execute Tests') {
             steps {
-
                 script {
                     def browsers = []
 
@@ -89,34 +88,37 @@ pipeline {
                     def parallelStages = [:]
                     // Loop through each selected browser
                     for (browser in browsers) {
+                        def selectedBrowser = browser
                         // Create a parallel stage per browser
                         parallelStages[browser] = {
-                            stage("Run ${browser}") {
+                            stage("Run ${selectedBrowser}") {
                                 try {
                                     // Execute main test task
                                     sh """
-                                    ./gradlew executeFeatures \
-                                      -Dcucumber.filter.tags="${params.SCENARIO_TAG}" \
-                                      -Dbrowser="${browser}" \
-                                      -DbaseUrl="${params.BASE_URL}" \
-                                      -DexplicitWait="${params.EXPLICIT_WAIT}" \
-                                      -Dthreads="${params.THREADS}"
+                                        ./gradlew clean executeFeatures \
+                                          -Dcucumber.filter.tags="${params.SCENARIO_TAG}" \
+                                          -Dbrowser="${selectedBrowser}" \
+                                          -DbaseUrl="${params.BASE_URL}" \
+                                          -DexplicitWait="${params.EXPLICIT_WAIT}" \
+                                          -Dthreads="${params.THREADS}" \
+                                          -Dallure.results.directory=build/allure-results/${selectedBrowser}
                                     """
                                 } catch (err) {
                                     // If execution fails, re-run failed scenarios only
                                     echo "Re-running failed scenarios for ${browser}"
                                     sh """
-                                    ./gradlew reExecuteFeatures \
-                                      -Dbrowser="${browser}" \
-                                      -DbaseUrl="${params.BASE_URL}" \
-                                      -DexplicitWait="${params.EXPLICIT_WAIT}" \
-                                      -Dthreads="${params.THREADS}"
+                                        ./gradlew reExecuteFeatures \
+                                          -Dbrowser="${selectedBrowser}" \
+                                          -DbaseUrl="${params.BASE_URL}" \
+                                          -DexplicitWait="${params.EXPLICIT_WAIT}" \
+                                          -Dthreads="${params.THREADS}" \
+                                          -Dallure.results.directory=build/allure-results/${selectedBrowser}
                                     """
                                     // Mark stage as failed after re-run
                                     throw err
                                 }
                                     // Save logs for this specific browser
-                                    archiveArtifacts artifacts: "build/logs/${browser}.log", allowEmptyArchive: true
+                                    archiveArtifacts artifacts: "build/logs/${selectedBrowser}.log", allowEmptyArchive: true
                             }
                         }
                     }
@@ -130,8 +132,20 @@ pipeline {
         stage('Allure Report') {
             steps {
                 script {
+                    def resultPaths = []
+                    if (params.BROWSER == 'ALL') {
+                        resultPaths = [
+                            [path: 'build/allure-results/CHROME_HEADLESS'],
+                            [path: 'build/allure-results/FIREFOX_HEADLESS'],
+                            [path: 'build/allure-results/EDGE_HEADLESS']
+                        ]
+                    } else {
+                        resultPaths = [
+                            [path: "build/allure-results/${params.BROWSER}"]
+                        ]
+                    }
                     allure([
-                        results: [[path: 'build/allure-results']]
+                        results: resultPaths
                     ])
                 }
             }
