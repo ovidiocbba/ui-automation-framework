@@ -1,9 +1,20 @@
 jenkins:
   systemMessage: "Jenkins configured automatically via JCasC"
 
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "${JENKINS_ADMIN_ID}"
+          password: "${JENKINS_ADMIN_PASSWORD}"
+
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
 # Job DSL: Automatically creates the Pipeline job at startup
 jobs:
-  - script: >
+  - script: |
       // Repository configuration
       def JOB_NAME        = 'automation-ci'
       def JOB_DESCRIPTION = 'Automation CI - Cross Browser Execution with Parallel Support'
