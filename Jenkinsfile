@@ -126,9 +126,13 @@ pipeline {
             }
         }
 
-       stage('Allure Report') {
+        stage('Allure Report') {
             steps {
-                allure results: [[path: 'build/allure-results']]
+                script {
+                    allure([
+                        results: [[path: 'build/allure-results']]
+                    ])
+                }
             }
         }
     }
