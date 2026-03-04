@@ -146,9 +146,7 @@ pipeline {
                             [path: "build/allure-results/\${params.BROWSER}"]
                         ]
                     }
-                    allure([
-                        results: resultPaths
-                    ])
+                    allure results: resultPaths
                 }
             }
         }
