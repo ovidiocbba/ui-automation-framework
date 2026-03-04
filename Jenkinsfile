@@ -96,6 +96,8 @@ pipeline {
                                     // Execute main test task
                                     sh """
                                         mkdir -p build/logs
+                                        mkdir -p build/allure-results/${selectedBrowser}
+                                        echo "Directory created: $(ls -al build/allure-results/${selectedBrowser})"
                                         ./gradlew executeFeatures \
                                           -Dcucumber.filter.tags="${params.SCENARIO_TAG}" \
                                           -Dbrowser="${selectedBrowser}" \
@@ -103,6 +105,7 @@ pipeline {
                                           -DexplicitWait="${params.EXPLICIT_WAIT}" \
                                           -Dthreads="${params.THREADS}" \
                                           -Dallure.results.directory=build/allure-results/${selectedBrowser} \
+                                          -Dorg.gradle.logging.level=debug \
                                           | tee build/logs/${selectedBrowser}.log
                                     """
                                 } catch (err) {
