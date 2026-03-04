@@ -13,13 +13,13 @@ pipeline {
         // Browser selection parameter
         choice(
             name: 'BROWSER',
-            choices: ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS', 'ALL'],
-            description: 'Browser to execute'
+            choices: ['ALL','CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS'],
+            description: 'Browser to execute (ALL | CHROME_HEADLESS | FIREFOX_HEADLESS | EDGE_HEADLESS)'
         )
-        string(name: 'SCENARIO_TAG', defaultValue: '@regression', description: 'Cucumber tag')
-        string(name: 'BASE_URL', defaultValue: 'https://www.amazon.com', description: 'Base URL')
-        string(name: 'EXPLICIT_WAIT', defaultValue: '30', description: 'Explicit wait (seconds)')
-        string(name: 'THREADS', defaultValue: '2', description: 'Parallel threads')
+        string(name: 'SCENARIO_TAG', defaultValue: '@regression', description: 'Scenario tag to execute (e.g. "@TC-00001")')
+        string(name: 'BASE_URL', defaultValue: 'https://www.amazon.com', description: 'Base URL (e.g. "https://www.amazon.com")')
+        string(name: 'EXPLICIT_WAIT', defaultValue: '30', description: 'Explicit wait timeout in seconds (e.g. "30")')
+        string(name: 'THREADS', defaultValue: '2', description: 'Number of parallel threads for test execution (e.g. "2")')
     }
 
     environment {
@@ -96,7 +96,7 @@ pipeline {
                                     // Execute main test task
                                     sh """
                                         mkdir -p build/logs
-                                        ./gradlew clean executeFeatures \
+                                        ./gradlew executeFeatures \
                                           -Dcucumber.filter.tags="${params.SCENARIO_TAG}" \
                                           -Dbrowser="${selectedBrowser}" \
                                           -DbaseUrl="${params.BASE_URL}" \
