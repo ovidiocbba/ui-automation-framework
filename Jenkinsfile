@@ -96,36 +96,36 @@ pipeline {
                                     // Execute main test task
                                     sh """
                                         mkdir -p build/logs
-                                        mkdir -p build/allure-results/${selectedBrowser}
-                                        echo "Directory created: $(ls -al build/allure-results/${selectedBrowser})"
+                                        mkdir -p build/allure-results/\${selectedBrowser}
+                                        echo "Directory created: \$(ls -al build/allure-results/\${selectedBrowser})"
                                         ./gradlew executeFeatures \
-                                          -Dcucumber.filter.tags="${params.SCENARIO_TAG}" \
-                                          -Dbrowser="${selectedBrowser}" \
-                                          -DbaseUrl="${params.BASE_URL}" \
-                                          -DexplicitWait="${params.EXPLICIT_WAIT}" \
-                                          -Dthreads="${params.THREADS}" \
-                                          -Dallure.results.directory="build/allure-results/${selectedBrowser}" \
+                                          -Dcucumber.filter.tags="\${params.SCENARIO_TAG}" \
+                                          -Dbrowser="\${selectedBrowser}" \
+                                          -DbaseUrl="\${params.BASE_URL}" \
+                                          -DexplicitWait="\${params.EXPLICIT_WAIT}" \
+                                          -Dthreads="\${params.THREADS}" \
+                                          -Dallure.results.directory="build/allure-results/\${selectedBrowser}" \
                                           -Dorg.gradle.logging.level=debug \
-                                          | tee build/logs/${selectedBrowser}.log
+                                          | tee build/logs/\${selectedBrowser}.log
                                     """
                                 } catch (err) {
                                     // If execution fails, re-run failed scenarios only
-                                    echo "Re-running failed scenarios for ${selectedBrowser}"
+                                    echo "Re-running failed scenarios for \${selectedBrowser}"
 
                                     sh """
                                         ./gradlew reExecuteFeatures \
-                                          -Dbrowser="${selectedBrowser}" \
-                                          -DbaseUrl="${params.BASE_URL}" \
-                                          -DexplicitWait="${params.EXPLICIT_WAIT}" \
-                                          -Dthreads="${params.THREADS}" \
-                                          -Dallure.results.directory=build/allure-results/${selectedBrowser} \
-                                          | tee build/logs/${selectedBrowser}-rerun.log
+                                          -Dbrowser="\${selectedBrowser}" \
+                                          -DbaseUrl="\${params.BASE_URL}" \
+                                          -DexplicitWait="\${params.EXPLICIT_WAIT}" \
+                                          -Dthreads="\${params.THREADS}" \
+                                          -Dallure.results.directory=build/allure-results/\${selectedBrowser} \
+                                          | tee build/logs/\${selectedBrowser}-rerun.log
                                     """
                                     // Mark stage as failed after re-run
                                     throw err
                                 }
                                 // Save logs for this specific browser
-                                archiveArtifacts artifacts: "build/logs/${selectedBrowser}*.log",
+                                archiveArtifacts artifacts: "build/logs/\${selectedBrowser}*.log",
                                                   allowEmptyArchive: true
                             }
                         }
@@ -150,7 +150,7 @@ pipeline {
                         ]
                     } else {
                         resultPaths = [
-                            [path: "build/allure-results/${params.BROWSER}"]
+                            [path: "build/allure-results/\${params.BROWSER}"]
                         ]
                     }
                     allure([
