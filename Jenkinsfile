@@ -126,14 +126,9 @@ pipeline {
             }
         }
 
-        stage('Allure Report') {
+       stage('Allure Report') {
             steps {
-                // Generate Allure report inside Jenkins UI
-                allure(
-                    includeProperties: false,
-                    jdk: '',
-                    results: [[path: 'build/allure-results']]
-                )
+                allure results: [[path: 'build/allure-results']]
             }
         }
     }
