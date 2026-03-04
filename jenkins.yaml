@@ -1,55 +1,32 @@
 jenkins:
   systemMessage: "Jenkins configured automatically via JCasC"
 
-# Job DSL Section
-# Automatically creates Pipeline job from SCM
+# Job DSL: Automatically creates the Pipeline job at startup
 jobs:
   - script: >
-      pipelineJob('ui-automation-ci') {
-        description('UI Automation CI - Cross Browser Execution with Parallel Support')
+      // Repository configuration (single source of truth)
+      def REPO_URL = 'https://github.com/ovidiocbba/ui-automation-framework'
+      def REPO_BRANCH = '*/main'
+        
+      pipelineJob('automation-ci') {
+        description('Automation CI - Cross Browser Execution with Parallel Support')
 
-        parameters {
-          choiceParam(
-            'BROWSER',
-            ['CHROME_HEADLESS','FIREFOX_HEADLESS','EDGE_HEADLESS','ALL'],
-            'Browser to execute (CHROME_HEADLESS | FIREFOX_HEADLESS | EDGE_HEADLESS | ALL)'
-          )
-
-          stringParam(
-          'SCENARIO_TAG',
-          '@regression',
-          'Cucumber scenario tag to execute (e.g. "@TC-00001" or "@regression")'
-          )
-
-          stringParam(
-          'BASE_URL',
-          'https://www.amazon.com',
-          'Application base URL (e.g. "https://www.amazon.com")'
-          )
-
-          stringParam(
-          'EXPLICIT_WAIT',
-          '30',
-          'Explicit wait timeout in seconds (e.g. "30")'
-          )
-
-          stringParam(
-          'THREADS',
-          '2',
-          'Number of parallel threads for test execution (e.g. "2")'
-          )
-        }
-        // Pipeline Definition from Git
+        // Load Pipeline script from Git (Pipeline as Code)
         definition {
+          // cpsScm = CPS (Continuation Passing Style) + SCM (Source Code Management):
+          // executes a Pipeline using a Jenkinsfile stored in a Git repository.
           cpsScm {
+            // scm = SCM (Source Code Management):
+            // defines which repository and branch Jenkins must clone.
             scm {
               git {
                 remote {
-                  url('https://github.com/ovidiocbba/ui-automation-framework')
+                  url(REPO_URL)
                 }
-                branch('*/main')
+                branch(REPO_BRANCH)
               }
             }
+            // Path to Jenkinsfile inside the repository
             scriptPath('Jenkinsfile')
           }
         }
