@@ -1,13 +1,50 @@
 jenkins:
   systemMessage: "Jenkins configured automatically via JCasC"
 
+  # Job DSL Section
+  # Automatically creates Pipeline job from SCM
+jobs:
+  - script: >
+      pipelineJob('ui-automation-pipeline') {
+        description('UI Automation Pipeline configured as code')
+
+        parameters {
+          choiceParam(
+            'BROWSER',
+            ['CHROME_HEADLESS','FIREFOX_HEADLESS','EDGE_HEADLESS','ALL'],
+            'Browser to execute'
+          )
+          stringParam('SCENARIO_TAG','@regression','Cucumber tag')
+          stringParam('BASE_URL','https://www.amazon.com','Base URL')
+          stringParam('EXPLICIT_WAIT','30','Explicit wait (seconds)')
+          stringParam('THREADS','2','Parallel threads')
+        }
+        // Pipeline Definition from Git
+        definition {
+          cpsScm {
+            scm {
+              git {
+                remote {
+                  url('https://github.com/ovidiocbba/ui-automation-framework')
+                }
+                branch('*/main')
+              }
+            }
+            scriptPath('Jenkinsfile')
+          }
+        }
+      }
+
+# Global Tool Configuration
 tool:
   jdk:
     installations:
       - name: "jdk17"
+        # Path inside Docker container
         home: "/opt/java/openjdk"
 
   allure:
     installations:
       - name: "allure"
+        # Allure CLI path installed in Docker image
         home: "/usr/bin/allure"
