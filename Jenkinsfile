@@ -74,8 +74,6 @@ pipeline {
         stage('Execute Tests') {
             steps {
                 script {
-                    def browsers = []
-
                     def browsers = params.BROWSER == 'ALL' ? ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS'] : [params.BROWSER]
                     // Map that will store parallel stages
                     def parallelStages = [:]
