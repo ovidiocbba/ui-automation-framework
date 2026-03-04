@@ -104,7 +104,7 @@ pipeline {
                                           -DbaseUrl="${params.BASE_URL}" \
                                           -DexplicitWait="${params.EXPLICIT_WAIT}" \
                                           -Dthreads="${params.THREADS}" \
-                                          -Dallure.results.directory=build/allure-results/${selectedBrowser} \
+                                          -Dallure.results.directory="build/allure-results/${selectedBrowser}" \
                                           -Dorg.gradle.logging.level=debug \
                                           | tee build/logs/${selectedBrowser}.log
                                     """
