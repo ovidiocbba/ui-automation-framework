@@ -50,6 +50,14 @@ RUN wget -q -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearm
     echo "===== MICROSOFT EDGE VERSION =====" && \
     microsoft-edge --version
 
+# Install Microsoft Edge WebDriver (FROM GITHUB - avoids Azure CDN)
+RUN wget https://github.com/MicrosoftEdge/EdgeWebDriver/releases/latest/download/edgedriver_linux64.zip -O /tmp/edgedriver.zip && \
+    unzip /tmp/edgedriver.zip -d /usr/local/bin/ && \
+    chmod +x /usr/local/bin/msedgedriver && \
+    rm /tmp/edgedriver.zip && \
+    echo "===== EDGE DRIVER VERSION =====" && \
+    msedgedriver --version
+
 # Install Allure CLI
 ENV ALLURE_VERSION=2.25.0
 
