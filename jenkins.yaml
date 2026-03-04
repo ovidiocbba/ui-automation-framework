@@ -4,12 +4,14 @@ jenkins:
 # Job DSL: Automatically creates the Pipeline job at startup
 jobs:
   - script: >
-      // Repository configuration (single source of truth)
+      // Repository configuration
+      def JOB_NAME        = 'automation-ci'
+      def JOB_DESCRIPTION = 'Automation CI - Cross Browser Execution with Parallel Support'
       def REPO_URL = 'https://github.com/ovidiocbba/ui-automation-framework'
       def REPO_BRANCH = '*/main'
-        
-      pipelineJob('automation-ci') {
-        description('Automation CI - Cross Browser Execution with Parallel Support')
+      
+      pipelineJob(JOB_NAME) {
+        description(JOB_DESCRIPTION)
 
         // Load Pipeline script from Git (Pipeline as Code)
         definition {
