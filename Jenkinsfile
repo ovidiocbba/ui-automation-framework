@@ -117,8 +117,7 @@ pipeline {
                                     throw err
                                 }
                                 // Save logs for this specific browser
-                                archiveArtifacts artifacts: "build/logs/\${selectedBrowser}*.log",
-                                                  allowEmptyArchive: true
+                                archiveArtifacts artifacts: "build/logs/\${selectedBrowser}*.log", allowEmptyArchive: true
                             }
                         }
                     }
