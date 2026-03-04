@@ -76,14 +76,7 @@ pipeline {
                 script {
                     def browsers = []
 
-                    // If user selects ALL, run all three browsers
-                    if (params.BROWSER == 'ALL') {
-                        browsers = ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
-                    }
-                    // Otherwise run only selected browser
-                    else {
-                        browsers = [params.BROWSER]
-                    }
+                    def browsers = params.BROWSER == 'ALL' ? ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS'] : [params.BROWSER]
                     // Map that will store parallel stages
                     def parallelStages = [:]
                     // Loop through each selected browser
