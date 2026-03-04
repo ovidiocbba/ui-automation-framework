@@ -1,13 +1,14 @@
 # Jenkins LTS with Java 17
+# Base image already includes Jenkins and JDK 17
 FROM jenkins/jenkins:lts-jdk17
 
-# Switch to root to install plugins
+# Switch to root to install system dependencies
 USER root
 
 RUN echo "===== JAVA VERSION =====" && java -version
 
 # Install Base System Dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
     gnupg \
@@ -23,40 +24,56 @@ RUN apt-get update && apt-get install -y \
     libgbm1 \
     xvfb \
     xauth \
+    firefox-esr \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Firefox
-RUN apt-get update && apt-get install -y \
-    firefox-esr \
-    && rm -rf /var/lib/apt/lists/* \
-    && echo "===== FIREFOX VERSION =====" \
-    && firefox --version
+RUN echo "===== FIREFOX VERSION =====" && firefox --version
 
 # Install Google Chrome
-RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /usr/share/keyrings/google.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub \
+    | gpg --dearmor -o /usr/share/keyrings/google.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
+    > /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
-    apt-get install -y google-chrome-stable && \
+    apt-get install -y --no-install-recommends google-chrome-stable && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     echo "===== GOOGLE CHROME VERSION =====" && \
     google-chrome --version
 
 # Install Microsoft Edge
-RUN wget -q -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /usr/share/keyrings/microsoft.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list && \
+RUN wget -q -O - https://packages.microsoft.com/keys/microsoft.asc \
+    | gpg --dearmor -o /usr/share/keyrings/microsoft.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" \
+    > /etc/apt/sources.list.d/microsoft-edge.list && \
     apt-get update && \
-    apt-get install -y microsoft-edge-stable && \
+    apt-get install -y --no-install-recommends microsoft-edge-stable && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     echo "===== MICROSOFT EDGE VERSION =====" && \
     microsoft-edge --version
 
+# Install Edge WebDriver (required for Selenium)
+# Edge does not include the WebDriver by default.
+# The driver version must match the installed browser version to avoid compatibility errors.
+RUN EDGE_VERSION=$(microsoft-edge --version | awk '{print $3}') && \
+    echo "Installing EdgeDriver for version: $EDGE_VERSION" && \
+    wget -q https://msedgedriver.microsoft.com/$EDGE_VERSION/edgedriver_linux64.zip && \
+    unzip -q edgedriver_linux64.zip && \
+    mv msedgedriver /usr/local/bin/ && \
+    chmod +x /usr/local/bin/msedgedriver && \
+    rm -f edgedriver_linux64.zip && \
+    echo "===== EDGE DRIVER VERSION =====" && \
+    msedgedriver --version
+
 # Install Allure CLI
 ENV ALLURE_VERSION=2.25.0
 
-RUN wget https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz && \
-    tar -zxvf allure-${ALLURE_VERSION}.tgz -C /opt/ && \
+RUN wget -q https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz && \
+    tar -zxf allure-${ALLURE_VERSION}.tgz -C /opt/ && \
     ln -s /opt/allure-${ALLURE_VERSION}/bin/allure /usr/bin/allure && \
-    rm allure-${ALLURE_VERSION}.tgz && \
+    rm -f allure-${ALLURE_VERSION}.tgz && \
     echo "===== ALLURE VERSION =====" && \
     allure --version
 
@@ -80,7 +97,7 @@ RUN jenkins-plugin-cli --plugins \
     configuration-as-code \
     job-dsl
 
-# Enable Jenkins Configuration as Code
+# Enable Jenkins Configuration as Code (JCasC)
 ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs
 
 # Create configuration folder
@@ -92,5 +109,5 @@ COPY jenkins.yaml /var/jenkins_home/casc_configs/jenkins.yaml
 # Fix permissions
 RUN chown -R jenkins:jenkins /var/jenkins_home/casc_configs
 
-# Switch back to default secure user
+# Switch back to secure Jenkins user
 USER jenkins
