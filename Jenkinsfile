@@ -74,7 +74,6 @@ pipeline {
         stage('Execute Tests') {
             steps {
                 script {
-
                     // Centralized Gradle parameters to avoid duplication
                     def commonParams = "-Dcucumber.filter.tags=${params.SCENARIO_TAG} " +
                                        "-DbaseUrl=${params.BASE_URL} " +
@@ -157,6 +156,11 @@ pipeline {
                         ]
                     }
 
+                    // Check if the results directory exists before generating the report
+                    sh "echo 'Checking Allure results directory existence...'"
+                    sh "ls -R ${resultPaths.collect { it.path }.join(' ')}"
+
+                    // Generate the Allure report
                     allure results: resultPaths
                 }
             }
