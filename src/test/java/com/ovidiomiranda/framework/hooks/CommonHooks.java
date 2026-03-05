@@ -45,8 +45,8 @@ public class CommonHooks {
         .getProperty(PropertiesInput.BASE_URL);
 
     // Add labels to Allure
-    Allure.label("browser", browser);
-    Allure.label("baseUrl", baseUrl);
+    // Allure.label("browser", browser);
+    // Allure.label("baseUrl", baseUrl);
 
     if (LOGGER.isInfoEnabled()) {
       LOGGER.info(SEPARATOR);
