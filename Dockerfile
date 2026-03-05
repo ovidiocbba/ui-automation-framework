@@ -7,26 +7,30 @@ USER root
 
 RUN echo "===== JAVA VERSION =====" && java -version
 
-# Install Base System Dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    wget \
-    gnupg \
-    unzip \
-    rsync \
-    ca-certificates \
-    fonts-liberation \
-    libnss3 \
-    libxss1 \
-    libasound2 \
-    libatk-bridge2.0-0 \
-    libgtk-3-0 \
-    libgbm1 \
-    xvfb \
-    xauth \
-    firefox-esr \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Install Base System Dependencies and UTF-8 support
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        locales \
+        curl \
+        wget \
+        gnupg \
+        unzip \
+        rsync \
+        ca-certificates \
+        fonts-liberation \
+        libnss3 \
+        libxss1 \
+        libasound2 \
+        libatk-bridge2.0-0 \
+        libgtk-3-0 \
+        libgbm1 \
+        xvfb \
+        xauth \
+        firefox-esr && \
+    locale-gen en_US.UTF-8 && \
+    update-locale LANG=en_US.UTF-8 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN echo "===== FIREFOX VERSION =====" && firefox --version
 
