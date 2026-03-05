@@ -112,8 +112,8 @@ COPY jenkins.yaml /var/jenkins_home/casc_configs/jenkins.yaml
 RUN chown -R jenkins:jenkins /var/jenkins_home/casc_configs
 
 # Set system language and encoding to English and UTF-8
-ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 # Set Java encoding to UTF-8 for Jenkins logs and operations
 ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
