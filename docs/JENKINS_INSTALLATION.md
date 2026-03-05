@@ -87,20 +87,23 @@ docker run -d \
   --shm-size=2g \
   jenkins-automation-ci:1.1.0
 ```
-**Note**: 
+
+**Note**:
 
 Be sure to change the default password `SuperSecurePass2026!` to a password you choose. This will help keep your Jenkins secure before using it. 
 The password you set here will be used for the Jenkins admin login during the first setup.
 
 ### 🔎 What each option does:
 
-| Option                     | Description                           |
-| -------------------------- | ------------------------------------- |
-| `--restart unless-stopped` | Auto-restart if container crashes     |
-| `8080`                     | Jenkins UI                            |
-| `50000`                    | Jenkins agent communication           |
-| `-v`                       | Persistent Jenkins data               |
-| `--shm-size=2g`            | Prevent Chrome/Edge crashes in Docker |
+| Option                                       | Description                                      |
+|----------------------------------------------|--------------------------------------------------|
+| `--restart unless-stopped`                   | Automatically restarts the container if it stops |
+| `-p 8080:8080`                               | Exposes Jenkins web interface (UI)               |
+| `-p 50000:50000`                             | Agent communication port for Jenkins nodes       |
+| `-v jenkins_automation_ci:/var/jenkins_home` | Persists Jenkins data between container restarts |
+| `-e JENKINS_ADMIN_ID`                        | Sets the Jenkins admin username                  |
+| `-e JENKINS_ADMIN_PASSWORD`                  | Sets the Jenkins admin password                  |
+| `--shm-size=2g`                              | Prevent Chrome/Edge crashes in Docker            |
 
 <div align="right">
   <strong>
@@ -113,6 +116,7 @@ The password you set here will be used for the Jenkins admin login during the fi
 ## :gear: 4. Initial Jenkins Setup
 
 ### 4.1 Plugin Installation
+
 Open the default URL:
 
 ```
@@ -171,6 +175,8 @@ Start using Jenkins
 ✅ Jenkins is now ready to use.
 
 ![08-jenkins-is-now-ready-to-use.png](images/jenkins/08-jenkins-is-now-ready-to-use.png)
+
+![09-jenkins-is-now-ready-to-use.png](images/jenkins/09-jenkins-is-now-ready-to-use.png)
 
 <div align="right">
   <strong>
