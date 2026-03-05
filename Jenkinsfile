@@ -101,6 +101,7 @@ pipeline {
 
                         // Centralized browser-specific parameters
                         def browserParams = "-Dbrowser=${selectedBrowser} " +
+                                            "-Dallure.results.directory=${browserBuildDir}/allure-results " +
                                             "-Dorg.gradle.project.buildDir=${browserBuildDir} " +
                                             "${gradleFlags}"
 
