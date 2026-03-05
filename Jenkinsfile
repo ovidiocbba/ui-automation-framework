@@ -13,7 +13,7 @@ pipeline {
         // Browser selection parameter
         choice(
             name: 'BROWSER',
-            choices: ['ALL','CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS'],
+            choices: ['ALL', 'CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS'],
             description: 'Browser to execute (ALL | CHROME_HEADLESS | FIREFOX_HEADLESS | EDGE_HEADLESS)'
         )
         string(name: 'SCENARIO_TAG', defaultValue: '@regression', description: 'Scenario tag to execute (e.g. "@TC-00001")')
@@ -161,7 +161,7 @@ pipeline {
                     sh "ls -R ${resultPaths.collect { it.path }.join(' ')}"
 
                     // Generate the Allure report
-                    allure results: resultPaths
+                    allure commandline: 'allure', results: resultPaths
                 }
             }
         }
