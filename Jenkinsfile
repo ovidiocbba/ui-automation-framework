@@ -128,7 +128,7 @@ pipeline {
                                     throw err
                                 }
                                 // Save logs for this specific browser
-                                archiveArtifacts artifacts: "${browserBuildDir}/logs/**/*.log"
+                                archiveArtifacts artifacts: "build/logs/**/*.log", allowEmptyArchive: true
                             }
                         }
                     }
