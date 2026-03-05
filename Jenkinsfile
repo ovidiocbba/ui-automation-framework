@@ -139,6 +139,18 @@ pipeline {
             }
         }
 
+        // Debugging step to check if allure-results directories are being generated
+        stage('Debug') {
+            steps {
+                script {
+                    // Verificar archivos generados
+                    sh 'ls -R build-CHROME_HEADLESS/allure-results'
+                    sh 'ls -R build-FIREFOX_HEADLESS/allure-results'
+                    sh 'ls -R build-EDGE_HEADLESS/allure-results'
+                }
+            }
+        }
+
         stage('Allure Report') {
             steps {
                 script {
