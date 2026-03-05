@@ -77,16 +77,6 @@ RUN wget -q https://github.com/allure-framework/allure2/releases/download/${ALLU
     echo "===== ALLURE VERSION =====" && \
     allure --version
 
-# Install required plugins:
-# - workflow-aggregator → Enables Pipeline (Jenkinsfile support)
-# - pipeline-stage-view → Visual stage view in UI
-# - git → Allows Jenkins to clone repositories
-# - credentials-binding → Secure usage of secrets in pipelines
-# - allure-jenkins-plugin → Integrates Allure test reports
-# - configuration-as-code → Allows Jenkins to be configured via YAML files (JCasC),
-#   enabling Infrastructure as Code and eliminating manual UI configuration
-# - job-dsl → Enables creation of Jenkins jobs via code (Job DSL),
-#   allowing automatic pipeline creation without manual UI configuration
 # Install Jenkins Plugins
 RUN jenkins-plugin-cli --plugins \
     workflow-aggregator \
@@ -95,7 +85,19 @@ RUN jenkins-plugin-cli --plugins \
     credentials-binding \
     allure-jenkins-plugin \
     configuration-as-code \
-    job-dsl
+    job-dsl \
+    blueocean \
+
+# Plugins:
+# - workflow-aggregator → Enables Pipeline (Jenkinsfile support)
+# - pipeline-stage-view → Visual stage view in UI
+# - git → Allows Jenkins to clone repositories
+# - credentials-binding → Secure usage of secrets in pipelines
+# - allure-jenkins-plugin → Integrates Allure test reports
+# - configuration-as-code → Allows Jenkins to be configured via YAML files (JCasC),
+#   enabling Infrastructure as Code and eliminating manual UI configuration
+# - job-dsl → Enables creation of Jenkins jobs via code (Job DSL),
+# - blueocean → Provides a modern, user-friendly UI for Jenkins with enhanced pipeline visualization
 
 # Enable Jenkins Configuration as Code (JCasC)
 ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs
@@ -108,6 +110,13 @@ COPY jenkins.yaml /var/jenkins_home/casc_configs/jenkins.yaml
 
 # Fix permissions
 RUN chown -R jenkins:jenkins /var/jenkins_home/casc_configs
+
+# Set system language and encoding to English and UTF-8
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+
+# Set Java encoding to UTF-8 for Jenkins logs and operations
+ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
 
 # Switch back to secure Jenkins user
 USER jenkins
