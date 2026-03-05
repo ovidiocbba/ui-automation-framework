@@ -28,8 +28,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Configure UTF-8 locales
-RUN locale-gen en_US.UTF-8
+# Install locales and UTF-8 support
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends locales && \
+    locale-gen en_US.UTF-8 && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN echo "===== FIREFOX VERSION =====" && firefox --version
 
