@@ -101,7 +101,6 @@ pipeline {
 
                         // Centralized browser-specific parameters
                         def browserParams = "-Dbrowser=${selectedBrowser} " +
-                                            "-Dallure.results.directory=${browserBuildDir}/allure-results/${selectedBrowser} " +
                                             "-Dorg.gradle.project.buildDir=${browserBuildDir} " +
                                             "${gradleFlags}"
 
@@ -147,13 +146,13 @@ pipeline {
 
                     if (params.BROWSER == 'ALL') {
                         resultPaths = [
-                            [path: 'build-CHROME_HEADLESS/allure-results/CHROME_HEADLESS'],
-                            [path: 'build-FIREFOX_HEADLESS/allure-results/FIREFOX_HEADLESS'],
-                            [path: 'build-EDGE_HEADLESS/allure-results/EDGE_HEADLESS']
+                            [path: 'build-CHROME_HEADLESS/allure-results'],
+                            [path: 'build-FIREFOX_HEADLESS/allure-results'],
+                            [path: 'build-EDGE_HEADLESS/allure-results']
                         ]
                     } else {
                         resultPaths = [
-                            [path: "build-${params.BROWSER}/allure-results/${params.BROWSER}"]
+                            [path: "build-${params.BROWSER}/allure-results"]
                         ]
                     }
 
