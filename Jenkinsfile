@@ -173,7 +173,7 @@ pipeline {
                     sh "ls -R ${resultPaths.collect { it.path }.join(' ')}"
 
                     // Generate the Allure report
-                    allure commandline: 'allure', results: resultPaths
+                    sh "allure generate ${resultPaths.collect { it.path }.join(' ')} --clean -o allure-report"
                 }
             }
         }
@@ -190,7 +190,6 @@ pipeline {
                 ]
 
                 // Final attempt to generate Allure Report to ensure visibility in Jenkins UI
-                // 'commandline' must match the name configured in Global Tool Configuration
                 allure commandline: 'allure', results: allureResults
             }
         }
