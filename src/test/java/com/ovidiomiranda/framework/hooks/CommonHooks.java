@@ -37,17 +37,6 @@ public class CommonHooks {
   public void beforeScenario(final Scenario scenario) {
     startTime = System.currentTimeMillis();
 
-    // Get configuration values
-    String browser = PropertiesManager.getInstance()
-        .getProperty(PropertiesInput.BROWSER);
-
-    String baseUrl = PropertiesManager.getInstance()
-        .getProperty(PropertiesInput.BASE_URL);
-
-    // Add labels to Allure
-    // Allure.label("browser", browser);
-    // Allure.label("baseUrl", baseUrl);
-
     if (LOGGER.isInfoEnabled()) {
       LOGGER.info(SEPARATOR);
       LOGGER.info("▶ STARTING SCENARIO | {}", getTestCaseTitle(scenario));
