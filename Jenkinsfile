@@ -166,4 +166,21 @@ pipeline {
             }
         }
     }
+
+    post {
+        always {
+            script {
+                // Define result paths for the post-execution report generation
+                def allureResults = [
+                    [path: 'build-CHROME_HEADLESS/allure-results'],
+                    [path: 'build-FIREFOX_HEADLESS/allure-results'],
+                    [path: 'build-EDGE_HEADLESS/allure-results']
+                ]
+
+                // Final attempt to generate Allure Report to ensure visibility in Jenkins UI
+                // 'commandline' must match the name configured in Global Tool Configuration
+                allure commandline: 'allure', results: allureResults
+            }
+        }
+    }
 }
