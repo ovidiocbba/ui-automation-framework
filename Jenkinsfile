@@ -100,12 +100,10 @@ pipeline {
                         def browserBuildDir = "build-${selectedBrowser}"
 
                         // Centralized browser-specific parameters
-                        def browserParams = """
-                            -Dbrowser=${selectedBrowser} \
-                            -Dallure.results.directory=${browserBuildDir}/allure-results/${selectedBrowser} \
-                            -Dorg.gradle.project.buildDir=${browserBuildDir} \
-                            ${gradleFlags}
-                        """
+                        def browserParams = "-Dbrowser=${selectedBrowser} " +
+                                            "-Dallure.results.directory=${browserBuildDir}/allure-results/${selectedBrowser} " +
+                                            "-Dorg.gradle.project.buildDir=${browserBuildDir} " +
+                                            "${gradleFlags}"
 
                         // Create a parallel stage per browser
                         parallelStages[selectedBrowser] = {
