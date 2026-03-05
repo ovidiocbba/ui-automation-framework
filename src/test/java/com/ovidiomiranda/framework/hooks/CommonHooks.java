@@ -3,8 +3,6 @@ package com.ovidiomiranda.framework.hooks;
 import static com.ovidiomiranda.framework.utils.ScenarioUtils.getTestCaseId;
 import static com.ovidiomiranda.framework.utils.ScenarioUtils.getTestCaseTitle;
 
-import com.ovidiomiranda.framework.core.config.PropertiesInput;
-import com.ovidiomiranda.framework.core.config.PropertiesManager;
 import com.ovidiomiranda.framework.core.driver.DriverManager;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
