@@ -87,6 +87,10 @@ docker run -d \
   --shm-size=2g \
   jenkins-automation-ci:1.1.0
 ```
+**Note**: 
+
+Be sure to change the default password `SuperSecurePass2026!` to a password you choose. This will help keep your Jenkins secure before using it. 
+The password you set here will be used for the Jenkins admin login during the first setup.
 
 ### 🔎 What each option does:
 
@@ -109,6 +113,16 @@ docker run -d \
 ## :gear: 4. Initial Jenkins Setup
 
 ### 4.1 Plugin Installation
+Open the default URL:
+
+```
+http://localhost:8080/
+```
+
+When you first access Jenkins, you will be prompted to log in. 
+Use the credentials specified in the environment variables (`JENKINS_ADMIN_ID` and `JENKINS_ADMIN_PASSWORD`) to access Jenkins.
+
+![00-login.png](images/jenkins/00-login.png)
 
 Since plugins are already installed via Dockerfile:
 
