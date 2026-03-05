@@ -150,12 +150,6 @@ No need to install suggested plugins again.
 
 ### 4.2 Instance Configuration
 
-Keep the default URL:
-
-```
-http://localhost:8080/
-```
-
 Click:
 
 ```
