@@ -82,8 +82,6 @@ pipeline {
                                        "-Dthreads=${params.THREADS}"
 
                     // Set browsers for parallel execution based on user input
-                                        // Set browsers for parallel execution based on user input
-                    // Set browsers for parallel execution based on user input
                     def browsers = params.BROWSER == 'ALL'
                         ? ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
                         : [params.BROWSER]
@@ -98,10 +96,11 @@ pipeline {
                                 try {
                                     // Execute main test task
                                     sh """
-                                        ./gradlew executeFeatures \
+                                        ./gradlew clean executeFeatures \
                                         ${commonParams} \
                                         -Dbrowser=${selectedBrowser} \
-                                        -Dallure.results.directory=build/allure-results/${selectedBrowser} \
+                                        -Dallure.results.directory=build-${selectedBrowser}/allure-results/${selectedBrowser} \
+                                        -Dorg.gradle.project.buildDir=build-${selectedBrowser} \
                                         --no-daemon --stacktrace
                                     """
                                 } catch (err) {
@@ -112,7 +111,8 @@ pipeline {
                                         ./gradlew reExecuteFeatures \
                                         ${commonParams} \
                                         -Dbrowser=${selectedBrowser} \
-                                        -Dallure.results.directory=build/allure-results/${selectedBrowser} \
+                                        -Dallure.results.directory=build-${selectedBrowser}/allure-results/${selectedBrowser} \
+                                        -Dorg.gradle.project.buildDir=build-${selectedBrowser} \
                                         --no-daemon --stacktrace
                                     """
                                     // Mark stage as failed after re-run
