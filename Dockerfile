@@ -86,7 +86,7 @@ RUN jenkins-plugin-cli --plugins \
     allure-jenkins-plugin \
     configuration-as-code \
     job-dsl \
-    blueocean \
+    blueocean
 
 # Plugins:
 # - workflow-aggregator → Enables Pipeline (Jenkinsfile support)
