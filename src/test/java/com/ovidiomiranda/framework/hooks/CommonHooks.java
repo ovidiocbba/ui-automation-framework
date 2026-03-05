@@ -37,7 +37,7 @@ public class CommonHooks {
 
     if (LOGGER.isInfoEnabled()) {
       LOGGER.info(SEPARATOR);
-      LOGGER.info("▶ STARTING SCENARIO | {}", getTestCaseTitle(scenario));
+      LOGGER.info(">>> STARTING SCENARIO | {}", getTestCaseTitle(scenario));
       LOGGER.info(SEPARATOR);
     }
   }
