@@ -60,6 +60,18 @@ tasks.withType(Test).configureEach {
         showStandardStreams = false
     }
 
+    // Separate test reports per browser (important for parallel CI execution)
+    def browser = System.getProperty("browser") ?:
+            configProps.getProperty("browser") ?: "LOCAL"
+
+    reports {
+        junitXml.required = true
+        junitXml.outputLocation = layout.buildDirectory.dir("test-results/${browser}")
+
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir("reports/tests/${browser}")
+    }
+
     // List of supported system properties
     def supportedProperties = ["cucumber.filter.tags",
                                "browser",
