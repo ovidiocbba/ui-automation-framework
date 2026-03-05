@@ -41,14 +41,14 @@ pipeline {
         stage('Build') {
             steps {
                 // Compile project but skip tests
-                sh './gradlew clean build -x test'
+                sh './gradlew clean build -x test --no-daemon --stacktrace'
             }
         }
 
         stage('Static Analysis') {
             steps {
                 // Run Checkstyle and PMD
-                sh './gradlew staticAnalysis'
+                sh './gradlew staticAnalysis --no-daemon --stacktrace'
             }
             post {
                 always {
@@ -76,15 +76,17 @@ pipeline {
                 script {
 
                     // Centralized Gradle parameters to avoid duplication
-                    def commonParams = """
-                    -Dcucumber.filter.tags=${params.SCENARIO_TAG} \
-                    -DbaseUrl=${params.BASE_URL} \
-                    -DexplicitWait=${params.EXPLICIT_WAIT} \
-                    -Dthreads=${params.THREADS}
-                    """
+                    def commonParams = "-Dcucumber.filter.tags=${params.SCENARIO_TAG} " +
+                                       "-DbaseUrl=${params.BASE_URL} " +
+                                       "-DexplicitWait=${params.EXPLICIT_WAIT} " +
+                                       "-Dthreads=${params.THREADS}"
 
                     // Set browsers for parallel execution based on user input
-                    def browsers = params.BROWSER == 'ALL' ? ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS'] : [params.BROWSER]
+                                        // Set browsers for parallel execution based on user input
+                    // Set browsers for parallel execution based on user input
+                    def browsers = params.BROWSER == 'ALL'
+                        ? ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
+                        : [params.BROWSER]
                     // Map that will store parallel stages
                     def parallelStages = [:]
                     // Loop through each selected browser
@@ -97,9 +99,10 @@ pipeline {
                                     // Execute main test task
                                     sh """
                                         ./gradlew executeFeatures \
-                                          ${commonParams} \
-                                          -Dbrowser="${selectedBrowser}" \
-                                          -Dallure.results.directory="build/allure-results/${selectedBrowser}"
+                                        ${commonParams} \
+                                        -Dbrowser=${selectedBrowser} \
+                                        -Dallure.results.directory=build/allure-results/${selectedBrowser} \
+                                        --no-daemon --stacktrace
                                     """
                                 } catch (err) {
                                     // If execution fails, re-run failed scenarios only
@@ -107,15 +110,16 @@ pipeline {
 
                                     sh """
                                         ./gradlew reExecuteFeatures \
-                                          ${commonParams} \
-                                          -Dbrowser="${selectedBrowser}" \
-                                          -Dallure.results.directory="build/allure-results/${selectedBrowser}"
+                                        ${commonParams} \
+                                        -Dbrowser=${selectedBrowser} \
+                                        -Dallure.results.directory=build/allure-results/${selectedBrowser} \
+                                        --no-daemon --stacktrace
                                     """
                                     // Mark stage as failed after re-run
                                     throw err
                                 }
                                 // Save logs for this specific browser
-                                archiveArtifacts artifacts: "build/logs/test-execution.log", allowEmptyArchive: true
+                                archiveArtifacts artifacts: "build/logs/**/*.log", allowEmptyArchive: true
                             }
                         }
                     }
