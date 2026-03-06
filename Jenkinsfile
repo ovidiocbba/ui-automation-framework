@@ -234,13 +234,13 @@ pipeline {
                         EOF
 
                     for dir in allure-report/allure-*; do
-                        [ -d "$dir" ] || continue
-                        name=$(basename "$dir")
-                        browser=${name#allure-}
+                        [ -d "\$dir" ] || continue
+                        name=\$(basename "\$dir")
+                        browser=\${name#allure-}
 
                         cat <<EOF >> "$OUTPUT"
                         <div class="card">
-                          <a href="./$name/index.html">${browser^} Report</a>
+                          <a href="./\$name/index.html">\${browser^} Report</a>
                         </div>
                         EOF
                     done
