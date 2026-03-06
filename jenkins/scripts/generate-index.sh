@@ -4,6 +4,7 @@ set -e
 echo "Generating index.html for Jenkins..."
 
 OUTPUT="allure-report/index.html"
+mkdir -p allure-report
 
 # Create the output file and write the basic HTML structure
 cat <<EOF > "$OUTPUT"
@@ -50,17 +51,21 @@ a {
 <h1>Allure Test Reports</h1>
 <div class="container">
 EOF
-# Loop for each allure directory and create links for reports
-for dir in allure-report/allure-*; do
-  [ -d "$dir" ] || continue
-  name=$(basename "$dir")
-  browser=${name#allure-}
 
-  cat <<EOF >> "$OUTPUT"
+# Loop for each browser and generate subreports
+for browser in CHROME_HEADLESS FIREFOX_HEADLESS EDGE_HEADLESS; do
+  report_dir="build-${browser}/allure-results"
+  if [ -d "$report_dir" ] && [ "$(ls -A $report_dir)" ]; then
+    # Generate a subreport for this browser
+    allure generate "$report_dir" --clean -o "allure-report/allure-${browser}"
+
+    # Add link to the index
+    cat <<EOF >> "$OUTPUT"
   <div class="card">
-    <a href="./$name/index.html">${browser^} Report</a>
+    <a href="./allure-${browser}/index.html">${browser^} Report</a>
   </div>
 EOF
+  fi
 done
 
 cat <<EOF >> "$OUTPUT"
