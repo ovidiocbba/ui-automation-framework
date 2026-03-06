@@ -234,28 +234,28 @@ pipeline {
                         <div class="container">
                         EOF
 
-                    # Loop through each allure directory and create cards for them
-                    for dir in allure-report/allure-*; do
-                        if [ -d "$dir" ]; then
-                            name=$(basename "$dir")
-                            # Use Bash string manipulation to get the browser name
-                            browser="${name#allure-}"
+                        # Loop through each allure directory and create cards for them
+                        for dir in allure-report/allure-*; do
+                            if [ -d "$dir" ]; then
+                                name=$(basename "$dir")
+                                # Use Bash string manipulation to get the browser name
+                                browser="${name#allure-}"
 
-                            cat <<EOF >> "$OUTPUT"
-                            <div class="card">
-                              <a href="./$name/index.html">${browser^} Report</a>
-                            </div>
-                            EOF
-                        fi
-                    done
+                                cat <<EOF >> "$OUTPUT"
+                                <div class="card">
+                                  <a href="./$name/index.html">${browser^} Report</a>
+                                </div>
+                                EOF
+                            fi
+                        done
 
-                    cat <<EOF >> "$OUTPUT"
-                    </div>
-                    </body>
-                    </html>
-                    EOF
+                        cat <<EOF >> "$OUTPUT"
+                        </div>
+                        </body>
+                        </html>
+                        EOF
 
-                    echo "index.html generated successfully."
+                        echo "index.html generated successfully."
                     '''
                 }
             }
