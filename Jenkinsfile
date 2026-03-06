@@ -186,6 +186,8 @@ pipeline {
                     sh '''
                         chmod +x jenkins/scripts/generate-index.sh
                         ./jenkins/scripts/generate-index.sh
+                        echo "Listing contents of the allure-report directory:"
+                        ls -l allure-report/
                     '''
                 }
             }
