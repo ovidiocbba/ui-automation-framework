@@ -156,18 +156,13 @@ pipeline {
                 // Use the official Allure Jenkins Plugin
                 // This automatically creates the UI tabs and shows graphs
                 allure([
-                    // Define Allure result directories per browser
                     results: params.BROWSER == 'ALL'
                         ? [
                             [path: 'build-CHROME_HEADLESS/allure-results'],
                             [path: 'build-FIREFOX_HEADLESS/allure-results'],
                             [path: 'build-EDGE_HEADLESS/allure-results']
                         ]
-                        : [
-                            [path: "build-${params.BROWSER}/allure-results"]
-                        ],
-                    // Optional: If you need to use specific properties or configurations, adjust them as necessary
-                    includeProperties: false
+                        : [[path: "build-${params.BROWSER}/allure-results"]]
                 ])
             }
         }
