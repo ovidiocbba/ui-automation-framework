@@ -68,7 +68,9 @@ RUN wget -q -O - https://packages.microsoft.com/keys/microsoft.asc \
     echo "===== MICROSOFT EDGE VERSION =====" && \
     microsoft-edge --version
 
-# Install Microsoft EdgeDriver matching installed Edge version or fallback to latest
+# Install Microsoft EdgeDriver for Selenium (Edge does not include WebDriver by default).
+# The driver must match the installed Edge version to avoid compatibility issues.
+# If the exact version is not available, fallback to the latest release.
 RUN EDGE_VERSION=$(microsoft-edge --version | awk '{print $3}') && \
     echo "Installed Microsoft Edge version: $EDGE_VERSION" && \
     if wget -q --spider https://msedgedriver.microsoft.com/$EDGE_VERSION/edgedriver_linux64.zip; then \
