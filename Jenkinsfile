@@ -182,8 +182,7 @@ pipeline {
         stage('Generate Index') {
             steps {
                 script {
-                    sh '''
-                        #!/bin/bash
+                    sh '''#!/bin/bash
                         echo "Generating index.html..."
 
                         OUTPUT="allure-report/index.html"
