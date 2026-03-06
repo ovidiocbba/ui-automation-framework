@@ -183,7 +183,10 @@ pipeline {
             steps {
                 script {
                     echo "Running index generation script..."
-                    sh 'chmod +x jenkins/scripts/generate-index.sh'
+                    sh '''
+                        chmod +x jenkins/scripts/generate-index.sh
+                        ./jenkins/scripts/generate-index.sh
+                    '''
                 }
             }
         }
