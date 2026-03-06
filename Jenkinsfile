@@ -238,7 +238,8 @@ pipeline {
                         for dir in allure-report/allure-*; do
                             if [ -d "$dir" ]; then
                                 name=$(basename "$dir")
-                                browser=${name#allure-}
+                                # Use Bash string manipulation to get the browser name
+                                browser="${name#allure-}"
 
                                 cat <<EOF >> "$OUTPUT"
                                 <div class="card">
