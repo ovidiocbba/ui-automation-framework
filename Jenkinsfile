@@ -200,7 +200,7 @@ pipeline {
                 publishHTML(target: [
                     reportDir: 'allure-report',       // root folder containing index.html + subreports
                     reportFiles: 'index.html',        // main entry point
-                    reportName: 'Allure Test Report', // display name in Jenkins
+                    reportName: 'Allure_Test_Report', // display name in Jenkins (no spaces)
                     keepAll: true,                    // keep old builds
                     alwaysLinkToLastBuild: true       // link to latest build
                 ])
