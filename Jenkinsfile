@@ -155,16 +155,14 @@ pipeline {
             steps {
                 // Use the official Allure Jenkins Plugin
                 allure([
-                    // Specify the results directory for Allure reports
-                    // If the 'BROWSER' parameter is set to 'ALL', include results from all browsers
-                    // Otherwise, use the result directory for the selected browser
-                    results: params.BROWSER == 'ALL'
-                        ? [
-                            [path: 'build-CHROME_HEADLESS/allure-results'],
-                            [path: 'build-FIREFOX_HEADLESS/allure-results'],
-                            [path: 'build-EDGE_HEADLESS/allure-results']
-                          ]
-                        : [[path: "build-${params.BROWSER}/allure-results"]] // For a specific browser, use that browser's result folder
+                    // You only need to define 'results' and specify the location of allure results
+                    // If 'BROWSER' is set to 'ALL', all browsers' results will be included
+                    // If not, use the specific browser's result directory
+                    results: [
+                        params.BROWSER == 'ALL'
+                            ? [path: 'build-CHROME_HEADLESS/allure-results', path: 'build-FIREFOX_HEADLESS/allure-results', path: 'build-EDGE_HEADLESS/allure-results']
+                            : [path: "build-${params.BROWSER}/allure-results"]
+                    ]
                 ])
             }
         }
