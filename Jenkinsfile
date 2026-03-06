@@ -156,8 +156,6 @@ pipeline {
                 // Use the official Allure Jenkins Plugin
                 // This automatically creates the UI tabs and shows graphs
                 allure([
-                    // Always publish reports even if build fails
-                    reportBuildPolicy: 'ALWAYS',
                     // Define Allure result directories per browser
                     results: params.BROWSER == 'ALL'
                         ? [
@@ -168,9 +166,8 @@ pipeline {
                         : [
                             [path: "build-${params.BROWSER}/allure-results"]
                         ],
-                    includeProperties: false,
-                    jdk: '',  // Use default JDK
-                    properties: []
+                    // Optional: If you need to use specific properties or configurations, adjust them as necessary
+                    includeProperties: false
                 ])
             }
         }
