@@ -193,14 +193,16 @@ pipeline {
             }
         }
 
-        // Publish Allure Report as HTML in Jenkins UI
         stage('Publish Allure Report') {
             steps {
-                // Publish the Allure report using Jenkins HTML Publisher plugin
+                // Publish the full allure-report folder
+                // All CSS, JS, and subreport directories are preserved
                 publishHTML(target: [
-                    reportDir: 'allure-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Allure Test Report'
+                    reportDir: 'allure-report',       // root folder containing index.html + subreports
+                    reportFiles: 'index.html',        // main entry point
+                    reportName: 'Allure Test Report', // display name in Jenkins
+                    keepAll: true,                    // keep old builds
+                    alwaysLinkToLastBuild: true       // link to latest build
                 ])
             }
         }
