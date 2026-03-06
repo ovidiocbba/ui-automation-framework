@@ -56,7 +56,7 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub \
     echo "===== GOOGLE CHROME VERSION =====" && \
     google-chrome --version
 
-# Install Microsoft Edge
+# Install Microsoft Edge (stable from repo)
 RUN wget -q -O - https://packages.microsoft.com/keys/microsoft.asc \
     | gpg --dearmor -o /usr/share/keyrings/microsoft.gpg && \
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" \
@@ -68,18 +68,21 @@ RUN wget -q -O - https://packages.microsoft.com/keys/microsoft.asc \
     echo "===== MICROSOFT EDGE VERSION =====" && \
     microsoft-edge --version
 
-# Install Edge WebDriver (required for Selenium)
-# Edge does not include the WebDriver by default.
-# The driver version must match the installed browser version to avoid compatibility errors.
+# Install Microsoft EdgeDriver matching installed Edge version or fallback to latest
 RUN EDGE_VERSION=$(microsoft-edge --version | awk '{print $3}') && \
-    echo "Installing EdgeDriver for version: $EDGE_VERSION" && \
+    echo "Installed Microsoft Edge version: $EDGE_VERSION" && \
+    if wget -q --spider https://msedgedriver.microsoft.com/$EDGE_VERSION/edgedriver_linux64.zip; then \
+        echo "Downloading EdgeDriver for version $EDGE_VERSION"; \
+    else \
+        echo "Matching EdgeDriver not found, using latest release"; \
+        EDGE_VERSION=$(wget -qO- https://msedgedriver.microsoft.com/LATEST_RELEASE); \
+    fi && \
     wget -q https://msedgedriver.microsoft.com/$EDGE_VERSION/edgedriver_linux64.zip && \
     unzip -q edgedriver_linux64.zip && \
     mv msedgedriver /usr/local/bin/ && \
     chmod +x /usr/local/bin/msedgedriver && \
     rm -f edgedriver_linux64.zip && \
-    echo "===== EDGE DRIVER VERSION =====" && \
-    msedgedriver --version
+    echo "===== EDGE DRIVER VERSION =====" && msedgedriver --version
 
 # Install Allure CLI
 ENV ALLURE_VERSION=2.25.0
