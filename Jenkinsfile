@@ -143,7 +143,7 @@ pipeline {
         stage('Debug') {
             steps {
                 script {
-                    // Verificar archivos generados
+                    // Check generated files
                     sh 'ls -R build-CHROME_HEADLESS/allure-results'
                     sh 'ls -R build-FIREFOX_HEADLESS/allure-results'
                     sh 'ls -R build-EDGE_HEADLESS/allure-results'
@@ -233,16 +233,15 @@ pipeline {
                         <div class="container">
                         EOF
 
-                        # Loop through each allure directory and create cards for them
+                        # Loop for each allure directory and create links for reports
                         for dir in allure-report/allure-*; do
                             if [ -d "$dir" ]; then
                                 name=$(basename "$dir")
-                                # Use Bash string manipulation to get the browser name
                                 browser="${name#allure-}"
 
                                 cat <<EOF >> "$OUTPUT"
                                 <div class="card">
-                                  <a href="./$name/index.html">${browser^} Report</a>
+                                <a href="./$name/index.html">${browser^} Report</a>
                                 </div>
                                 EOF
                             fi
@@ -269,20 +268,6 @@ pipeline {
                     reportFiles: 'index.html',
                     reportName: 'Allure Test Report'
                 ])
-            }
-        }
-    }
-
-    post {
-        always {
-            script {
-                // Final attempt to generate Allure Report to ensure visibility in Jenkins UI
-                def allureResults = [
-                    [path: 'build-CHROME_HEADLESS/allure-results'],
-                    [path: 'build-FIREFOX_HEADLESS/allure-results'],
-                    [path: 'build-EDGE_HEADLESS/allure-results']
-                ]
-                allure commandline: 'allure', results: allureResults
             }
         }
     }
