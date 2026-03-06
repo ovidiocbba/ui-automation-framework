@@ -32,17 +32,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y --no-install-recommends locales && \
-    locale-gen en_US.UTF-8 && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen && \
+    update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set system language and encoding to English and UTF-8
 ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
-
-# Ensure locales are properly set
-RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 
 RUN echo "===== FIREFOX VERSION =====" && firefox --version
 
@@ -126,10 +124,6 @@ COPY jenkins.yaml /var/jenkins_home/casc_configs/jenkins.yaml
 
 # Fix permissions
 RUN chown -R jenkins:jenkins /var/jenkins_home/casc_configs
-
-# Set system language and encoding to English and UTF-8
-ENV LANG=en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
 
 # Set Java encoding to UTF-8 for Jenkins logs and operations
 ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
