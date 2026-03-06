@@ -177,19 +177,108 @@ pipeline {
                 }
             }
         }
+
+        // Generate index.html to show links to the Allure reports for each browser
+        stage('Generate Index') {
+            steps {
+                script {
+                    sh """
+                        #!/bin/bash
+                        echo "Generating index.html..."
+
+                        OUTPUT="allure-report/index.html"
+
+                        cat <<EOF > "$OUTPUT"
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                        <meta charset="UTF-8">
+                        <title>UI Automation Framework - Allure Reports</title>
+                        <style>
+                        body {
+                          font-family: Arial, sans-serif;
+                          text-align: center;
+                          background-color: #0f172a;
+                          color: white;
+                          margin-top: 60px;
+                        }
+                        h1 { margin-bottom: 40px; }
+                        .container {
+                          display: flex;
+                          justify-content: center;
+                          gap: 30px;
+                          flex-wrap: wrap;
+                        }
+                        .card {
+                          background: #1e293b;
+                          padding: 30px;
+                          border-radius: 12px;
+                          width: 220px;
+                          transition: 0.3s;
+                        }
+                        .card:hover {
+                          background: #334155;
+                          transform: translateY(-5px);
+                        }
+                        a {
+                          color: #38bdf8;
+                          text-decoration: none;
+                          font-size: 18px;
+                          font-weight: bold;
+                        }
+                        </style>
+                        </head>
+                        <body>
+                        <h1>Allure Test Reports</h1>
+                        <div class="container">
+                        EOF
+
+                    for dir in allure-report/allure-*; do
+                        [ -d "$dir" ] || continue
+                        name=$(basename "$dir")
+                        browser=${name#allure-}
+
+                        cat <<EOF >> "$OUTPUT"
+                        <div class="card">
+                          <a href="./$name/index.html">${browser^} Report</a>
+                        </div>
+                        EOF
+                    done
+
+                    cat <<EOF >> "$OUTPUT"
+                    </div>
+                    </body>
+                    </html>
+                    EOF
+
+                    echo "index.html generated successfully."
+                    """
+                }
+            }
+        }
+
+        // Publish Allure Report as HTML in Jenkins UI
+        stage('Publish Allure Report') {
+            steps {
+                // Publish the Allure report using Jenkins HTML Publisher plugin
+                publishHTML(target: [
+                    reportDir: 'allure-report',
+                    reportFiles: 'index.html',
+                    reportName: 'Allure Test Report'
+                ])
+            }
+        }
     }
 
     post {
         always {
             script {
-                // Define result paths for the post-execution report generation
+                // Final attempt to generate Allure Report to ensure visibility in Jenkins UI
                 def allureResults = [
                     [path: 'build-CHROME_HEADLESS/allure-results'],
                     [path: 'build-FIREFOX_HEADLESS/allure-results'],
                     [path: 'build-EDGE_HEADLESS/allure-results']
                 ]
-
-                // Final attempt to generate Allure Report to ensure visibility in Jenkins UI
                 allure commandline: 'allure', results: allureResults
             }
         }
