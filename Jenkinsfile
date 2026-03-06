@@ -188,7 +188,7 @@ pipeline {
 
                         OUTPUT="allure-report/index.html"
 
-                        cat <<EOF > "$OUTPUT"
+                        cat <<EOF > "\$OUTPUT"
                         <!DOCTYPE html>
                         <html>
                         <head>
@@ -238,14 +238,14 @@ pipeline {
                         name=\$(basename "\$dir")
                         browser=\${name#allure-}
 
-                        cat <<EOF >> "$OUTPUT"
+                        cat <<EOF >> "\$OUTPUT"
                         <div class="card">
                           <a href="./\$name/index.html">\${browser^} Report</a>
                         </div>
                         EOF
                     done
 
-                    cat <<EOF >> "$OUTPUT"
+                    cat <<EOF >> "\$OUTPUT"
                     </div>
                     </body>
                     </html>
