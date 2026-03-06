@@ -37,6 +37,11 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Ensure the locale settings are applied correctly
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+RUN update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+
 RUN echo "===== FIREFOX VERSION =====" && firefox --version
 
 # Install Google Chrome
