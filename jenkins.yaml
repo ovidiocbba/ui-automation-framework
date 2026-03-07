@@ -58,26 +58,3 @@ tool:
       - name: "allure"
         # Allure CLI path installed in Docker image
         home: "/usr/bin/allure"
-
-# Plugin installation via Configuration as Code (JCasC)
-unclassified:
-  # Specify the plugins to be installed automatically
-    plugins:
-      - workflow-aggregator
-      - pipeline-stage-view
-      - git
-      - credentials-binding
-      - allure-jenkins-plugin
-      - configuration-as-code
-      - job-dsl
-      - blueocean
-
-# - workflow-aggregator → Enables Pipeline (Jenkinsfile support)
-# - pipeline-stage-view → Visual stage view in UI
-# - git → Allows Jenkins to clone repositories
-# - credentials-binding → Secure usage of secrets in pipelines
-# - allure-jenkins-plugin → Integrates Allure test reports
-# - configuration-as-code → Allows Jenkins to be configured via YAML files (JCasC),
-#   enabling Infrastructure as Code and eliminating manual UI configuration
-# - job-dsl → Enables creation of Jenkins jobs via code (Job DSL),
-# - blueocean → Provides a modern, user-friendly UI for Jenkins with enhanced pipeline visualization
