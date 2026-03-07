@@ -143,23 +143,66 @@ pipeline {
         stage('Debug') {
             steps {
                 script {
-                    // Debugging step to check if allure-results directories exist
-                    sh 'ls -R build-CHROME_HEADLESS/allure-results || true'
-                    sh 'ls -R build-FIREFOX_HEADLESS/allure-results || true'
-                    sh 'ls -R build-EDGE_HEADLESS/allure-results || true'
+                    // Check generated files
+                    sh 'ls -R build-CHROME_HEADLESS/allure-results'
+                    sh 'ls -R build-FIREFOX_HEADLESS/allure-results'
+                    sh 'ls -R build-EDGE_HEADLESS/allure-results'
+                }
+            }
+        }
+
+        stage('Allure Report') {
+            steps {
+                script {
+                    def resultPaths = []
+
+                    if (params.BROWSER == 'ALL') {
+                        resultPaths = [
+                            [path: 'build-CHROME_HEADLESS/allure-results'],
+                            [path: 'build-FIREFOX_HEADLESS/allure-results'],
+                            [path: 'build-EDGE_HEADLESS/allure-results']
+                        ]
+                    } else {
+                        resultPaths = [
+                            [path: "build-${params.BROWSER}/allure-results"]
+                        ]
+                    }
+
+                    // Check if the results directory exists before generating the report
+                    sh "echo 'Checking Allure results directory existence...'"
+                    sh "ls -R ${resultPaths.collect { it.path }.join(' ')}"
+
+                    // Generate the Allure report
+                    sh "allure generate ${resultPaths.collect { it.path }.join(' ')} --clean -o allure-report"
+                }
+            }
+        }
+
+        // Generate index.html to show links to the Allure reports for each browser
+        stage('Generate Index') {
+            steps {
+                script {
+                    echo "Running index generation script..."
+                    sh '''
+                        chmod +x jenkins/scripts/generate-index.sh
+                        ./jenkins/scripts/generate-index.sh
+                        echo "Listing contents of the allure-report directory:"
+                        ls -l allure-report/
+                    '''
                 }
             }
         }
 
         stage('Publish Allure Report') {
             steps {
-                // Use the official Allure Jenkins Plugin to generate the report
-                allure([
-                    // Set the name of the report
-                    name: 'allure-report',
-
-                    // Specify the result directory for Chrome only
-                    allure report: 'allure_reports', results: [[path: 'build-CHROME_HEADLESS/allure-results']]
+                // Publish the full allure-report folder
+                // All CSS, JS, and subreport directories are preserved
+                publishHTML(target: [
+                    reportDir: 'allure-report',       // root folder containing index.html + subreports
+                    reportFiles: 'index.html',        // main entry point
+                    reportName: 'Report', // display name in Jenkins (no spaces)
+                    keepAll: true,                    // keep old builds
+                    alwaysLinkToLastBuild: true       // link to latest build
                 ])
             }
         }
