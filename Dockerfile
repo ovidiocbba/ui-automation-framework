@@ -45,15 +45,17 @@ ENV LC_ALL=en_US.UTF-8
 RUN echo "===== FIREFOX VERSION =====" && firefox --version
 
 # Check if Google Chrome is installed, if not, install it
-RUN if command -v google-chrome >/dev/null 2>&1; then \
-      echo "Google Chrome already installed:" && google-chrome --version; \
+RUN if ! dpkg -l | grep -q google-chrome-stable; then \
+    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
+    apt-get update && \
+    apt-get update && \
+    apt-get install -y google-chrome-stable && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    echo "Google Chrome installed."; \
     else \
-      echo "Google Chrome not found. Installing..."; \
-      wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-      apt install -y ./google-chrome-stable_current_amd64.deb && \
-      rm -f google-chrome-stable_current_amd64.deb && \
-      echo "Installed Chrome version:" && google-chrome --version; \
-    fi
+    echo "Google Chrome is already installed."; \
+fi
 
 # Install Microsoft Edge (stable from repo)
 RUN wget -q -O - https://packages.microsoft.com/keys/microsoft.asc \
