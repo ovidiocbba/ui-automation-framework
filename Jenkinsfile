@@ -159,7 +159,7 @@ pipeline {
                     name: 'allure-report',
 
                     // Specify the result directory for Chrome only
-                    report: 'build-CHROME_HEADLESS/allure-results'
+                    allure report: 'allure_reports', results: [[path: 'build-CHROME_HEADLESS/allure-results']]
                 ])
             }
         }
