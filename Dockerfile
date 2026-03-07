@@ -44,17 +44,17 @@ ENV LC_ALL=en_US.UTF-8
 
 RUN echo "===== FIREFOX VERSION =====" && firefox --version
 
-# Install Google Chrome
-RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub \
-    | gpg --dearmor -o /usr/share/keyrings/google.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
-    > /etc/apt/sources.list.d/google-chrome.list && \
+# Check if Google Chrome is installed, if not, install it
+RUN if ! dpkg -l | grep -q google-chrome-stable; then \
+    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
-    apt-get install -y --no-install-recommends google-chrome-stable && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    echo "===== GOOGLE CHROME VERSION =====" && \
-    google-chrome --version
+    apt-get install -y google-chrome-stable && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    echo "Google Chrome installed."; \
+    else \
+    echo "Google Chrome is already installed."; \
+fi
 
 # Install Microsoft Edge (stable from repo)
 RUN wget -q -O - https://packages.microsoft.com/keys/microsoft.asc \
@@ -95,28 +95,6 @@ RUN wget -q https://github.com/allure-framework/allure2/releases/download/${ALLU
     rm -f allure-${ALLURE_VERSION}.tgz && \
     echo "===== ALLURE VERSION =====" && \
     allure --version
-
-# Install Jenkins Plugins
-RUN jenkins-plugin-cli --plugins \
-    workflow-aggregator \
-    pipeline-stage-view \
-    git \
-    credentials-binding \
-    allure-jenkins-plugin \
-    configuration-as-code \
-    job-dsl \
-    blueocean
-
-# Plugins:
-# - workflow-aggregator → Enables Pipeline (Jenkinsfile support)
-# - pipeline-stage-view → Visual stage view in UI
-# - git → Allows Jenkins to clone repositories
-# - credentials-binding → Secure usage of secrets in pipelines
-# - allure-jenkins-plugin → Integrates Allure test reports
-# - configuration-as-code → Allows Jenkins to be configured via YAML files (JCasC),
-#   enabling Infrastructure as Code and eliminating manual UI configuration
-# - job-dsl → Enables creation of Jenkins jobs via code (Job DSL),
-# - blueocean → Provides a modern, user-friendly UI for Jenkins with enhanced pipeline visualization
 
 # Enable Jenkins Configuration as Code (JCasC)
 ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs
