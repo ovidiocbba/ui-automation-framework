@@ -96,6 +96,28 @@ RUN wget -q https://github.com/allure-framework/allure2/releases/download/${ALLU
     echo "===== ALLURE VERSION =====" && \
     allure --version
 
+# Install Jenkins Plugins
+RUN jenkins-plugin-cli --plugins \
+    workflow-aggregator \
+    pipeline-stage-view \
+    git \
+    credentials-binding \
+    allure-jenkins-plugin \
+    configuration-as-code \
+    job-dsl \
+    blueocean
+
+# Plugins:
+# - workflow-aggregator → Enables Pipeline (Jenkinsfile support)
+# - pipeline-stage-view → Visual stage view in UI
+# - git → Allows Jenkins to clone repositories
+# - credentials-binding → Secure usage of secrets in pipelines
+# - allure-jenkins-plugin → Integrates Allure test reports
+# - configuration-as-code → Allows Jenkins to be configured via YAML files (JCasC),
+#   enabling Infrastructure as Code and eliminating manual UI configuration
+# - job-dsl → Enables creation of Jenkins jobs via code (Job DSL),
+# - blueocean → Provides a modern, user-friendly UI for Jenkins with enhanced pipeline visualization
+
 # Enable Jenkins Configuration as Code (JCasC)
 ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs
 
