@@ -12,11 +12,6 @@ jenkins:
     loggedInUsersCanDoAnything:
       allowAnonymousRead: false
 
-  # Enable Content Security Policy (CSP) with proper options for Allure reports
-  javaOptions: |
-    -Dhudson.model.DirectoryBrowserSupport.CSP="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';" 
-    -Djenkins.model.DirectoryBrowserSupport.CSP="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
-
 # Job DSL: Automatically creates the Pipeline job at startup
 jobs:
   - script: |
