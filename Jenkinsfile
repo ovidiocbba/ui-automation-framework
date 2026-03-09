@@ -3,8 +3,13 @@ pipeline {
     agent any
 
     options {
+        // Enable ANSI color support in Jenkins console logs
+        // Allows tools like Gradle to display colored output (errors, warnings, info)
+        ansiColor('xterm')
+
         // Stop the build if it runs more than 30 minutes
         timeout(time: 30, unit: 'MINUTES')
+
         // Do not allow two builds of this job at the same time
         disableConcurrentBuilds()
 
