@@ -31,6 +31,13 @@ pipeline {
 
     stages {
 
+        // Clean Jenkins workspace before starting a new build
+        stage('Prepare Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
         stage('Checkout') {
             steps {
                 // Clone repository from SCM (Git)
@@ -154,10 +161,14 @@ pipeline {
         stage('Debug') {
             steps {
                 script {
-                    // Check generated files
-                    sh 'ls -R build-CHROME_HEADLESS/allure-results || true'
-                    sh 'ls -R build-FIREFOX_HEADLESS/allure-results || true'
-                    sh 'ls -R build-EDGE_HEADLESS/allure-results || true'
+                    // Check generated files dynamically based on selected browser(s)
+                    def browsers = params.BROWSER == 'ALL'
+                        ? ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
+                        : [params.BROWSER]
+
+                    for (browser in browsers) {
+                        sh "ls -R build-${browser}/allure-results || true"
+                    }
                 }
             }
         }
