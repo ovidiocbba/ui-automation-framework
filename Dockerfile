@@ -106,7 +106,9 @@ RUN jenkins-plugin-cli --plugins \
     allure-jenkins-plugin \
     configuration-as-code \
     job-dsl \
-    blueocean
+    blueocean \
+    ansicolor \
+    timestamper
 
 # Plugins:
 # - workflow-aggregator → Enables Pipeline (Jenkinsfile support)
@@ -118,6 +120,8 @@ RUN jenkins-plugin-cli --plugins \
 #   enabling Infrastructure as Code and eliminating manual UI configuration
 # - job-dsl → Enables creation of Jenkins jobs via code (Job DSL),
 # - blueocean → Provides a modern, user-friendly UI for Jenkins with enhanced pipeline visualization
+# - ansicolor → Enables ANSI color support in Jenkins console logs
+# - timestamper → Adds timestamps to each line of the Jenkins console output
 
 # Enable Jenkins Configuration as Code (JCasC)
 ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs
