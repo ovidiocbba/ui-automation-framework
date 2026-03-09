@@ -7,6 +7,15 @@ pipeline {
         timeout(time: 30, unit: 'MINUTES')
         // Do not allow two builds of this job at the same time
         disableConcurrentBuilds()
+
+        // Add timestamps to Jenkins logs for better debugging
+        timestamps()
+
+        // Keep only the latest 20 builds and artifacts from the last 10 builds to save disk space
+        buildDiscarder(logRotator(
+            numToKeepStr: '20',
+            artifactNumToKeepStr: '10'
+        ))
     }
 
     parameters {
@@ -27,6 +36,13 @@ pipeline {
         JAVA_HOME = tool name: 'jdk17'
         // Add selected JDK to system PATH
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
+
+        // Gradle flags used in all pipeline executions
+        // --no-daemon: do not start Gradle daemon in CI
+        // --stacktrace: show full error stack trace
+        // --info: show more details in the build logs
+        // --warning-mode all: show all Gradle warnings
+        GRADLE_FLAGS = "--no-daemon --stacktrace --info --warning-mode all"
     }
 
     stages {
@@ -48,14 +64,14 @@ pipeline {
         stage('Build') {
             steps {
                 // Compile project but skip tests
-                sh './gradlew clean build -x test --no-daemon --stacktrace'
+                sh "./gradlew clean build -x test ${env.GRADLE_FLAGS}"
             }
         }
 
         stage('Static Analysis') {
             steps {
                 // Run Checkstyle and PMD
-                sh './gradlew staticAnalysis --no-daemon --stacktrace'
+                sh "./gradlew staticAnalysis ${env.GRADLE_FLAGS}"
             }
             post {
                 always {
@@ -91,9 +107,6 @@ pipeline {
                                            "-DexplicitWait=${params.EXPLICIT_WAIT} " +
                                            "-Dthreads=${params.THREADS}"
 
-                        // Centralized Gradle flags to avoid repeating daemon and stacktrace options
-                        def gradleFlags = "--no-daemon --stacktrace"
-
                         // Set browsers for parallel execution based on user input
                         def browsers = params.BROWSER == 'ALL'
                             ? ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
@@ -113,7 +126,7 @@ pipeline {
                             def browserParams = "-Dbrowser=${selectedBrowser} " +
                                                 "-Dallure.results.directory=${browserBuildDir}/allure-results " +
                                                 "-Dorg.gradle.project.buildDir=${browserBuildDir} " +
-                                                "${gradleFlags}"
+                                                "${env.GRADLE_FLAGS}"
 
                             // Create a parallel stage per browser
                             parallelStages[selectedBrowser] = {
@@ -206,6 +219,7 @@ pipeline {
                 script {
                     echo "Running index generation script..."
                     sh '''
+                        set -e
                         chmod +x jenkins/scripts/generate-index.sh
                         ./jenkins/scripts/generate-index.sh
                         echo "Listing contents of the allure-report directory:"
