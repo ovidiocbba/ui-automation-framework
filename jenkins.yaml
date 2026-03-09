@@ -24,6 +24,43 @@ jobs:
       pipelineJob(JOB_NAME) {
         description(JOB_DESCRIPTION)
 
+        /*
+        Parameters are defined here so Jenkins shows "Build with Parameters" immediately.
+        Otherwise Jenkins only detects Jenkinsfile parameters after the first build (common with Docker restarts).
+        */
+        parameters {
+
+          choiceParam(
+            'BROWSER',
+            ['ALL','CHROME_HEADLESS','FIREFOX_HEADLESS','EDGE_HEADLESS'],
+            'Browser to execute (ALL | CHROME_HEADLESS | FIREFOX_HEADLESS | EDGE_HEADLESS)'
+          )
+
+          stringParam(
+            'SCENARIO_TAG',
+            '@regression',
+            'Scenario tag to execute (e.g. "@TC-00001")'
+          )
+
+          stringParam(
+            'BASE_URL',
+            'https://www.amazon.com',
+            'Base URL (e.g. "https://www.amazon.com")'
+          )
+
+          stringParam(
+            'EXPLICIT_WAIT',
+            '30',
+            'Explicit wait timeout in seconds (e.g. "30")'
+          )
+
+          stringParam(
+            'THREADS',
+            '2',
+            'Number of parallel threads for test execution (e.g. "2")'
+          )
+        }
+
         // Load Pipeline script from Git (Pipeline as Code)
         definition {
           // cpsScm = CPS (Continuation Passing Style) + SCM (Source Code Management):
