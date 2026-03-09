@@ -31,10 +31,10 @@ pipeline {
 
     stages {
 
-        // Clean Jenkins workspace before starting a new build
+        // Clean workspace before build
         stage('Prepare Workspace') {
             steps {
-                cleanWs()
+                deleteDir()
             }
         }
 
