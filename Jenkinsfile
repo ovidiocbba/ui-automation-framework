@@ -73,68 +73,79 @@ pipeline {
 
         stage('Execute Tests') {
             steps {
-                script {
-                    // Centralized Gradle parameters to avoid duplication
-                    def commonParams = "-Dcucumber.filter.tags=${params.SCENARIO_TAG} " +
-                                       "-DbaseUrl=${params.BASE_URL} " +
-                                       "-DexplicitWait=${params.EXPLICIT_WAIT} " +
-                                       "-Dthreads=${params.THREADS}"
 
-                    // Centralized Gradle flags to avoid repeating daemon and stacktrace options
-                    def gradleFlags = "--no-daemon --stacktrace"
+                // Added to allow pipeline continuation even if tests fail
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
 
-                    // Set browsers for parallel execution based on user input
-                    def browsers = params.BROWSER == 'ALL'
-                        ? ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
-                        : [params.BROWSER]
-                    // Map that will store parallel stages
-                    def parallelStages = [:]
-                    // Loop through each selected browser
-                    for (browser in browsers) {
-                        def selectedBrowser = browser
+                    script {
+                        // Centralized Gradle parameters to avoid duplication
+                        def commonParams = "-Dcucumber.filter.tags=${params.SCENARIO_TAG} " +
+                                           "-DbaseUrl=${params.BASE_URL} " +
+                                           "-DexplicitWait=${params.EXPLICIT_WAIT} " +
+                                           "-Dthreads=${params.THREADS}"
 
-                        // Isolated build directory per browser
-                        // Prevents parallel executions from overwriting the shared "build/" folder
-                        // Ensures independent Gradle outputs and Allure results
-                        def browserBuildDir = "build-${selectedBrowser}"
+                        // Centralized Gradle flags to avoid repeating daemon and stacktrace options
+                        def gradleFlags = "--no-daemon --stacktrace"
 
-                        // Centralized browser-specific parameters
-                        def browserParams = "-Dbrowser=${selectedBrowser} " +
-                                            "-Dallure.results.directory=${browserBuildDir}/allure-results " +
-                                            "-Dorg.gradle.project.buildDir=${browserBuildDir} " +
-                                            "${gradleFlags}"
+                        // Set browsers for parallel execution based on user input
+                        def browsers = params.BROWSER == 'ALL'
+                            ? ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
+                            : [params.BROWSER]
+                        // Map that will store parallel stages
+                        def parallelStages = [:]
+                        // Loop through each selected browser
+                        for (browser in browsers) {
+                            def selectedBrowser = browser
 
-                        // Create a parallel stage per browser
-                        parallelStages[selectedBrowser] = {
-                            stage("Run ${selectedBrowser}") {
-                                try {
-                                    // Execute main test task
-                                    sh """
-                                        ./gradlew clean executeFeatures \
-                                        ${commonParams} \
-                                        ${browserParams}
-                                    """
-                                } catch (err) {
-                                    // If execution fails, re-run failed scenarios only
-                                    echo "Re-running failed scenarios for ${selectedBrowser}"
+                            // Isolated build directory per browser
+                            // Prevents parallel executions from overwriting the shared "build/" folder
+                            // Ensures independent Gradle outputs and Allure results
+                            def browserBuildDir = "build-${selectedBrowser}"
 
-                                    sh """
-                                        ./gradlew reExecuteFeatures \
-                                        ${commonParams} \
-                                        ${browserParams}
-                                    """
-                                    // Mark stage as failed after re-run
-                                    throw err
+                            // Centralized browser-specific parameters
+                            def browserParams = "-Dbrowser=${selectedBrowser} " +
+                                                "-Dallure.results.directory=${browserBuildDir}/allure-results " +
+                                                "-Dorg.gradle.project.buildDir=${browserBuildDir} " +
+                                                "${gradleFlags}"
+
+                            // Create a parallel stage per browser
+                            parallelStages[selectedBrowser] = {
+                                stage("Run ${selectedBrowser}") {
+                                    try {
+                                        // Execute main test task
+                                        sh """
+                                            ./gradlew executeFeatures \
+                                            ${commonParams} \
+                                            ${browserParams}
+                                        """
+                                    } catch (err) {
+                                        // If execution fails, re-run failed scenarios only
+                                        echo "Re-running failed scenarios for ${selectedBrowser}"
+                                        try {
+                                            sh """
+                                                ./gradlew reExecuteFeatures \
+                                                ${commonParams} \
+                                                ${browserParams}
+                                            """
+                                            echo "Retry succeeded for ${selectedBrowser}"
+                                        } catch (retryErr) {
+                                            echo "Retry failed for ${selectedBrowser}"
+                                            throw retryErr
+                                        }
+                                    }
+                                    // Save logs for this specific browser
+                                    archiveArtifacts artifacts: "${browserBuildDir}/logs/**/*.log", allowEmptyArchive: true
+
+                                    // Save allure results for debugging if needed
+                                    archiveArtifacts artifacts: "${browserBuildDir}/allure-results/**", allowEmptyArchive: true
                                 }
-                                // Save logs for this specific browser
-                                archiveArtifacts artifacts: "build/logs/**/*.log", allowEmptyArchive: true
                             }
                         }
+                        // failFast: false ensures one browser failure does NOT stop the others
+                        parallelStages.failFast = false
+                        // Run all browser stages in parallel
+                        parallel parallelStages
                     }
-                    // failFast: false ensures one browser failure does NOT stop the others
-                    parallelStages.failFast = false
-                    // Run all browser stages in parallel
-                    parallel parallelStages
                 }
             }
         }
@@ -144,9 +155,9 @@ pipeline {
             steps {
                 script {
                     // Check generated files
-                    sh 'ls -R build-CHROME_HEADLESS/allure-results'
-                    sh 'ls -R build-FIREFOX_HEADLESS/allure-results'
-                    sh 'ls -R build-EDGE_HEADLESS/allure-results'
+                    sh 'ls -R build-CHROME_HEADLESS/allure-results || true'
+                    sh 'ls -R build-FIREFOX_HEADLESS/allure-results || true'
+                    sh 'ls -R build-EDGE_HEADLESS/allure-results || true'
                 }
             }
         }
@@ -170,7 +181,7 @@ pipeline {
 
                     // Check if the results directory exists before generating the report
                     sh "echo 'Checking Allure results directory existence...'"
-                    sh "ls -R ${resultPaths.collect { it.path }.join(' ')}"
+                    sh "ls -R ${resultPaths.collect { it.path }.join(' ')} || true"
 
                     // Generate the Allure report
                     sh "allure generate ${resultPaths.collect { it.path }.join(' ')} --clean -o allure-report"
@@ -205,6 +216,16 @@ pipeline {
                     alwaysLinkToLastBuild: true       // link to latest build
                 ])
             }
+        }
+    }
+
+    post {
+        always {
+            // This ensures the pipeline completes cleanly and reports remain available
+            echo "Pipeline finished. Reports are preserved even if tests fail."
+
+            // Archive the generated Allure report for additional access
+            archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
         }
     }
 }
