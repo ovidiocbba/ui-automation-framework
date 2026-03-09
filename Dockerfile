@@ -134,8 +134,8 @@ RUN chown -R jenkins:jenkins /var/jenkins_home/casc_configs
 # Set Java encoding to UTF-8 for Jenkins logs and operations
 ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
 
-# Add Content Security Policy (CSP) to the JAVA_OPTS
-ENV JAVA_OPTS="${JAVA_OPTS} -Dhudson.model.DirectoryBrowserSupport.CSP='default-src ''self''; script-src ''self'' ''unsafe-inline'' ''unsafe-eval''; style-src ''self'' ''unsafe-inline'';'"
+# Disable Jenkins Content Security Policy so HTML reports like Allure can load JS/CSS
+ENV JAVA_OPTS="${JAVA_OPTS} -Dhudson.model.DirectoryBrowserSupport.CSP="
 
 # Switch back to secure Jenkins user
 USER jenkins
