@@ -10,7 +10,7 @@ pipeline {
         // Allows tools like Gradle to display colored output (errors, warnings, info)
         ansiColor('xterm')
 
-        // Stop the build if it runs more than 30 minutes
+        // Global timeout to stop the whole pipeline if it runs too long
         timeout(time: 30, unit: 'MINUTES')
 
         // Do not allow two builds of this job at the same time
@@ -108,6 +108,12 @@ pipeline {
         }
 
         stage('Execute Tests') {
+
+            // Stage timeout to stop this stage if tests take too long
+            options {
+                timeout(time: 20, unit: 'MINUTES')
+            }
+
             steps {
 
                 // Added to allow pipeline continuation even if tests fail
