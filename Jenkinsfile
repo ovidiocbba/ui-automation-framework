@@ -3,6 +3,9 @@ pipeline {
     agent any
 
     options {
+        // Disable Jenkins automatic checkout to avoid cloning the repository twice
+        skipDefaultCheckout(true)
+
         // Enable ANSI color support in Jenkins console logs
         // Allows tools like Gradle to display colored output (errors, warnings, info)
         ansiColor('xterm')
