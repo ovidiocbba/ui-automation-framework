@@ -141,11 +141,17 @@ pipeline {
                             // Ensures independent Gradle outputs and Allure results
                             def browserBuildDir = "build-${selectedBrowser}"
 
+                            // Add the logDir variable
+                            def logDir = "${browserBuildDir}/logs"
+
+                            // Print the logDir to debug
+                            echo "Using log directory: ${logDir}"
+
                             // Centralized browser-specific parameters
                             def browserParams = "-Dbrowser=${selectedBrowser} " +
                                                 "-Dallure.results.directory=${browserBuildDir}/allure-results " +
                                                 "-Dorg.gradle.project.buildDir=${browserBuildDir} " +
-                                                "-DlogDir=${browserBuildDir}/logs " +
+                                                "-DlogDir=${logDir} " +
                                                 "${env.GRADLE_FLAGS}"
 
                             // Create a parallel stage per browser
