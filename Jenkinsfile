@@ -74,6 +74,14 @@ pipeline {
             }
         }
 
+        // Added stage to show Gradle properties
+        stage('Show Gradle Properties') {
+            steps {
+                // Print Gradle properties to check if logDir and others are being passed
+                sh './gradlew properties'
+            }
+        }
+
         stage('Build') {
             steps {
                 // Compile project but skip tests
