@@ -96,6 +96,11 @@ jobs:
 
 # Global Tool Configuration
 tool:
+  git:
+    installations:
+      - name: "git"
+        home: "/usr/bin/git"
+
   jdk:
     installations:
       - name: "jdk17"
