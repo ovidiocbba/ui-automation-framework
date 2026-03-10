@@ -175,11 +175,11 @@ pipeline {
                                     // DEBUG: Check if logs exist before archiving
                                     echo "Listing the log files for ${selectedBrowser}..."
                                     sh """
-                                        find build/logs -name "*.log" || echo "No logs found."
+                                        find build/logs/${selectedBrowser} -name "*.log" || echo "No logs found."
                                     """
 
                                     // Save logs for this specific browser
-                                    archiveArtifacts artifacts: "build/logs/${params.BROWSER}/*.log", allowEmptyArchive: true
+                                    archiveArtifacts artifacts: "build/logs/${selectedBrowser}/*.log", allowEmptyArchive: true
 
                                     // Save allure results for debugging if needed
                                     archiveArtifacts artifacts: "${browserBuildDir}/allure-results/**", allowEmptyArchive: true
