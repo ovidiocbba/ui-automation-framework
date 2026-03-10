@@ -55,6 +55,7 @@ feat(core-browser): add browser interface
 * **chore**: maintenance tasks, dependency updates, build configuration
 * **perf**: performance improvements
 * **ci**: continuous integration changes
+* **revert**: reverts a previous commit (used when undoing a change)
 
 <div align="right">
   <strong>
