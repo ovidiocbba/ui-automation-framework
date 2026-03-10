@@ -45,8 +45,8 @@ pipeline {
         // Add selected JDK to system PATH
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
 
-        // Gradle cache directory (improves CI performance)
-        GRADLE_USER_HOME = "${WORKSPACE}/.gradle"
+        // Shared Gradle cache to make builds faster (improves CI performance)
+        GRADLE_USER_HOME = "/var/jenkins_home/.gradle"
 
         // Gradle flags used in all pipeline executions
         // --no-daemon: do not start Gradle daemon in CI
@@ -58,10 +58,10 @@ pipeline {
 
     stages {
 
-        // Clean workspace before build
+        // Clean workspace before build (Gradle cache is kept outside)
         stage('Prepare Workspace') {
             steps {
-                deleteDir()
+                cleanWs()
             }
         }
 
