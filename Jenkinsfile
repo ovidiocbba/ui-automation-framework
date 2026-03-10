@@ -173,7 +173,7 @@ pipeline {
                                         }
                                     }
                                     // Save logs for this specific browser
-                                    archiveArtifacts artifacts: "${browserBuildDir}/logs/**/*.log", allowEmptyArchive: true
+                                    archiveArtifacts artifacts: "build/logs/${params.BROWSER}/**/*.log", allowEmptyArchive: true
 
                                     // Save allure results for debugging if needed
                                     archiveArtifacts artifacts: "${browserBuildDir}/allure-results/**", allowEmptyArchive: true
