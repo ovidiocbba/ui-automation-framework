@@ -74,14 +74,6 @@ pipeline {
             }
         }
 
-        // Added stage to show Gradle properties
-        stage('Show Gradle Properties') {
-            steps {
-                // Print Gradle properties to check if logDir and others are being passed
-                sh './gradlew properties'
-            }
-        }
-
         stage('Build') {
             steps {
                 // Compile project but skip tests
@@ -159,7 +151,6 @@ pipeline {
                             def browserParams = "-Dbrowser=${selectedBrowser} " +
                                                 "-Dallure.results.directory=${browserBuildDir}/allure-results " +
                                                 "-Dorg.gradle.project.buildDir=${browserBuildDir} " +
-                                                "-DlogDir=${logDir} " +
                                                 "${env.GRADLE_FLAGS}"
 
                             // Create a parallel stage per browser
@@ -190,11 +181,11 @@ pipeline {
                                     // DEBUG: Check if logs exist before archiving
                                     echo "Listing the log files for ${selectedBrowser}..."
                                     sh """
-                                        find ${browserBuildDir}/logs -name "*.log" || echo "No logs found."
+                                        find build/logs/${selectedBrowser} -name "*.log" || echo "No logs found."
                                     """
 
                                     // Save logs for this specific browser
-                                    archiveArtifacts artifacts: "${browserBuildDir}/logs/*.log", allowEmptyArchive: true
+                                    archiveArtifacts artifacts: "build/logs/${selectedBrowser}/*.log", allowEmptyArchive: true
 
                                     // Save allure results for debugging if needed
                                     archiveArtifacts artifacts: "${browserBuildDir}/allure-results/**", allowEmptyArchive: true
