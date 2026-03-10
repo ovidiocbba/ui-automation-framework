@@ -6,7 +6,7 @@
   <property name="BROWSER" value="${browser:-LOCAL}"/>
 
   <!-- Base log directory -->
-  <property name="LOG_DIR" value="build/logs/${BROWSER}"/>
+  <property name="LOG_DIR" value="${logDir:-build/logs/${BROWSER}}"/>
 
   <!-- Silence WebDriverManager INFO logs -->
   <logger name="io.github.bonigarcia.wdm" level="WARN"/>
