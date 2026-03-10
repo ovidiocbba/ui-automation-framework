@@ -109,7 +109,8 @@ RUN jenkins-plugin-cli --plugins \
     blueocean \
     ansicolor \
     timestamper \
-    ws-cleanup
+    ws-cleanup \
+    htmlpublisher
 
 # Plugins:
 # - workflow-aggregator → Enables Pipeline (Jenkinsfile support)
@@ -124,6 +125,7 @@ RUN jenkins-plugin-cli --plugins \
 # - ansicolor → Enables ANSI color support in Jenkins console logs
 # - timestamper → Adds timestamps to each line of the Jenkins console output
 # - ws-cleanup → Allows cleaning the workspace in pipelines using cleanWs()
+# - htmlpublisher → Publishes HTML reports in Jenkins (used for Allure report UI)
 
 # Enable Jenkins Configuration as Code (JCasC)
 ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs
