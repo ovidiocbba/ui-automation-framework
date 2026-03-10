@@ -126,12 +126,15 @@ pipeline {
                                            "-DexplicitWait=${params.EXPLICIT_WAIT} " +
                                            "-Dthreads=${params.THREADS}"
 
+                        // Centralized list of supported browsers
+                        def ALL_BROWSERS = ['CHROME_HEADLESS','FIREFOX_HEADLESS','EDGE_HEADLESS']
+
                         // Set browsers for parallel execution based on user input
-                        def browsers = params.BROWSER == 'ALL'
-                            ? ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
-                            : [params.BROWSER]
+                        def browsers = params.BROWSER == 'ALL' ? ALL_BROWSERS : [params.BROWSER]
+
                         // Map that will store parallel stages
                         def parallelStages = [:]
+
                         // Loop through each selected browser
                         for (browser in browsers) {
                             def selectedBrowser = browser
@@ -197,6 +200,9 @@ pipeline {
 
         // Debugging step to check if allure-results directories are being generated
         stage('Debug') {
+            when {
+                expression { currentBuild.currentResult == 'FAILURE' }
+            }
             steps {
                 script {
                     // Check generated files dynamically based on selected browser(s)
@@ -205,6 +211,7 @@ pipeline {
                         : [params.BROWSER]
 
                     for (browser in browsers) {
+                        echo "Checking allure results for ${browser}"
                         sh "ls -R build-${browser}/allure-results || true"
                     }
                 }
