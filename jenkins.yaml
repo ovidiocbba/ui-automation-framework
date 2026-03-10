@@ -1,16 +1,28 @@
 jenkins:
   systemMessage: "Jenkins configured automatically via JCasC"
 
+  # Authentication configuration
+  # Defines how users log in to Jenkins
   securityRealm:
     local:
+      # Disable public user registration
       allowsSignup: false
       users:
         - id: "${JENKINS_ADMIN_ID}"
           password: "${JENKINS_ADMIN_PASSWORD}"
 
+  # Authorization strategy (permissions model)
   authorizationStrategy:
     loggedInUsersCanDoAnything:
+      # Prevent anonymous users from accessing Jenkins
       allowAnonymousRead: false
+
+  # Enable CSRF protection (Cross-Site Request Forgery)
+  # Stops malicious websites from sending requests to Jenkins using a logged-in user session.
+  # excludeClientIPFromCrumb avoids problems when Jenkins runs in Docker or behind a proxy.
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
 
 # Job DSL: Automatically creates the Pipeline job at startup
 jobs:
