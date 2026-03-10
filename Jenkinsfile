@@ -67,8 +67,10 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                // Clone repository from SCM (Git)
-                checkout scm
+                    // Clone repository from Git (retry helps avoid temporary network errors)
+                    retry(3) {
+                      checkout scm
+                    }
             }
         }
 
