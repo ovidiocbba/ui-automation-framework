@@ -76,8 +76,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                // Compile project but skip tests
-                sh "./gradlew clean build -x test ${env.GRADLE_FLAGS}"
+                // Clean workspace and compile project, skipping tests.
+                sh "./gradlew clean assemble ${env.GRADLE_FLAGS}"
             }
         }
 
