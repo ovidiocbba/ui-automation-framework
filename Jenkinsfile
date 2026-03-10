@@ -145,6 +145,7 @@ pipeline {
                             def browserParams = "-Dbrowser=${selectedBrowser} " +
                                                 "-Dallure.results.directory=${browserBuildDir}/allure-results " +
                                                 "-Dorg.gradle.project.buildDir=${browserBuildDir} " +
+                                                "-DlogDir=${browserBuildDir}/logs " +
                                                 "${env.GRADLE_FLAGS}"
 
                             // Create a parallel stage per browser
@@ -175,11 +176,11 @@ pipeline {
                                     // DEBUG: Check if logs exist before archiving
                                     echo "Listing the log files for ${selectedBrowser}..."
                                     sh """
-                                        find build/logs/${selectedBrowser} -name "*.log" || echo "No logs found."
+                                        find ${browserBuildDir}/logs -name "*.log" || echo "No logs found."
                                     """
 
                                     // Save logs for this specific browser
-                                    archiveArtifacts artifacts: "build/logs/${selectedBrowser}/*.log", allowEmptyArchive: true
+                                    archiveArtifacts artifacts: "${browserBuildDir}/logs/*.log", allowEmptyArchive: true
 
                                     // Save allure results for debugging if needed
                                     archiveArtifacts artifacts: "${browserBuildDir}/allure-results/**", allowEmptyArchive: true
