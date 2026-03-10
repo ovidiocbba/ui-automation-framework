@@ -45,6 +45,9 @@ pipeline {
         // Add selected JDK to system PATH
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
 
+        // Gradle cache directory (improves CI performance)
+        GRADLE_USER_HOME = "${WORKSPACE}/.gradle"
+
         // Gradle flags used in all pipeline executions
         // --no-daemon: do not start Gradle daemon in CI
         // --stacktrace: show full error stack trace
