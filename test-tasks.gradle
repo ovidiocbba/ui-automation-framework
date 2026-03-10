@@ -96,6 +96,11 @@ tasks.withType(Test).configureEach {
             configProps.getProperty("threads") ?: "1"
     // Required by TestNG to control parallel DataProvider threads
     systemProperty "dataproviderthreadcount", threadCount
+
+    // Fixing deprecation warnings by explicitly setting test classes directories
+    // This ensures Gradle uses the correct paths for test classes and dependencies during test execution
+    classpath = sourceSets.test.runtimeClasspath
+    testClassesDirs = sourceSets.test.output.classesDirs
 }
 
 // ========================================
