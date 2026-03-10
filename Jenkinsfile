@@ -274,14 +274,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            // This ensures the pipeline completes cleanly and reports remain available
-            echo "Pipeline finished. Reports are preserved even if tests fail."
-
-            // Archive the generated Allure report for additional access
-            archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
-        }
-    }
 }
