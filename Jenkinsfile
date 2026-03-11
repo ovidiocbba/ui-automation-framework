@@ -53,9 +53,6 @@ pipeline {
         // --info: show more details in the build logs
         // --warning-mode all: show all Gradle warnings
         GRADLE_FLAGS = "--no-daemon --stacktrace --info --warning-mode all"
-
-        // Centralizing list of supported browsers (defined globally for access in other stages)
-        ALL_BROWSERS = ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
     }
 
     stages {
