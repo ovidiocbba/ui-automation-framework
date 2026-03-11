@@ -65,9 +65,8 @@ pipeline {
                 script {
                     // Define the list of supported browsers inside a script block
                     def ALL_BROWSERS = ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
-
-                    // Make browsers accessible globally via the env object
-                    env.BROWSERS = params.BROWSER == 'ALL' ? ALL_BROWSERS : [params.BROWSER]
+                    // No 'def' needed as 'browsers' is already defined globally and should be used in all stages.
+                    browsers = params.BROWSER == 'ALL' ? ALL_BROWSERS : [params.BROWSER]
                 }
             }
         }
@@ -133,9 +132,8 @@ pipeline {
 
                         // Map that will store parallel stages
                         def parallelStages = [:]
-
                         // Loop through each selected browser
-                        for (browser in env.BROWSERS) {
+                        for (browser in browsers) {
                             def selectedBrowser = browser
 
                             // Isolated build directory per browser
@@ -205,7 +203,7 @@ pipeline {
             steps {
                 script {
                     echo "Checking allure results for browsers"
-                    for (browser in env.BROWSERS) {
+                    for (browser in browsers) {
                         echo "Checking allure results for ${browser}"
                         sh "ls -R build-${browser}/allure-results || true"
                     }
@@ -216,7 +214,7 @@ pipeline {
         stage('Allure Report') {
             steps {
                 script {
-                    def resultPaths = env.BROWSERS.collect { browser ->
+                    def resultPaths = browsers.collect { browser ->
                         "build-${browser}/allure-results"
                     }
 
