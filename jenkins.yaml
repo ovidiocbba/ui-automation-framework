@@ -98,7 +98,7 @@ jobs:
 tool:
   git:
     installations:
-      - name: "git"
+      - name: "Default"
         home: "/usr/bin/git"
 
   jdk:
