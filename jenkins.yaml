@@ -24,8 +24,8 @@ jenkins:
     standard:
       excludeClientIPFromCrumb: true
 
-  # Add Global Pipeline Libraries Configuration
-  globalLibraries:
+  # Shared Libraries Configuration for Pipeline
+  sharedLibraries:
     - name: 'shared-pipeline-steps'
       defaultVersion: 'main'
       implicit: false
