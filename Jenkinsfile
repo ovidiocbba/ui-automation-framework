@@ -100,9 +100,11 @@ pipeline {
                     post {
                         // If Checkstyle or PMD find issues, fail the pipeline before running tests
                         failure {
-                            echo "Static analysis failed. Stopping the pipeline."
-                            currentBuild.result = 'FAILURE'
-                            error("Static analysis failed, skipping tests.")
+                            script {
+                                echo "Static analysis failed. Stopping the pipeline."
+                                currentBuild.result = 'FAILURE'
+                                error("Static analysis failed, skipping tests.")
+                            }
                         }
                         always {
                             // Save static analysis reports as Jenkins artifacts
