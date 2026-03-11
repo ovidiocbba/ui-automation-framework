@@ -96,7 +96,6 @@ RUN curl -fsSL https://github.com/allure-framework/allure2/releases/download/${A
 # Install Jenkins Plugins
 RUN jenkins-plugin-cli --plugins \
     workflow-aggregator \
-    workflow-cps-global-lib \
     pipeline-stage-view \
     git \
     credentials-binding \
@@ -111,7 +110,6 @@ RUN jenkins-plugin-cli --plugins \
 
 # Plugins:
 # - workflow-aggregator → Enables Pipeline (Jenkinsfile support)
-# - workflow-cps-global-lib → Shared Libraries support and JCasC globalLibraries configuration
 # - pipeline-stage-view → Visual stage view in UI
 # - git → Allows Jenkins to clone repositories
 # - credentials-binding → Secure usage of secrets in pipelines
