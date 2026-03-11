@@ -89,35 +89,38 @@ pipeline {
             }
         }
 
-        stage('Static Analysis') {
-            steps {
-                // Run Checkstyle and PMD
-                sh "./gradlew staticAnalysis ${env.GRADLE_FLAGS}"
-            }
-            post {
-               // If Checkstyle or PMD find issues, fail the pipeline before running tests
-               failure {
-                        echo "Static analysis failed. Stopping the pipeline."
-                        currentBuild.result = 'FAILURE'
-                        // Explicitly fail the pipeline to skip tests if static analysis fails
-                        error("Static analysis failed, skipping tests.")
+        // Parallel execution of Static Analysis and Javadoc generation
+        stage('Static Analysis & Javadoc') {
+            parallel {
+                stage('Static Analysis') {
+                    steps {
+                        // Run Checkstyle and PMD
+                        sh "./gradlew staticAnalysis ${env.GRADLE_FLAGS}"
+                    }
+                    post {
+                        // If Checkstyle or PMD find issues, fail the pipeline before running tests
+                        failure {
+                            echo "Static analysis failed. Stopping the pipeline."
+                            currentBuild.result = 'FAILURE'
+                            error("Static analysis failed, skipping tests.")
+                        }
+                        always {
+                            // Save static analysis reports as Jenkins artifacts
+                            archiveArtifacts artifacts: 'build/reports/**', allowEmptyArchive: true
+                        }
+                    }
                 }
-                always {
-                    // Save static analysis reports as Jenkins artifacts
-                    archiveArtifacts artifacts: 'build/reports/**', allowEmptyArchive: true
-                }
-            }
-        }
-
-        stage('Javadoc') {
-            steps {
-                // Generate Javadoc documentation
-                sh './gradlew javadoc'
-            }
-            post {
-                always {
-                    // Save generated Javadoc
-                    archiveArtifacts artifacts: 'build/docs/javadoc/**', allowEmptyArchive: true
+                stage('Javadoc') {
+                    steps {
+                        // Generate Javadoc documentation
+                        sh './gradlew javadoc'
+                    }
+                    post {
+                        always {
+                            // Save generated Javadoc
+                            archiveArtifacts artifacts: 'build/docs/javadoc/**', allowEmptyArchive: true
+                        }
+                    }
                 }
             }
         }
