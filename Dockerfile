@@ -32,8 +32,7 @@ RUN apt-get update && \
     locales && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \
-    update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 && \
-    rm -rf /var/lib/apt/lists/*
+    update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 
 # Set system language and encoding to English and UTF-8
 ENV LANG=en_US.UTF-8
@@ -47,8 +46,7 @@ RUN if ! dpkg -l | grep -q google-chrome-stable; then \
     curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google.gpg && \
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
-    apt-get install -y google-chrome-stable && \
-    rm -rf /var/lib/apt/lists/* && \
+    apt-get install -y google-chrome-stable; \
     echo "Google Chrome installed."; \
     else \
     echo "Google Chrome is already installed."; \
@@ -59,7 +57,6 @@ RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends microsoft-edge-stable && \
-    rm -rf /var/lib/apt/lists/* && \
     echo "===== MICROSOFT EDGE VERSION =====" && \
     microsoft-edge --version && \
     # Install EdgeDriver (matching the Edge version)
@@ -139,6 +136,9 @@ ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
 
 # Disable Jenkins Content Security Policy so HTML reports like Allure can load JS/CSS
 ENV JAVA_OPTS="${JAVA_OPTS} -Dhudson.model.DirectoryBrowserSupport.CSP="
+
+# Clean up apt lists in the end
+RUN rm -rf /var/lib/apt/lists/*
 
 # Switch back to secure Jenkins user
 USER jenkins
