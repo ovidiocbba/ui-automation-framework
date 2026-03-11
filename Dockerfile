@@ -1,6 +1,6 @@
 # Jenkins LTS with Java 17
 # Base image already includes Jenkins and JDK 17
-FROM jenkins/jenkins:lts-jdk17
+FROM jenkins/jenkins:2.541.2-lts-jdk17
 
 # Switch to root to install system dependencies
 USER root
