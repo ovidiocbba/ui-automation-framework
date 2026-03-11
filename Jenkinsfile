@@ -95,6 +95,13 @@ pipeline {
                 sh "./gradlew staticAnalysis ${env.GRADLE_FLAGS}"
             }
             post {
+               // If Checkstyle or PMD find issues, fail the pipeline before running tests
+               failure {
+                        echo "Static analysis failed. Stopping the pipeline."
+                        currentBuild.result = 'FAILURE'
+                        // Explicitly fail the pipeline to skip tests if static analysis fails
+                        error("Static analysis failed, skipping tests.")
+                }
                 always {
                     // Save static analysis reports as Jenkins artifacts
                     archiveArtifacts artifacts: 'build/reports/**', allowEmptyArchive: true
