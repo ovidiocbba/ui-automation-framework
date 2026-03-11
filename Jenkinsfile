@@ -75,7 +75,9 @@ pipeline {
             steps {
                 // Clone repository from Git (retry helps avoid temporary network errors)
                 retry(3) {
-                    checkout scm
+                    timeout(time: 5, unit: 'MINUTES') {
+                        checkout scm
+                    }
                 }
             }
         }
