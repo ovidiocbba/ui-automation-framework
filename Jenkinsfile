@@ -6,7 +6,6 @@ pipeline {
         // Disable Jenkins automatic checkout to avoid cloning the repository twice
         skipDefaultCheckout(true)
 
-        // Enable ANSI color support in Jenkins console logs
         // Allows tools like Gradle to display colored output (errors, warnings, info)
         ansiColor('xterm')
 
@@ -55,9 +54,8 @@ pipeline {
         // --warning-mode all: show all Gradle warnings
         GRADLE_FLAGS = "--no-daemon --stacktrace --info --warning-mode all"
 
-        // Centralizing list of supported browsers
-        def ALL_BROWSERS = ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
-        def browsers = params.BROWSER == 'ALL' ? ALL_BROWSERS : [params.BROWSER]
+        // Centralizing list of supported browsers (defined globally for access in other stages)
+        ALL_BROWSERS = ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
     }
 
     stages {
@@ -65,15 +63,19 @@ pipeline {
         stage('Prepare Workspace') {
             steps {
                 cleanWs()
+                script {
+                    // Define the browsers based on the parameter value
+                    browsers = params.BROWSER == 'ALL' ? ALL_BROWSERS : [params.BROWSER]
+                }
             }
         }
 
         stage('Checkout') {
             steps {
-                    // Clone repository from Git (retry helps avoid temporary network errors)
-                    retry(3) {
-                      checkout scm
-                    }
+                // Clone repository from Git (retry helps avoid temporary network errors)
+                retry(3) {
+                    checkout scm
+                }
             }
         }
 
@@ -118,10 +120,8 @@ pipeline {
             }
 
             steps {
-
                 // Added to allow pipeline continuation even if tests fail
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-
                     script {
                         // Centralized Gradle parameters to avoid duplication
                         def commonParams = "-Dcucumber.filter.tags=${params.SCENARIO_TAG} " +
@@ -246,7 +246,6 @@ pipeline {
         stage('Publish Allure Report') {
             steps {
                 // Publish the full allure-report folder
-                // All CSS, JS, and subreport directories are preserved
                 publishHTML(target: [
                     reportDir: 'allure-report',       // root folder containing index.html + subreports
                     reportFiles: 'index.html',        // main entry point
