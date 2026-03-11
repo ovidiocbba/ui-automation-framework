@@ -136,8 +136,9 @@ ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
 # Disable Jenkins Content Security Policy so HTML reports like Allure can load JS/CSS
 ENV JAVA_OPTS="${JAVA_OPTS} -Dhudson.model.DirectoryBrowserSupport.CSP="
 
-# Clean up apt lists in the end
-RUN rm -rf /var/lib/apt/lists/*
+# Clean up apt cache and lists
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Switch back to secure Jenkins user
 USER jenkins
