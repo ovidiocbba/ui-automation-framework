@@ -2,7 +2,7 @@ pipeline {
     // Run this pipeline on any available Jenkins agent
     agent any
     tools {
-        git "git" // Use the Git installation named "Default" (as configured in jenkins.yaml)
+        git "Default" // Use the Git installation named "Default" (as configured in jenkins.yaml)
     }
     options {
         // Disable Jenkins automatic checkout to avoid cloning the repository twice
