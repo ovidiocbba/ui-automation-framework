@@ -58,6 +58,12 @@ pipeline {
 
     stages {
 
+        // Centralizing list of supported browsers
+        script {
+            def ALL_BROWSERS = ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
+            def browsers = params.BROWSER == 'ALL' ? ALL_BROWSERS : [params.BROWSER]
+        }
+
         // Clean workspace before build (Gradle cache is kept outside)
         stage('Prepare Workspace') {
             steps {
@@ -125,12 +131,6 @@ pipeline {
                                            "-DbaseUrl=${params.BASE_URL} " +
                                            "-DexplicitWait=${params.EXPLICIT_WAIT} " +
                                            "-Dthreads=${params.THREADS}"
-
-                        // Centralized list of supported browsers
-                        def ALL_BROWSERS = ['CHROME_HEADLESS','FIREFOX_HEADLESS','EDGE_HEADLESS']
-
-                        // Set browsers for parallel execution based on user input
-                        def browsers = params.BROWSER == 'ALL' ? ALL_BROWSERS : [params.BROWSER]
 
                         // Map that will store parallel stages
                         def parallelStages = [:]
@@ -205,11 +205,7 @@ pipeline {
             }
             steps {
                 script {
-                    // Check generated files dynamically based on selected browser(s)
-                    def browsers = params.BROWSER == 'ALL'
-                        ? ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
-                        : [params.BROWSER]
-
+                    echo "Checking allure results for browsers"
                     for (browser in browsers) {
                         echo "Checking allure results for ${browser}"
                         sh "ls -R build-${browser}/allure-results || true"
@@ -221,26 +217,15 @@ pipeline {
         stage('Allure Report') {
             steps {
                 script {
-                    def resultPaths = []
-
-                    if (params.BROWSER == 'ALL') {
-                        resultPaths = [
-                            [path: 'build-CHROME_HEADLESS/allure-results'],
-                            [path: 'build-FIREFOX_HEADLESS/allure-results'],
-                            [path: 'build-EDGE_HEADLESS/allure-results']
-                        ]
-                    } else {
-                        resultPaths = [
-                            [path: "build-${params.BROWSER}/allure-results"]
-                        ]
+                    def resultPaths = browsers.collect { browser ->
+                        "build-${browser}/allure-results"
                     }
 
                     // Check if the results directory exists before generating the report
                     sh "echo 'Checking Allure results directory existence...'"
-                    sh "ls -R ${resultPaths.collect { it.path }.join(' ')} || true"
-
+                    sh "ls -R ${resultPaths.join(' ')} || true"
                     // Generate the Allure report
-                    sh "allure generate ${resultPaths.collect { it.path }.join(' ')} --clean -o allure-report"
+                    sh "allure generate ${resultPaths.join(' ')} --clean -o allure-report"
                 }
             }
         }
