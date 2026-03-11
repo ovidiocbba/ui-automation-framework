@@ -32,8 +32,9 @@ unclassified:
         defaultVersion: "main"
         allowVersionOverride: true
         includeInChangesets: true
+        # BUG: JCasC fails with libraryPath. Jenkins will look for 'vars/' in repo root by default.
         # The path is set because pipeline libraries (like 'vars/' or 'src/') are inside the 'jenkins/' folder in the repository.
-        libraryPath: "jenkins/"
+        # libraryPath: "jenkins/"
         retriever:
           modernSCM:
             scm:
