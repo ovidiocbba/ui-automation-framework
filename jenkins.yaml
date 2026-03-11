@@ -38,7 +38,7 @@ unclassified:
         retriever:
           modernSCM:
             scm:
-              git:
+              gitSource:
                 remote: "https://github.com/ovidiocbba/ui-automation-framework"
                 traits:
                   - gitBranchDiscovery
