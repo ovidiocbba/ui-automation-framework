@@ -123,14 +123,12 @@ RUN jenkins-plugin-cli --plugins \
 # Enable Jenkins Configuration as Code (JCasC)
 ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs
 
-# Create configuration folder
-RUN mkdir -p /var/jenkins_home/casc_configs
+# Create configuration folder and copy JCasC configuration file
+RUN mkdir -p /var/jenkins_home/casc_configs && \
+    chown -R jenkins:jenkins /var/jenkins_home/casc_configs
 
 # Copy JCasC configuration file
 COPY jenkins.yaml /var/jenkins_home/casc_configs/jenkins.yaml
-
-# Fix permissions
-RUN chown -R jenkins:jenkins /var/jenkins_home/casc_configs
 
 # Set Java encoding to UTF-8 for Jenkins logs and operations
 ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
