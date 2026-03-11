@@ -28,6 +28,7 @@ RUN apt-get update && \
     libgbm1 \
     xvfb \
     xauth \
+    git \
     firefox-esr \
     locales && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
