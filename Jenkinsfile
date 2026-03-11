@@ -64,7 +64,8 @@ pipeline {
             steps {
                 cleanWs()
                 script {
-                    // Define the browsers based on the parameter value
+                    // Define the list of supported browsers inside a script block
+                    def ALL_BROWSERS = ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
                     browsers = params.BROWSER == 'ALL' ? ALL_BROWSERS : [params.BROWSER]
                 }
             }
