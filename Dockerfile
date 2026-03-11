@@ -9,6 +9,8 @@ RUN echo "===== JAVA VERSION =====" && java -version
 
 # Install Base System Dependencies, locales and UTF-8 support
 ENV DEBIAN_FRONTEND=noninteractive
+
+# First update and install all dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     curl \
@@ -31,7 +33,6 @@ RUN apt-get update && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \
     update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 && \
-    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Set system language and encoding to English and UTF-8
@@ -47,7 +48,7 @@ RUN if ! dpkg -l | grep -q google-chrome-stable; then \
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
     apt-get install -y google-chrome-stable && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/lib/apt/lists/* && \
     echo "Google Chrome installed."; \
     else \
     echo "Google Chrome is already installed."; \
@@ -58,7 +59,6 @@ RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends microsoft-edge-stable && \
-    apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     echo "===== MICROSOFT EDGE VERSION =====" && \
     microsoft-edge --version && \
