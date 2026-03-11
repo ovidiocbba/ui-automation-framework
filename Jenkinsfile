@@ -54,16 +54,13 @@ pipeline {
         // --info: show more details in the build logs
         // --warning-mode all: show all Gradle warnings
         GRADLE_FLAGS = "--no-daemon --stacktrace --info --warning-mode all"
+
+        // Centralizing list of supported browsers
+        def ALL_BROWSERS = ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
+        def browsers = params.BROWSER == 'ALL' ? ALL_BROWSERS : [params.BROWSER]
     }
 
     stages {
-
-        // Centralizing list of supported browsers
-        script {
-            def ALL_BROWSERS = ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
-            def browsers = params.BROWSER == 'ALL' ? ALL_BROWSERS : [params.BROWSER]
-        }
-
         // Clean workspace before build (Gradle cache is kept outside)
         stage('Prepare Workspace') {
             steps {
