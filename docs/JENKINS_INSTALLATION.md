@@ -111,6 +111,31 @@ The password you set here will be used for the Jenkins admin login during the fi
   </strong>
 </div>
 
+### :key: 3.1 Accessing the Jenkins Container
+
+To access the Jenkins container's shell for troubleshooting or configuration, run this command:
+
+```
+docker exec -it jenkins-ui-automation bash
+```
+
+This will open an interactive shell inside the running container. From here, you can:
+
+- Check logs
+- Change Jenkins settings
+- Troubleshoot problems
+
+To exit the shell, type:
+```
+exit
+```
+
+<div align="right">
+  <strong>
+    <a href="#table-of-contents">↥ Back to top</a>
+  </strong>
+</div>
+
 ---
 
 ## :gear: 4. Initial Jenkins Setup
