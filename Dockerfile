@@ -130,11 +130,8 @@ RUN mkdir -p /var/jenkins_home/casc_configs && \
 # Copy JCasC configuration file
 COPY jenkins.yaml /var/jenkins_home/casc_configs/jenkins.yaml
 
-# Set Java encoding to UTF-8 for Jenkins logs and operations
-ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
-
-# Disable Jenkins Content Security Policy so HTML reports like Allure can load JS/CSS
-ENV JAVA_OPTS="${JAVA_OPTS} -Dhudson.model.DirectoryBrowserSupport.CSP="
+# Set Java encoding to UTF-8 for Jenkins logs and disable Jenkins Content Security Policy so HTML reports like Allure can load JS/CSS
+ENV JAVA_OPTS="-Dfile.encoding=UTF-8 -Dhudson.model.DirectoryBrowserSupport.CSP="
 
 # Clean up apt cache and lists
 RUN apt-get clean && \
