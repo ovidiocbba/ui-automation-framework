@@ -1,3 +1,5 @@
+@Library('shared-pipeline-steps') _
+
 pipeline {
     // Run this pipeline on any available Jenkins agent
     agent any
@@ -61,12 +63,9 @@ pipeline {
         // Clean workspace before build (Gradle cache is kept outside)
         stage('Prepare Workspace') {
             steps {
-                cleanWs()
                 script {
-                    // Define the list of supported browsers inside a script block
-                    def ALL_BROWSERS = ['CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS']
                     // No 'def' needed as 'browsers' is already defined globally and should be used in all stages.
-                    browsers = params.BROWSER == 'ALL' ? ALL_BROWSERS : [params.BROWSER]
+                    browsers = prepareWorkspace()
                 }
             }
         }
