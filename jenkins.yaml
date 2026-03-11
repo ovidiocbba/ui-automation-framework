@@ -24,6 +24,22 @@ jenkins:
     standard:
       excludeClientIPFromCrumb: true
 
+  # Add Global Pipeline Libraries Configuration
+  globalLibraries:
+    - name: 'shared-pipeline-steps'
+      defaultVersion: 'main'
+      implicit: false
+      allowVersionOverride: true
+      includeChangesInJobChanges: true
+      cacheVersionsOnController: false
+      source:
+        git:
+          url: 'https://github.com/ovidiocbba/ui-automation-framework'
+          credentialsId: none
+          branch: 'main'
+          # The path is set because pipeline libraries (like 'vars/' or 'src/') are inside the 'jenkins/' folder in the repository.
+          libraryPath: 'jenkins/'
+
 # Job DSL: Automatically creates the Pipeline job at startup
 jobs:
   - script: |
