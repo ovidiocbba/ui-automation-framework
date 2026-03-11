@@ -211,7 +211,7 @@ pipeline {
         // Debugging step to check if allure-results directories are being generated
         stage('Debug') {
             when {
-                expression { currentBuild.currentResult == 'FAILURE' }
+                expression { currentBuild.result != 'SUCCESS' }
             }
             steps {
                 script {
