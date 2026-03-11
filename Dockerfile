@@ -7,8 +7,10 @@ USER root
 
 RUN echo "===== JAVA VERSION =====" && java -version
 
-# Install Base System Dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Install Base System Dependencies, locales and UTF-8 support
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     curl \
     wget \
     gnupg \
@@ -25,17 +27,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xvfb \
     xauth \
     firefox-esr \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install locales and UTF-8 support
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends locales && \
+    locales && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \
     update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set system language and encoding to English and UTF-8
 ENV LANG=en_US.UTF-8
@@ -46,9 +43,8 @@ RUN echo "===== FIREFOX VERSION =====" && firefox --version
 
 # Check if Google Chrome is installed, if not, install it
 RUN if ! dpkg -l | grep -q google-chrome-stable; then \
-    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google.gpg && \
+    curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google.gpg && \
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get update && \
     apt-get update && \
     apt-get install -y google-chrome-stable && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
@@ -57,40 +53,39 @@ RUN if ! dpkg -l | grep -q google-chrome-stable; then \
     echo "Google Chrome is already installed."; \
 fi
 
-# Install Microsoft Edge (stable from repo)
-RUN wget -q -O - https://packages.microsoft.com/keys/microsoft.asc \
-    | gpg --dearmor -o /usr/share/keyrings/microsoft.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" \
-    > /etc/apt/sources.list.d/microsoft-edge.list && \
+# Install Microsoft Edge (stable from repo) and EdgeDriver for Selenium
+RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends microsoft-edge-stable && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     echo "===== MICROSOFT EDGE VERSION =====" && \
-    microsoft-edge --version
-
-# Install Microsoft EdgeDriver for Selenium (Edge does not include WebDriver by default).
-# The driver must match the installed Edge version to avoid compatibility issues.
-# If the exact version is not available, fallback to the latest release.
-RUN EDGE_VERSION=$(microsoft-edge --version | awk '{print $3}') && \
+    microsoft-edge --version && \
+    # Install EdgeDriver (matching the Edge version)
+    EDGE_VERSION=$(microsoft-edge --version | awk '{print $3}') && \
     echo "Installed Microsoft Edge version: $EDGE_VERSION" && \
-    if wget -q --spider https://msedgedriver.microsoft.com/$EDGE_VERSION/edgedriver_linux64.zip; then \
-        echo "Downloading EdgeDriver for version $EDGE_VERSION"; \
+    if curl -fsSL "https://msedgedriver.microsoft.com/$EDGE_VERSION/edgedriver_linux64.zip" -o edgedriver_linux64.zip; then \
+        unzip -q edgedriver_linux64.zip && \
+        mv msedgedriver /usr/local/bin/ && \
+        chmod +x /usr/local/bin/msedgedriver && \
+        rm -f edgedriver_linux64.zip && \
+        echo "EdgeDriver installed."; \
     else \
         echo "Matching EdgeDriver not found, using latest release"; \
-        EDGE_VERSION=$(wget -qO- https://msedgedriver.microsoft.com/LATEST_RELEASE); \
-    fi && \
-    wget -q https://msedgedriver.microsoft.com/$EDGE_VERSION/edgedriver_linux64.zip && \
-    unzip -q edgedriver_linux64.zip && \
-    mv msedgedriver /usr/local/bin/ && \
-    chmod +x /usr/local/bin/msedgedriver && \
-    rm -f edgedriver_linux64.zip && \
-    echo "===== EDGE DRIVER VERSION =====" && msedgedriver --version
+        EDGE_VERSION=$(curl -fsSL https://msedgedriver.microsoft.com/LATEST_RELEASE) && \
+        curl -fsSL "https://msedgedriver.microsoft.com/$EDGE_VERSION/edgedriver_linux64.zip" -o edgedriver_linux64.zip && \
+        unzip -q edgedriver_linux64.zip && \
+        mv msedgedriver /usr/local/bin/ && \
+        chmod +x /usr/local/bin/msedgedriver && \
+        rm -f edgedriver_linux64.zip && \
+        echo "EdgeDriver latest version installed."; \
+    fi
 
 # Install Allure CLI
 ENV ALLURE_VERSION=2.25.0
 
-RUN wget -q https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz && \
+RUN curl -fsSL https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz -o allure-${ALLURE_VERSION}.tgz && \
     tar -zxf allure-${ALLURE_VERSION}.tgz -C /opt/ && \
     ln -s /opt/allure-${ALLURE_VERSION}/bin/allure /usr/bin/allure && \
     rm -f allure-${ALLURE_VERSION}.tgz && \
