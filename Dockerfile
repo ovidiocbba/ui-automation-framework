@@ -33,14 +33,14 @@ RUN apt-get update && \
     locales && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen && \
-    update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+    update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 && \
+    echo "===== GIT VERSION =====" && git --version && \
+    echo "===== FIREFOX VERSION =====" && firefox --version
 
 # Set system language and encoding to English and UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
-
-RUN echo "===== FIREFOX VERSION =====" && firefox --version
 
 # Check if Google Chrome is installed, if not, install it
 RUN if ! dpkg -l | grep -q google-chrome-stable; then \
@@ -50,24 +50,26 @@ RUN if ! dpkg -l | grep -q google-chrome-stable; then \
     apt-get install -y google-chrome-stable; \
     echo "Google Chrome installed."; \
     else \
-    echo "Google Chrome is already installed."; \
-fi
+    echo "Google Chrome is already installed. Skipping installation."; \
+fi && \
+echo "===== GOOGLE CHROME VERSION =====" && google-chrome-stable --version
 
 # Install Microsoft Edge (stable from repo) and EdgeDriver for Selenium
 RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft.gpg && \
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends microsoft-edge-stable && \
-    echo "===== MICROSOFT EDGE VERSION =====" && \
-    microsoft-edge --version && \
-    # Install EdgeDriver (matching the Edge version)
+    # Get Microsoft Edge version
     EDGE_VERSION=$(microsoft-edge --version | awk '{print $3}') && \
+    echo "===== MICROSOFT EDGE VERSION =====" && \
     echo "Installed Microsoft Edge version: $EDGE_VERSION" && \
+    # Install EdgeDriver (matching the Edge version)
     if curl -fsSL "https://msedgedriver.microsoft.com/$EDGE_VERSION/edgedriver_linux64.zip" -o edgedriver_linux64.zip; then \
         unzip -q edgedriver_linux64.zip && \
         mv msedgedriver /usr/local/bin/ && \
         chmod +x /usr/local/bin/msedgedriver && \
         rm -f edgedriver_linux64.zip && \
+        echo "===== EDGEDRIVER VERSION =====" && msedgedriver --version && \
         echo "EdgeDriver installed."; \
     else \
         echo "Matching EdgeDriver not found, using latest release"; \
@@ -77,6 +79,7 @@ RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor
         mv msedgedriver /usr/local/bin/ && \
         chmod +x /usr/local/bin/msedgedriver && \
         rm -f edgedriver_linux64.zip && \
+        echo "===== EDGEDRIVER VERSION =====" && msedgedriver --version && \
         echo "EdgeDriver latest version installed."; \
     fi
 
