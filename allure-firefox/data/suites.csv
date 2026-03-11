@@ -1,34 +1,4 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","14274","Active page number should be 1 after performing a new search","","2026-03-05","passed","2026-03-05","","Product Search","Active page number should be 1 after performing a new search",""
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","9915","Page title should contain searched product","","2026-03-05","passed","2026-03-05","","Product Search","Page title should contain searched product",""
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","11736","Previous button should appear on second page","","2026-03-05","passed","2026-03-05","","Product Search","Previous button should appear on second page",""
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","11151","User can navigate using Next button","","2026-03-05","passed","2026-03-05","","Product Search","User can navigate using Next button",""
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","18744","Search for a valid product","","2026-03-05","passed","2026-03-05","","Product Search","Search for a valid product",""
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","12353","Next pagination button should be visible on first page","","2026-03-05","passed","2026-03-05","","Product Search","Next pagination button should be visible on first page",""
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","10113","Previous button should be disabled on first page","","2026-03-05","passed","2026-03-05","","Product Search","Previous button should be disabled on first page",""
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","10810","Search results should include the searched keyword in their titles","","2026-03-05","passed","2026-03-05","","Product Search","Search results should include the searched keyword in their titles",""
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","13050","User can navigate to second page of search results","","2026-03-05","passed","2026-03-05","","Product Search","User can navigate to second page of search results",""
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","11085","The search field should have the correct placeholder text","","2026-03-05","passed","2026-03-05","","Product Search","The search field should have the correct placeholder text",""
-"  As a customer
-  I want to search for products
-  So that I can view relevant search results","18900","Search for a valid product","","2026-03-05","passed","2026-03-05","","Product Search","Search for a valid product",""
+  So that I can view relevant search results","42942","Page title should contain searched product","","2026-03-11","passed","2026-03-11","","Product Search","Page title should contain searched product",""
