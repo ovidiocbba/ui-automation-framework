@@ -65,7 +65,7 @@ pipeline {
         // Gradle flags optimized for CI logs
         // --console=plain: better log formatting for CI
         // --warning-mode summary: show warning summary only
-        GRADLE_FLAGS = "--no-daemon --console=plain --info --warning-mode summary"
+        GRADLE_FLAGS = "--no-daemon --console=plain --warning-mode summary"
     }
 
     stages {
