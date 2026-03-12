@@ -123,7 +123,7 @@ pipeline {
                 stage('Javadoc') {
                     steps {
                         // Generate Javadoc documentation
-                        sh './gradlew javadoc'
+                        sh "./gradlew javadoc ${env.GRADLE_FLAGS}"
                     }
                     post {
                         always {
