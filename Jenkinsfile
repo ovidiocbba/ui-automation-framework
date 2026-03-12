@@ -169,26 +169,22 @@ pipeline {
                     }
 
                     // Check if the results directory exists before generating the report
-                    sh "echo 'Checking Allure results directory existence...'"
+                    echo "Checking Allure results directories..."
                     sh "ls -R ${resultPaths.join(' ')} || true"
-                    // Generate the Allure report
-                    sh "allure generate ${resultPaths.join(' ')} --clean -o allure-report"
-                }
-            }
-        }
 
-        // Generate index.html to show links to the Allure reports for each browser
-        stage('Generate Index') {
-            steps {
-                script {
-                    echo "Running index generation script..."
+                    echo "Generating Allure report..."
+                    sh "allure generate ${resultPaths.join(' ')} --clean -o allure-report"
+
+                    // Generate index.html to show links to the Allure reports for each browser
+                    echo "Generating report index..."
                     sh '''
                         set -e
                         chmod +x jenkins/scripts/generate-index.sh
                         ./jenkins/scripts/generate-index.sh
-                        echo "Listing contents of the allure-report directory:"
-                        ls -l allure-report/
                     '''
+
+                    echo "Listing contents of the allure-report directory:"
+                    sh "ls -l allure-report/"
                 }
             }
         }
