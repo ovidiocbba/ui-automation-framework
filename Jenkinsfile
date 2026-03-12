@@ -1,5 +1,7 @@
 @Library('shared-pipeline-steps') _
 
+def browsers = []
+
 pipeline {
     // Run this pipeline on any available Jenkins agent
     agent any
@@ -65,7 +67,6 @@ pipeline {
             steps {
                 cleanWs()
                 script {
-                    // No 'def' needed as 'browsers' is already defined globally and should be used in all stages.
                     browsers = getBrowsers(params.BROWSER)
                 }
             }
