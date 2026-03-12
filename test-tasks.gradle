@@ -50,6 +50,10 @@ configFile.withInputStream { stream -> configProps.load(stream)
 // ========================================
 tasks.withType(Test).configureEach {
 
+    // Disable caching for tests
+    // Test results may change depending on environment or UI state
+    outputs.cacheIf { false }
+
     useTestNG()
     // Required for Cucumber + TestNG integration
     scanForTestClasses = false
