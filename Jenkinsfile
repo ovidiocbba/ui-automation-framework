@@ -53,12 +53,19 @@ pipeline {
         // Shared Gradle cache to make builds faster (improves CI performance)
         GRADLE_USER_HOME = "/var/jenkins_home/.gradle"
 
-        // Gradle flags used in all pipeline executions
+        // Gradle flags
         // --no-daemon: do not start Gradle daemon in CI
+
+        // Gradle flags optimized for Debug
         // --stacktrace: show full error stack trace
-        // --info: show more details in the build logs
+        // --info: detailed build logs
         // --warning-mode all: show all Gradle warnings
-        GRADLE_FLAGS = "--no-daemon --stacktrace --info --warning-mode all"
+        //GRADLE_FLAGS = "--no-daemon --stacktrace --info --warning-mode all"
+
+        // Gradle flags optimized for CI logs
+        // --console=plain: better log formatting for CI
+        // --warning-mode summary: show warning summary only
+        GRADLE_FLAGS = "--no-daemon --console=plain --warning-mode summary"
     }
 
     stages {
