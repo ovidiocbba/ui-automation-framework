@@ -63,9 +63,10 @@ pipeline {
         // Clean workspace before build (Gradle cache is kept outside)
         stage('Prepare Workspace') {
             steps {
+                cleanWs()
                 script {
                     // No 'def' needed as 'browsers' is already defined globally and should be used in all stages.
-                    browsers = prepareWorkspace()
+                    browsers = getBrowsers(params.BROWSER)
                 }
             }
         }
