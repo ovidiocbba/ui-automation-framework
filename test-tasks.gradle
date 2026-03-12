@@ -57,7 +57,8 @@ tasks.withType(Test).configureEach {
     testLogging {
         events "passed", "skipped", "failed"
         exceptionFormat "short"
-        showStandardStreams = false
+        // Show Cucumber and framework logs in console output
+        showStandardStreams = true
     }
 
     // Separate test reports per browser (important for parallel CI execution)
