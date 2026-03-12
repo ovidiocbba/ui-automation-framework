@@ -145,22 +145,6 @@ pipeline {
             }
         }
 
-        // Debugging step to check if allure-results directories are being generated
-        stage('Debug') {
-            when {
-                expression { currentBuild.result != 'SUCCESS' }
-            }
-            steps {
-                script {
-                    echo "Checking allure results for browsers"
-                    for (browser in browsers) {
-                        echo "Checking allure results for ${browser}"
-                        sh "ls -R build-${browser}/allure-results || true"
-                    }
-                }
-            }
-        }
-
         stage('Allure Report') {
             steps {
                 script {
