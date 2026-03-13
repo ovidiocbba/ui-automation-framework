@@ -13,7 +13,7 @@ runs:
     - name: Setup Node
       uses: actions/setup-node@v4
       with:
-        node-version: 20
+        node-version: 24
 
     - name: Install Allure CLI
       shell: bash
@@ -120,7 +120,7 @@ runs:
       run: bash .github/scripts/generate-index.sh
 
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ inputs.github_token }}
         publish_branch: gh-pages
