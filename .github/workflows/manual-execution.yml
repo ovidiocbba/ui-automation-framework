@@ -2,8 +2,6 @@ name: Manual execution
 
 env:
   JAVA_VERSION: 17.0.12
-  # Define the list of supported browsers
-  SUPPORTED_BROWSERS: '["CHROME_HEADLESS","FIREFOX_HEADLESS","EDGE_HEADLESS"]'
   # Force GitHub Actions to use Node.js 24 to avoid Node 20 deprecation warnings
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -133,7 +131,9 @@ jobs:
       # Allow all matrix jobs to finish even if one fails
       fail-fast: false
       matrix:
-        browser: ${{ inputs.browser == 'ALL' && fromJson(env.SUPPORTED_BROWSERS) || fromJson(format('["{0}"]', inputs.browser)) }}
+        # Browser list comes from repository variable SUPPORTED_BROWSERS(vars.SUPPORTED_BROWSERS).
+        # To update it go to: Settings → Secrets and variables → Actions → Variables
+        browser: ${{ inputs.browser == 'ALL' && fromJson(vars.SUPPORTED_BROWSERS) || fromJson(format('["{0}"]', inputs.browser)) }}
 
     steps:
       # Cloning you repository to the runner.
