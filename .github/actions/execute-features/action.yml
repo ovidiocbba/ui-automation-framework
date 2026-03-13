@@ -37,25 +37,43 @@ runs:
       # Configuration variables in your repository.
       # Settings -> Secrets and variables -> Actions -> Secrets(secrets) or Variables(vars).
       run: |
-        ./gradlew executeFeatures \
-            -Dcucumber.filter.tags="${{ inputs.scenarioTag }}" \
-            -Dbrowser="${{ inputs.browser }}" \
-            -DbaseUrl="${{ inputs.baseUrl }}" \
-            -DexplicitWait="${{ inputs.explicitWait }}" \
-            -Dthreads="${{ inputs.threads }}"
-      shell: bash
+        set +e
 
-    # Re-execute if there are failed scenarios using the 'rerun.txt' file.
-    - name: Re-Execute Failed Features
-      # Composite actions, now support if conditionals.
-      # https://github.blog/changelog/2021-11-09-github-actions-conditional-execution-of-steps-in-actions/
-      if: ${{ failure() && steps.execute-features.conclusion == 'failure' }}
-      run: |
-        ./gradlew reExecuteFeatures \
-            -Dbrowser="${{ inputs.browser }}" \
-            -DbaseUrl="${{ inputs.baseUrl }}" \
-            -DexplicitWait="${{ inputs.explicitWait }}" \
-            -Dthreads="${{ inputs.threads }}"
+        echo "================================="
+        echo "Executing tests for ${{ inputs.browser }}"
+        echo "================================="
+
+        # Common parameters
+        COMMON_PARAMS="\
+        -Dcucumber.filter.tags=${{ inputs.scenarioTag }} \
+        -Dbrowser=${{ inputs.browser }} \
+        -DbaseUrl=${{ inputs.baseUrl }} \
+        -DexplicitWait=${{ inputs.explicitWait }} \
+        -Dthreads=${{ inputs.threads }}"
+
+        # Gradle flags optimized for CI logs
+        GRADLE_FLAGS="--no-daemon --console=plain --warning-mode summary"
+
+        echo "Running tests..."
+
+        ./gradlew executeFeatures \
+            $GRADLE_FLAGS \
+            $COMMON_PARAMS
+
+        STATUS=$?
+
+        if [ "$STATUS" -ne 0 ]; then
+            echo "================================="
+            echo "Tests failed. Re-running failed scenarios..."
+            echo "================================="
+
+            ./gradlew reExecuteFeatures \
+                $GRADLE_FLAGS \
+                $COMMON_PARAMS
+        else
+            echo "All tests passed. No retry needed."
+        fi
+
       shell: bash
 
     # Upload log file.
