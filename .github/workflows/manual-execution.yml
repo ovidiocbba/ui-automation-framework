@@ -51,8 +51,6 @@ jobs:
   build:
     # The type of runner that the job will run on.
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       # Cloning you repository to the runner.
@@ -73,8 +71,6 @@ jobs:
     needs: build
     # The type of runner that the job will run on.
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       # Cloning you repository to the runner.
@@ -102,8 +98,6 @@ jobs:
     needs: build
     # The type of runner that the job will run on.
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       # Cloning you repository to the runner.
@@ -132,8 +126,6 @@ jobs:
     runs-on: ubuntu-latest
     # Stops the job if it runs too long.
     timeout-minutes: 30
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     strategy:
       # Allow all matrix jobs to finish even if one fails
@@ -166,8 +158,6 @@ jobs:
     # Run report even if execution job fails
     if: always()
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     # Prevents two workflows from deploying to 'gh-pages' at the same time.
     concurrency:
