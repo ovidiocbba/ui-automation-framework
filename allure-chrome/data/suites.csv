@@ -1,34 +1,34 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","10111","Next pagination button should be visible on first page","","2026-03-13","passed","2026-03-13","","Product Search","Next pagination button should be visible on first page",""
+  So that I can view relevant search results","6254","Search results should include the searched keyword in their titles","","2026-03-13","passed","2026-03-13","","Product Search","Search results should include the searched keyword in their titles",""
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","8109","User can navigate to second page of search results","","2026-03-13","passed","2026-03-13","","Product Search","User can navigate to second page of search results",""
+  So that I can view relevant search results","5718","Page title should contain searched product","","2026-03-13","passed","2026-03-13","","Product Search","Page title should contain searched product",""
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","16605","Search for a valid product","","2026-03-13","passed","2026-03-13","","Product Search","Search for a valid product",""
+  So that I can view relevant search results","13461","Search for a valid product","","2026-03-13","passed","2026-03-13","","Product Search","Search for a valid product",""
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","8346","Previous button should appear on second page","","2026-03-13","passed","2026-03-13","","Product Search","Previous button should appear on second page",""
+  So that I can view relevant search results","8855","The search field should have the correct placeholder text","","2026-03-13","passed","2026-03-13","","Product Search","The search field should have the correct placeholder text",""
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","8722","The search field should have the correct placeholder text","","2026-03-13","passed","2026-03-13","","Product Search","The search field should have the correct placeholder text",""
+  So that I can view relevant search results","10451","Active page number should be 1 after performing a new search","","2026-03-13","passed","2026-03-13","","Product Search","Active page number should be 1 after performing a new search",""
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","8290","User can navigate using Next button","","2026-03-13","passed","2026-03-13","","Product Search","User can navigate using Next button",""
+  So that I can view relevant search results","14686","Search for a valid product","","2026-03-13","passed","2026-03-13","","Product Search","Search for a valid product",""
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","10872","Active page number should be 1 after performing a new search","","2026-03-13","passed","2026-03-13","","Product Search","Active page number should be 1 after performing a new search",""
+  So that I can view relevant search results","7306","User can navigate to second page of search results","","2026-03-13","passed","2026-03-13","","Product Search","User can navigate to second page of search results",""
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","5720","Page title should contain searched product","","2026-03-13","passed","2026-03-13","","Product Search","Page title should contain searched product",""
+  So that I can view relevant search results","6608","User can navigate using Next button","","2026-03-13","passed","2026-03-13","","Product Search","User can navigate using Next button",""
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","6108","Previous button should be disabled on first page","","2026-03-13","passed","2026-03-13","","Product Search","Previous button should be disabled on first page",""
+  So that I can view relevant search results","7413","Previous button should appear on second page","","2026-03-13","passed","2026-03-13","","Product Search","Previous button should appear on second page",""
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","6345","Search results should include the searched keyword in their titles","","2026-03-13","passed","2026-03-13","","Product Search","Search results should include the searched keyword in their titles",""
+  So that I can view relevant search results","9867","Next pagination button should be visible on first page","","2026-03-13","passed","2026-03-13","","Product Search","Next pagination button should be visible on first page",""
 "  As a customer
   I want to search for products
-  So that I can view relevant search results","16979","Search for a valid product","","2026-03-13","passed","2026-03-13","","Product Search","Search for a valid product",""
+  So that I can view relevant search results","5921","Previous button should be disabled on first page","","2026-03-13","passed","2026-03-13","","Product Search","Previous button should be disabled on first page",""
