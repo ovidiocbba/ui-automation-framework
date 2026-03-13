@@ -2,6 +2,8 @@ name: Manual execution
 
 env:
   JAVA_VERSION: 17.0.12
+  # Define the list of supported browsers
+  SUPPORTED_BROWSERS: '["CHROME_HEADLESS","FIREFOX_HEADLESS","EDGE_HEADLESS"]'
   # Force GitHub Actions to use Node.js 24 to avoid Node 20 deprecation warnings
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -17,10 +19,10 @@ on:
         required: true
         default: CHROME_HEADLESS
         options:
+          - ALL
           - CHROME_HEADLESS
           - FIREFOX_HEADLESS
           - EDGE_HEADLESS
-          - ALL
 
       scenarioTag:
         description: 'Scenario tag to execute (e.g. "@TC-00001")'
@@ -131,7 +133,7 @@ jobs:
       # Allow all matrix jobs to finish even if one fails
       fail-fast: false
       matrix:
-        browser: ${{ inputs.browser == 'ALL' && fromJson('["CHROME_HEADLESS","FIREFOX_HEADLESS","EDGE_HEADLESS"]') || fromJson(format('["{0}"]', inputs.browser)) }}
+        browser: ${{ inputs.browser == 'ALL' && fromJson(env.SUPPORTED_BROWSERS) || fromJson(format('["{0}"]', inputs.browser)) }}
 
     steps:
       # Cloning you repository to the runner.
