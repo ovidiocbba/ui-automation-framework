@@ -12,10 +12,10 @@ on:
     # Inputs the workflow accepts.
     inputs:
       browser:
-        description: 'Browser to execute (CHROME_HEADLESS | FIREFOX_HEADLESS | EDGE_HEADLESS | ALL)'
+        description: 'Browser to execute (ALL | CHROME_HEADLESS | FIREFOX_HEADLESS | EDGE_HEADLESS)'
         type: choice
         required: true
-        default: CHROME_HEADLESS
+        default: ALL
         options:
           - ALL
           - CHROME_HEADLESS
