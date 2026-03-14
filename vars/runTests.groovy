@@ -4,7 +4,9 @@ def call(browsers, params, gradleFlags) {
     def commonParams = "-Dcucumber.filter.tags=${params.SCENARIO_TAG} " +
             "-DbaseUrl=${params.BASE_URL} " +
             "-DexplicitWait=${params.EXPLICIT_WAIT} " +
-            "-Dthreads=${params.THREADS}"
+            "-Dthreads=${params.THREADS} " +
+            "-Dbranch=${env.BRANCH_NAME} " +
+            "-Dcommit=${env.GIT_COMMIT}"
 
     // Map that will store parallel stages
     def parallelStages = [:]
