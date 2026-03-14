@@ -126,6 +126,25 @@ tasks.withType(Test).configureEach {
         def baseUrl = getProp("baseUrl", "N/A")
         def threads = getProp("threads", "1")
 
+        // Detect CI environment
+        def ciEnv = "Local"
+        def buildNumber = "local"
+        def branch = "local"
+        def commit = "local"
+
+        if (System.getenv("GITHUB_ACTIONS")) {
+            ciEnv = "GitHub Actions"
+            buildNumber = System.getenv("GITHUB_RUN_NUMBER") ?: "unknown"
+            branch = System.getenv("GITHUB_REF_NAME") ?: "unknown"
+            commit = System.getenv("GITHUB_SHA") ?: "unknown"
+        }
+        else if (System.getenv("JENKINS_URL")) {
+            ciEnv = "Jenkins"
+            buildNumber = System.getenv("BUILD_NUMBER") ?: "unknown"
+            branch = System.getenv("GIT_BRANCH") ?: "unknown"
+            commit = System.getenv("GIT_COMMIT") ?: "unknown"
+        }
+
         def envFile = new File(resultsDir, "environment.properties")
 
         envFile.text = """
@@ -142,7 +161,10 @@ Gradle=${gradle.gradleVersion}
 
 Project=${project.name}
 
-CI=${System.getenv("JENKINS_URL") ? "Jenkins" : "Local"}
+CI=${ciEnv}
+BuildNumber=${buildNumber}
+Branch=${branch}
+Commit=${commit}
 """
     }
 }
