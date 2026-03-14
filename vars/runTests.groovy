@@ -1,7 +1,7 @@
 def call(browsers, params, gradleFlags) {
 
     def branch = sh(
-            script: "git branch --show-current || git name-rev --name-only HEAD",
+            script: "git branch --show-current",
             returnStdout: true
     ).trim()
 
