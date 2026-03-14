@@ -61,6 +61,11 @@ jobs:
         */
         parameters {
 
+          stringParam(
+            'BRANCH',
+            'main',
+            'Git branch to build (example: main, develop, feature/login)'
+          )
           choiceParam(
             'BROWSER',
             ['ALL','CHROME_HEADLESS','FIREFOX_HEADLESS','EDGE_HEADLESS'],
