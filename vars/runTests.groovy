@@ -1,9 +1,6 @@
 def call(browsers, params, gradleFlags) {
 
-    def branch = sh(
-            script: "git branch --show-current",
-            returnStdout: true
-    ).trim()
+    def branch = params.BRANCH
 
     def commit = sh(
             script: "git rev-parse HEAD",
