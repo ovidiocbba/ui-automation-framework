@@ -1,12 +1,14 @@
 def call(browsers, params, gradleFlags) {
+    def branch = env.BRANCH_NAME ?: env.GIT_BRANCH ?: "unknown"
+    def commit = env.GIT_COMMIT ?: "unknown"
 
     // Centralized Gradle parameters to avoid duplication
     def commonParams = "-Dcucumber.filter.tags=${params.SCENARIO_TAG} " +
             "-DbaseUrl=${params.BASE_URL} " +
             "-DexplicitWait=${params.EXPLICIT_WAIT} " +
             "-Dthreads=${params.THREADS} " +
-            "-Dbranch=${env.BRANCH_NAME} " +
-            "-Dcommit=${env.GIT_COMMIT}"
+            "-Dbranch=${branch} " +
+            "-Dcommit=${commit}"
 
     // Map that will store parallel stages
     def parallelStages = [:]
