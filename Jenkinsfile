@@ -1,5 +1,6 @@
 @Library('shared-pipeline-steps') _
 
+def REPO_URL = 'https://github.com/ovidiocbba/ui-automation-framework'
 def browsers = []
 
 pipeline {
@@ -33,6 +34,11 @@ pipeline {
 
     parameters {
         // Browser selection parameter
+        string(
+            name: 'BRANCH',
+            defaultValue: 'main',
+            description: 'Git branch to build (example: main, develop, feature/login)'
+        )
         choice(
             name: 'BROWSER',
             choices: ['ALL', 'CHROME_HEADLESS', 'FIREFOX_HEADLESS', 'EDGE_HEADLESS'],
@@ -84,7 +90,15 @@ pipeline {
                 // Clone repository from Git (retry helps avoid temporary network errors)
                 retry(3) {
                     timeout(time: 5, unit: 'MINUTES') {
-                        checkout scm
+
+                        checkout([
+                            $class: 'GitSCM',
+                            branches: [[name: "*/${params.BRANCH}"]],
+                            userRemoteConfigs: [[
+                                url: REPO_URL
+                            ]]
+                        ])
+
                     }
                 }
             }
