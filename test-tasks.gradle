@@ -141,18 +141,28 @@ tasks.withType(Test).configureEach {
             buildNumber = System.getenv("BUILD_NUMBER") ?: "unknown"
         }
 
+        // ========================================
         // Branch detection (supports Jenkins + GitHub)
+        // Priority: Command Line > CI Environment Variables
+        // Allows Jenkins to pass branch using -Dbranch
+        // ========================================
         def branch =
-                System.getenv("GITHUB_REF_NAME") ?:
-                        System.getenv("BRANCH_NAME") ?:
-                                System.getenv("GIT_BRANCH") ?:
-                                        "unknown"
+                System.getProperty("branch") ?:
+                        System.getenv("GITHUB_REF_NAME") ?:
+                                System.getenv("BRANCH_NAME") ?:
+                                        System.getenv("GIT_BRANCH") ?:
+                                                "unknown"
 
+        // ========================================
         // Commit detection
+        // Priority: Command Line > CI Environment Variables
+        // Allows Jenkins to pass commit using -Dcommit
+        // ========================================
         def commit =
-                System.getenv("GITHUB_SHA") ?:
-                        System.getenv("GIT_COMMIT") ?:
-                                "unknown"
+                System.getProperty("commit") ?:
+                        System.getenv("GITHUB_SHA") ?:
+                                System.getenv("GIT_COMMIT") ?:
+                                        "unknown"
 
         def envFile = new File(resultsDir, "environment.properties")
 
