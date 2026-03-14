@@ -42,7 +42,16 @@ if (!configFile.exists()) {
 }
 
 // Load properties into memory
-configFile.withInputStream { stream -> configProps.load(stream)
+configFile.withInputStream { stream ->
+    configProps.load(stream)
+}
+
+// ========================================
+// Helper function to resolve properties
+// Priority: Command Line > config.properties > default value
+// ========================================
+def getProp = { key, defaultValue = null ->
+    System.getProperty(key) ?: configProps.getProperty(key) ?: defaultValue
 }
 
 // ========================================
@@ -55,19 +64,18 @@ tasks.withType(Test).configureEach {
     outputs.cacheIf { false }
 
     useTestNG()
+
     // Required for Cucumber + TestNG integration
     scanForTestClasses = false
 
     testLogging {
         events "passed", "skipped", "failed"
         exceptionFormat "short"
-        // Show Cucumber and framework logs in console output
         showStandardStreams = true
     }
 
     // Separate test reports per browser (important for parallel CI execution)
-    def browser = System.getProperty("browser") ?:
-            configProps.getProperty("browser") ?: "LOCAL"
+    def browser = getProp("browser", "LOCAL")
 
     reports {
         junitXml.required = true
@@ -77,28 +85,26 @@ tasks.withType(Test).configureEach {
         html.outputLocation = layout.buildDirectory.dir("reports/tests/${browser}")
     }
 
-    // List of supported system properties
-    def supportedProperties = ["cucumber.filter.tags",
-                               "browser",
-                               "baseUrl",
-                               "explicitWait",
-                               "threads"]
+    // Supported system properties
+    def supportedProperties = [
+            "cucumber.filter.tags",
+            "browser",
+            "baseUrl",
+            "explicitWait",
+            "threads"
+    ]
 
     supportedProperties.each { key ->
         // First priority: Command line
-        def value = System.getProperty(key)
-        // Second priority: config.properties
-        if (value == null) {
-            value = configProps.getProperty(key)
-        }
+        def value = getProp(key)
         // If value exists, pass it to test runtime
         if (value != null) {
             systemProperty key, value
         }
     }
 
-    def threadCount = System.getProperty("threads") ?:
-            configProps.getProperty("threads") ?: "1"
+    def threadCount = getProp("threads", "1")
+
     // Required by TestNG to control parallel DataProvider threads
     systemProperty "dataproviderthreadcount", threadCount
 
@@ -106,6 +112,39 @@ tasks.withType(Test).configureEach {
     // This ensures Gradle uses the correct paths for test classes and dependencies during test execution
     classpath = sourceSets.test.runtimeClasspath
     testClassesDirs = sourceSets.test.output.classesDirs
+
+    // ========================================
+    // Allure Environment Information
+    // Generates environment.properties automatically
+    // ========================================
+    doFirst {
+
+        def resultsDir = file("$buildDir/allure-results")
+        resultsDir.mkdirs()
+
+        def browserName = getProp("browser", "LOCAL")
+        def baseUrl = getProp("baseUrl", "N/A")
+        def threads = getProp("threads", "1")
+
+        def envFile = new File(resultsDir, "environment.properties")
+
+        envFile.text = """
+Browser=${browserName}
+BaseURL=${baseUrl}
+Threads=${threads}
+
+OS=${System.getProperty("os.name")}
+OSVersion=${System.getProperty("os.version")}
+
+Java=${System.getProperty("java.version")}
+
+Gradle=${gradle.gradleVersion}
+
+Project=${project.name}
+
+CI=${System.getenv("JENKINS_URL") ? "Jenkins" : "Local"}
+"""
+    }
 }
 
 // ========================================
@@ -134,7 +173,9 @@ tasks.register('reExecuteFeatures', Test) {
         def rerunFile = file("build/rerun.txt")
 
         if (!rerunFile.exists()) {
-            throw new GradleException("rerun.txt not found. Execute 'executeFeatures' first.")
+            throw new GradleException(
+                    "rerun.txt not found. Execute 'executeFeatures' first."
+            )
         }
     }
 
