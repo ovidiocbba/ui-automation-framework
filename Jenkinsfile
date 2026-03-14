@@ -51,6 +51,9 @@ pipeline {
     }
 
     environment {
+        // Export branch so tests and Allure can read it
+        BRANCH = "${params.BRANCH}"
+
         // Use JDK configured in Jenkins Global Tool Configuration
         JAVA_HOME = tool name: 'jdk17'
         // Add selected JDK to system PATH
