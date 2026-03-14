@@ -1,6 +1,7 @@
 def call(browsers, params, gradleFlags) {
-    def branch = env.BRANCH_NAME ?: env.GIT_BRANCH ?: "unknown"
-    def commit = env.GIT_COMMIT ?: "unknown"
+
+    def branch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+    def commit = sh(script: "git rev-parse HEAD", returnStdout: true).trim()
 
     // Centralized Gradle parameters to avoid duplication
     def commonParams = "-Dcucumber.filter.tags=${params.SCENARIO_TAG} " +
