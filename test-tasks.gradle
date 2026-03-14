@@ -55,6 +55,17 @@ def getProp = { key, defaultValue = null ->
 }
 
 // ========================================
+// Supported runtime properties
+// ========================================
+def supportedProperties = [
+        "cucumber.filter.tags",
+        "browser",
+        "baseUrl",
+        "explicitWait",
+        "threads"
+]
+
+// ========================================
 // Base configuration applied to ALL Test tasks
 // ========================================
 tasks.withType(Test).configureEach {
@@ -74,7 +85,6 @@ tasks.withType(Test).configureEach {
         showStandardStreams = true
     }
 
-    // Separate test reports per browser (important for parallel CI execution)
     def browser = getProp("browser", "LOCAL")
 
     reports {
@@ -85,15 +95,7 @@ tasks.withType(Test).configureEach {
         html.outputLocation = layout.buildDirectory.dir("reports/tests/${browser}")
     }
 
-    // Supported system properties
-    def supportedProperties = [
-            "cucumber.filter.tags",
-            "browser",
-            "baseUrl",
-            "explicitWait",
-            "threads"
-    ]
-
+    // Pass supported properties to runtime
     supportedProperties.each { key ->
         // First priority: Command line
         def value = getProp(key)
@@ -126,24 +128,31 @@ tasks.withType(Test).configureEach {
         def baseUrl = getProp("baseUrl", "N/A")
         def threads = getProp("threads", "1")
 
-        // Detect CI environment
+        // CI detection
         def ciEnv = "Local"
         def buildNumber = "local"
-        def branch = "local"
-        def commit = "local"
 
         if (System.getenv("GITHUB_ACTIONS")) {
             ciEnv = "GitHub Actions"
             buildNumber = System.getenv("GITHUB_RUN_NUMBER") ?: "unknown"
-            branch = System.getenv("GITHUB_REF_NAME") ?: "unknown"
-            commit = System.getenv("GITHUB_SHA") ?: "unknown"
         }
         else if (System.getenv("JENKINS_URL")) {
             ciEnv = "Jenkins"
             buildNumber = System.getenv("BUILD_NUMBER") ?: "unknown"
-            branch = System.getenv("GIT_BRANCH") ?: "unknown"
-            commit = System.getenv("GIT_COMMIT") ?: "unknown"
         }
+
+        // Branch detection (supports Jenkins + GitHub)
+        def branch =
+                System.getenv("GITHUB_REF_NAME") ?:
+                        System.getenv("BRANCH_NAME") ?:
+                                System.getenv("GIT_BRANCH") ?:
+                                        "unknown"
+
+        // Commit detection
+        def commit =
+                System.getenv("GITHUB_SHA") ?:
+                        System.getenv("GIT_COMMIT") ?:
+                                "unknown"
 
         def envFile = new File(resultsDir, "environment.properties")
 
