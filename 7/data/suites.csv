@@ -1,0 +1,34 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"  As a customer
+  I want to search for products
+  So that I can view relevant search results","18951","User can navigate using Next button","","Sat Apr 11 03:36:16 UTC 2026","passed","Sat Apr 11 03:36:35 UTC 2026","","Product Search","User can navigate using Next button",""
+"  As a customer
+  I want to search for products
+  So that I can view relevant search results","19510","Previous button should appear on second page","","Sat Apr 11 03:36:17 UTC 2026","passed","Sat Apr 11 03:36:36 UTC 2026","","Product Search","Previous button should appear on second page",""
+"  As a customer
+  I want to search for products
+  So that I can view relevant search results","27812","Search for a valid product","","Sat Apr 11 03:35:51 UTC 2026","passed","Sat Apr 11 03:36:19 UTC 2026","","Product Search","Search for a valid product",""
+"  As a customer
+  I want to search for products
+  So that I can view relevant search results","26002","Page title should contain searched product","","Sat Apr 11 03:35:51 UTC 2026","passed","Sat Apr 11 03:36:17 UTC 2026","","Product Search","Page title should contain searched product",""
+"  As a customer
+  I want to search for products
+  So that I can view relevant search results","30244","User can navigate to second page of search results","","Sat Apr 11 03:35:51 UTC 2026","passed","Sat Apr 11 03:36:21 UTC 2026","","Product Search","User can navigate to second page of search results",""
+"  As a customer
+  I want to search for products
+  So that I can view relevant search results","16852","Previous button should be disabled on first page","","Sat Apr 11 03:36:21 UTC 2026","passed","Sat Apr 11 03:36:38 UTC 2026","","Product Search","Previous button should be disabled on first page",""
+"  As a customer
+  I want to search for products
+  So that I can view relevant search results","19845","Next pagination button should be visible on first page","","Sat Apr 11 03:36:37 UTC 2026","passed","Sat Apr 11 03:36:56 UTC 2026","","Product Search","Next pagination button should be visible on first page",""
+"  As a customer
+  I want to search for products
+  So that I can view relevant search results","13362","The search field should have the correct placeholder text","","Sat Apr 11 03:36:35 UTC 2026","passed","Sat Apr 11 03:36:48 UTC 2026","","Product Search","The search field should have the correct placeholder text",""
+"  As a customer
+  I want to search for products
+  So that I can view relevant search results","17180","Search results should include the searched keyword in their titles","","Sat Apr 11 03:36:19 UTC 2026","passed","Sat Apr 11 03:36:36 UTC 2026","","Product Search","Search results should include the searched keyword in their titles",""
+"  As a customer
+  I want to search for products
+  So that I can view relevant search results","24907","Search for a valid product","","Sat Apr 11 03:35:51 UTC 2026","passed","Sat Apr 11 03:36:16 UTC 2026","","Product Search","Search for a valid product",""
+"  As a customer
+  I want to search for products
+  So that I can view relevant search results","18449","Active page number should be 1 after performing a new search","","Sat Apr 11 03:36:36 UTC 2026","passed","Sat Apr 11 03:36:54 UTC 2026","","Product Search","Active page number should be 1 after performing a new search",""
